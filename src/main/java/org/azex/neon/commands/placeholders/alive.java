@@ -2,8 +2,10 @@ package org.azex.neon.commands.placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.azex.neon.methods.ListManager;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class alive extends PlaceholderExpansion {
 
@@ -28,7 +30,8 @@ public class alive extends PlaceholderExpansion {
         return "1.0";
     }
 
-    public String onRequest(Player player, @NotNull String params) {
+    @Override
+    public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
         if (params.equalsIgnoreCase("players")) {
             return list.aliveAsList();
         }
