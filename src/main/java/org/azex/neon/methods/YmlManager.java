@@ -46,12 +46,6 @@ public class YmlManager {
         return new Location(plugin.getServer().getWorld(world), x, y, z, yaw, pitch);
     }
 
-    public void createTokensFile() {
-        if (!tokensfile.exists()) {
-            plugin.saveResource("tokens.yml", false);
-        }
-    }
-
     public FileConfiguration getTokensFile() {
         File tokensfile = new File(plugin.getDataFolder(), "tokens.yml");
         tokens = YamlConfiguration.loadConfiguration(tokensfile);
@@ -63,12 +57,6 @@ public class YmlManager {
             tokens.save(tokensfile);
         } catch (IOException e) {
             plugin.getLogger().warning("Unable to save the tokens due to " + e.getMessage());
-        }
-    }
-
-    public void createSpawnFile() {
-        if (!spawnFile.exists()) {
-            plugin.saveResource("spawn.yml", false);
         }
     }
 }
