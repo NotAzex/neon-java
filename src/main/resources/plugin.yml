@@ -2,7 +2,7 @@ name: Neon
 version: '1.0.0'
 main: org.azex.neon.Neon
 api-version: '1.21'
-softdepend: [bStats]
+softdepend: [PlaceholderAPI]
 depend: [WorldGuard]
 authors: [ Azex ]
 description: Neon, but it's rewritten in Java

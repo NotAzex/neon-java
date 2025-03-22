@@ -8,6 +8,9 @@ version = '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
     maven {
+        url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
+    maven {
         name = "worldguard"
         url = "https://maven.enginehub.org/repo/"
     }
@@ -23,7 +26,7 @@ repositories {
 
 dependencies {
     implementation("org.json:json:20240303")
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT", "com.sk89q.worldguard:worldguard-bukkit:7.0.13")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT", "me.clip:placeholderapi:2.11.6", "com.sk89q.worldguard:worldguard-bukkit:7.0.13")
 }
 
 def targetJavaVersion = 21

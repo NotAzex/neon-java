@@ -3,9 +3,7 @@ package org.azex.neon.methods;
 import org.azex.neon.Neon;
 import org.bukkit.Bukkit;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class ListManager {
 
@@ -18,6 +16,22 @@ public class ListManager {
     public final Set<UUID> aliveList = new HashSet<>();
     public final Set<UUID> deadList = new HashSet<>();
     public final Set<UUID> reviveRecentList = new HashSet<>();
+
+    public String aliveAsList() {
+        List<String> names = new ArrayList<>();
+        for (UUID uuid : aliveList) {
+            names.add(Bukkit.getPlayer(uuid).getName());
+        }
+        return String.join(", ", names);
+    }
+
+    public String deadAsList() {
+        List<String> names = new ArrayList<>();
+        for (UUID uuid : deadList) {
+            names.add(Bukkit.getPlayer(uuid).getName());
+        }
+        return String.join(", ", names);
+    }
 
     public void playerDeath(UUID uuid) {
         if (aliveList.contains(uuid)) {

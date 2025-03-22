@@ -1,8 +1,10 @@
 package org.azex.neon;
 
 import org.azex.neon.commands.*;
+import org.azex.neon.commands.placeholders.*;
 import org.azex.neon.methods.*;
 import org.azex.neon.tabcompletions.*;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
@@ -34,6 +36,15 @@ public final class Neon extends JavaPlugin {
         wg = new WorldGuardManager(this);
 
         empty = new Empty();
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            getLogger().info("\u001B[37m PlaceholderAPI found! Registering placeholders...\u001B[0m");
+            new alive(list).register();
+            new dead(list).register();
+            getLogger().info("\u001B[37m Registered placeholders!\u001B[0m");
+        }else{
+            getLogger().info("\u001B[37m PlaceholderAPI not found, Neon will not register placeholders.\u001B[0m");
+        }
 
         getLogger().info("\u001B[37m Registering events...\u001B[0m");
         getServer().getPluginManager().registerEvents(new EventManager(this, list, ymlManager, versionChecker, wg), this);
