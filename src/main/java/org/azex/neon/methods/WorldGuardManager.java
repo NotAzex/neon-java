@@ -29,18 +29,17 @@ public class WorldGuardManager {
 
     public WorldGuardManager(Neon plugin) {
         this.plugin = plugin;
-
-        worldObj = plugin.getConfig().getString("World");
-        bukkitWorld = Bukkit.getWorld((String) worldObj);
-
-        if (bukkitWorld == null) {
-            plugin.getLogger().warning("Failed to load world " + worldObj + ", does it exist?");
-        }
     }
 
     private RegionManager getRegionManager() {
         Object worldObj = plugin.getConfig().getString("World");
         org.bukkit.World bukkitWorld = Bukkit.getWorld((String) worldObj);
+
+        if (bukkitWorld == null) {
+            plugin.getLogger().warning("Failed to load world " + worldObj + ", does it exist?");
+            return null;
+        }
+
         World wgWorld = BukkitAdapter.adapt(bukkitWorld);
 
         container = WorldGuard.getInstance().getPlatform().getRegionContainer();
@@ -74,13 +73,16 @@ public class WorldGuardManager {
     }
 
     public void setFlag(Flag flag, StateFlag.State state) {
-        RegionManager regions = getRegionManager();
-        ymlRegion = plugin.getConfig().getString("Region");
-        region = regions.getRegion(ymlRegion);
-        try {
-            region.setFlag(flag, state);
-        } catch (NullPointerException e) {
-            Messages.broadcast("<red>Dear players, this command won't work because the config hasn't been set up properly. [region from config is invalid!]");
+        if (getRegionManager() != null) {
+            RegionManager regions = getRegionManager();
+            ymlRegion = plugin.getConfig().getString("Region");
+            region = regions.getRegion(ymlRegion);
+            try {
+                region.setFlag(flag, state);
+            } catch (NullPointerException e) {
+                Messages.broadcast("<red>Caught an error! [region from config is invalid!] Command will not work.");
+            }
         }
+        Messages.broadcast("<red>Received an error! [world from config is invalid!] Command will not work.");
     }
 }

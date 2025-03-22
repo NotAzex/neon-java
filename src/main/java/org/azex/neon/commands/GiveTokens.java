@@ -19,7 +19,7 @@ public class GiveTokens implements CommandExecutor {
         this.tokens = tokens;
     }
 
-    private boolean isInteger(String str) {
+    public static boolean isInteger(String str) {
         try {
             Integer.parseInt(str);
             return true;
