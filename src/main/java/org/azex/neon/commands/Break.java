@@ -14,7 +14,7 @@ public class Break implements CommandExecutor {
 
     private WorldGuardManager wg;
     private Flag flag = Flags.BLOCK_BREAK;
-    private Boolean toggle = false;
+    public static boolean toggle = true;
 
     public Break(WorldGuardManager wg) {
         this.wg = wg;

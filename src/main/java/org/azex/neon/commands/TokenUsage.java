@@ -8,14 +8,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class TokenUsage implements CommandExecutor {
 
-    private Boolean toggle = false;
+    public static boolean toggle = true;
     private String state;
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
         toggle = !toggle;
-        state = toggle ? "enabled" : "disabled";
+        state = toggle ? "disabled" : "enabled";
         Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has <light_purple>" +
                 state + "<gray> tokens!");
 

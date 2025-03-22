@@ -82,7 +82,8 @@ public class WorldGuardManager {
             } catch (NullPointerException e) {
                 Messages.broadcast("<red>Caught an error! [region from config is invalid!] Command will not work.");
             }
+        }else{
+            Messages.broadcast("<red>Received an error! [world from config is invalid!] Command will not work.");
         }
-        Messages.broadcast("<red>Received an error! [world from config is invalid!] Command will not work.");
     }
 }

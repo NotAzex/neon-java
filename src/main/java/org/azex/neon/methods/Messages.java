@@ -11,6 +11,8 @@ public class Messages {
 
     public static final MiniMessage mini = MiniMessage.miniMessage();
     // note to self add customizability for these things in later updates
+    public static final String PlaceholderVersion = "1.0";
+    public static final String PlaceholderAuthor = "Azex";
     public static final Component ConsolePlayerError = mini.deserialize("<red>Only players can run this command!");
     public static final Component PlayerNotOnline = mini.deserialize("<red>That player is not online!");
     public static final Component UsedCommandWrong = mini.deserialize("<red>You used the command wrong!");

@@ -17,20 +17,24 @@ public class ListManager {
     public final Set<UUID> deadList = new HashSet<>();
     public final Set<UUID> reviveRecentList = new HashSet<>();
 
-    public String aliveAsList() {
+    private String turnToList(Set<UUID> set) {
         List<String> names = new ArrayList<>();
-        for (UUID uuid : aliveList) {
+        for (UUID uuid : set) {
             names.add(Bukkit.getPlayer(uuid).getName());
         }
         return String.join(", ", names);
     }
 
+    public String aliveAsList() {
+        return turnToList(aliveList);
+    }
+
     public String deadAsList() {
-        List<String> names = new ArrayList<>();
-        for (UUID uuid : deadList) {
-            names.add(Bukkit.getPlayer(uuid).getName());
-        }
-        return String.join(", ", names);
+        return turnToList(deadList);
+    }
+
+    public String reviveRecentAsList() {
+        return turnToList(reviveRecentList);
     }
 
     public void playerDeath(UUID uuid) {

@@ -2,15 +2,15 @@ package org.azex.neon.commands.placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.azex.neon.methods.ListManager;
+import org.azex.neon.methods.Messages;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class dead extends PlaceholderExpansion {
+public class DeadPlaceholder extends PlaceholderExpansion {
 
     private ListManager list;
 
-    public dead(ListManager list) {
+    public DeadPlaceholder(ListManager list) {
         this.list = list;
     }
 
@@ -21,21 +21,19 @@ public class dead extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getAuthor() {
-        return "Azex";
+        return Messages.PlaceholderAuthor;
     }
 
     @Override
     public @NotNull String getVersion() {
-        return "1.0";
+        return Messages.PlaceholderVersion;
     }
 
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
         if (params.equalsIgnoreCase("players")) {
-            return list.deadAsList();
-        }
-
-        if (params.equalsIgnoreCase("size")) {
+            return list.deadList.isEmpty() ? "No one!" : list.deadAsList();
+        }else if (params.equalsIgnoreCase("size")) {
             return String.valueOf(list.deadList.size());
         }
         return null;

@@ -1,43 +1,33 @@
 package org.azex.neon.commands.placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.azex.neon.methods.ListManager;
+import org.azex.neon.commands.TokenUsage;
+import org.azex.neon.methods.Messages;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class alive extends PlaceholderExpansion {
-
-    private ListManager list;
-
-    public alive(ListManager list) {
-        this.list = list;
-    }
+public class TokenusagePlaceholder extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getIdentifier() {
-        return "alive";
+        return "tokenusage";
     }
 
     @Override
     public @NotNull String getAuthor() {
-        return "Azex";
+        return Messages.PlaceholderAuthor;
     }
 
     @Override
     public @NotNull String getVersion() {
-        return "1.0";
+        return Messages.PlaceholderVersion;
     }
 
     @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
-        if (params.equalsIgnoreCase("players")) {
-            return list.aliveAsList();
-        }
-
-        if (params.equalsIgnoreCase("size")) {
-            return String.valueOf(list.aliveList.size());
+        if (params.equalsIgnoreCase("status")) {
+            return String.valueOf(!TokenUsage.toggle);
         }
         return null;
     }

@@ -14,7 +14,7 @@ public class Build implements CommandExecutor {
 
     private WorldGuardManager wg;
     private Flag flag = Flags.BLOCK_PLACE;
-    private boolean toggle = false;
+    public static boolean toggle = true;
 
     public Build(WorldGuardManager wg) {
         this.wg = wg;

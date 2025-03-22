@@ -14,7 +14,7 @@ public class FallDamage implements CommandExecutor {
 
     private WorldGuardManager wg;
     private Flag flag = Flags.FALL_DAMAGE;
-    private Boolean toggle = false;
+    public static boolean toggle = true;
 
     public FallDamage(WorldGuardManager wg) {
         this.wg = wg;
