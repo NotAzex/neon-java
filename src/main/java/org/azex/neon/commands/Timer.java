@@ -73,7 +73,7 @@ public class Timer implements CommandExecutor {
             public void run() {
                 if (time <= 0) {
                     Messages.broadcastActionBar("");
-                    Messages.broadcast("<light_purple>☄ Timer<gray> finished!");
+                    Messages.broadcast("<light_purple>☄<gray> The <light_purple>timer<gray> has ended!");
                     status = false;
                     format = null;
                     cancel();
