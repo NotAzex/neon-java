@@ -18,6 +18,8 @@ import java.util.UUID;
 public class UseRevive implements CommandExecutor {
 
     private Tokens tokens;
+    private String color1 = Messages.color1;
+    private String color2 = Messages.color2;
 
     public UseRevive(Tokens tokens) {
         this.tokens = tokens;
@@ -47,25 +49,22 @@ public class UseRevive implements CommandExecutor {
         tokens.requestedToken.add(uuid);
 
         Component deny = Component.text("deny")
-                .color(NamedTextColor.LIGHT_PURPLE)
                 .clickEvent(ClickEvent.runCommand("/token deny " + player.getName()));
 
         Component accept = Component.text("accept")
-                .color(NamedTextColor.LIGHT_PURPLE)
                 .clickEvent(ClickEvent.runCommand("/token accept " + player.getName()));
 
-        Component message = Component.text("☄ " + player.getName())
-                .color(NamedTextColor.LIGHT_PURPLE)
-                .append(Component.text(" has used a token! ").color(NamedTextColor.GRAY))
-                .append(Component.text("Do you want to ").color(NamedTextColor.GRAY))
+        Component txt = Messages.mini.deserialize(Messages.prefix + " " + player.getName()
+        + color2 + " has used a token! Do you want to");
+        txt = txt.append(Messages.mini.deserialize(color1 + " "))
                 .append(accept)
-                .append(Component.text(" or ").color(NamedTextColor.GRAY))
+                .append(Messages.mini.deserialize(color2 + " it or " + color1))
                 .append(deny)
-                .append(Component.text(" it?").color(NamedTextColor.GRAY));
+                .append(Messages.mini.deserialize(color2 + " it?"));
 
         for (Player loop : Bukkit.getOnlinePlayers()) {
             if (loop.hasPermission("neon.admin")) {
-                loop.sendMessage(message);
+                loop.sendMessage(txt);
                 loop.playSound(loop.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 100, 1);
             }
         }

@@ -24,15 +24,13 @@ public class WorldGuardManager {
     private ProtectedRegion region;
     private String ymlRegion;
     private RegionContainer container;
-    private Object worldObj;
-    private org.bukkit.World bukkitWorld;
 
     public WorldGuardManager(Neon plugin) {
         this.plugin = plugin;
     }
 
     private RegionManager getRegionManager() {
-        Object worldObj = plugin.getConfig().getString("World");
+        Object worldObj = plugin.getConfig().getString("WorldGuard.World");
         org.bukkit.World bukkitWorld = Bukkit.getWorld((String) worldObj);
 
         if (bukkitWorld == null) {
@@ -75,7 +73,7 @@ public class WorldGuardManager {
     public void setFlag(Flag flag, StateFlag.State state) {
         if (getRegionManager() != null) {
             RegionManager regions = getRegionManager();
-            ymlRegion = plugin.getConfig().getString("Region");
+            ymlRegion = plugin.getConfig().getString("WorldGuard.Region");
             region = regions.getRegion(ymlRegion);
             try {
                 region.setFlag(flag, state);

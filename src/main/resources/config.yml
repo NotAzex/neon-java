@@ -1,2 +1,17 @@
-World: world
-Region: arena
+
+# Important:
+# Check out the MiniMessage docs to see how to properly use colors.
+# https://docs.advntr.dev/minimessage/format
+
+WorldGuard:
+  World: world
+  Region: arena
+Customization:
+  Prefix: <light_purple>☄
+  Color1: <light_purple>
+  Color2: <gray>
+Sounds:
+  Main: BLOCK_NOTE_BLOCK_PLING
+  Error: BLOCK_NOTE_BLOCK_BASS
+  Pitch: 1
+  Volume: 100

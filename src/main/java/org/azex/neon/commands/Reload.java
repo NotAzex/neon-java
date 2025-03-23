@@ -24,7 +24,7 @@ public class Reload implements CommandExecutor {
         }
 
         if (args[0].equals("reload")) {
-            plugin.reloadConfig();
+            Messages.reloadConfig(plugin);
             Messages.sendMessage(sender, "<light_purple>☄ Config<gray> has been reloaded!", "msg");
         }else{
             Messages.sendMessage(sender, "<red>Not a real argument! Available arguments: [reload]", "error");

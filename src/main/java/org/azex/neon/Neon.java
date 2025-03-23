@@ -18,9 +18,16 @@ public final class Neon extends JavaPlugin {
     private Empty empty;
     private WorldGuardManager wg;
 
+    private static Neon instance;
+
+    public static Neon getInstance() {
+        return instance;
+    }
+
     @Override
     public void onEnable() {
 
+        instance = this;
         int pluginId = 25207;
         Metrics metrics = new Metrics(this, pluginId);
         this.getLogger().info("\u001B[37m Loaded bStats...\u001B[0m");
@@ -38,7 +45,7 @@ public final class Neon extends JavaPlugin {
         empty = new Empty();
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            getLogger().info("\u001B[37m PlaceholderAPI found! Registering placeholders...\u001B[0m");
+            getLogger().info("\u001B[37mPlaceholderAPI found! Registering placeholders...\u001B[0m");
             new TimerPlaceholder().register();
             new BreakPlaceholder().register();
             new BuildPlaceholder().register();
@@ -54,16 +61,16 @@ public final class Neon extends JavaPlugin {
             new AlivePlaceholder(list).register();
             new DeadPlaceholder(list).register();
             new TokensPlaceholder(tokens).register();
-            getLogger().info("\u001B[37m Registered 15 placeholders!\u001B[0m");
+            getLogger().info("\u001B[37mRegistered 15 placeholders!\u001B[0m");
         }else{
-            getLogger().info("\u001B[37m PlaceholderAPI not found, Neon will not register placeholders.\u001B[0m");
+            getLogger().info("\u001B[37mPlaceholderAPI not found, Neon will not register placeholders.\u001B[0m");
         }
 
-        getLogger().info("\u001B[37m Registering events...\u001B[0m");
+        getLogger().info("\u001B[37mRegistering events...\u001B[0m");
         getServer().getPluginManager().registerEvents(new EventManager(list, ymlManager, wg), this);
-        getLogger().info("\u001B[37m Registered events!\u001B[0m");
+        getLogger().info("\u001B[37mRegistered events!\u001B[0m");
 
-        getLogger().info("\u001B[37m Registering commands...\u001B[0m");
+        getLogger().info("\u001B[37mRegistering commands...\u001B[0m");
         getCommand("timer").setExecutor(new Timer(this));
         getCommand("tokenusage").setExecutor(new TokenUsage());
         getCommand("token").setExecutor(new AcceptDenyToken(tokens));
@@ -92,9 +99,9 @@ public final class Neon extends JavaPlugin {
         getCommand("tpdead").setExecutor(new TeleportDead(list));
         getCommand("tpall").setExecutor(new TeleportAll());
         getCommand("revival").setExecutor(new Revival());
-        getLogger().info("\u001B[37m Registered commands!\u001B[0m");
+        getLogger().info("\u001B[37mRegistered commands!\u001B[0m");
 
-        getLogger().info("\u001B[37m Registering tab completers...\u001B[0m");
+        getLogger().info("\u001B[37mRegistering tab completers...\u001B[0m");
         getCommand("timer").setTabCompleter(new TimerTab());
         getCommand("token").setTabCompleter(new AcceptDenyTokenTab());
         getCommand("neon").setTabCompleter(new ReloadTab());
@@ -118,7 +125,7 @@ public final class Neon extends JavaPlugin {
         getCommand("tpalive").setTabCompleter(empty);
         getCommand("tpall").setTabCompleter(empty);
         getCommand("tokenusage").setTabCompleter(empty);
-        getLogger().info("\u001B[37m Registered tab completers!\u001B[0m");
+        getLogger().info("\u001B[37mRegistered tab completers!\u001B[0m");
     }
 
     @Override
