@@ -32,6 +32,7 @@ public class Timer implements CommandExecutor {
                 timerLoop.cancel();
                 status = false;
                 format = null;
+                time = 0;
                 return true;
             }else{
                 Messages.sendMessage(sender, "<red>There isn't a timer running right now!", "error");
