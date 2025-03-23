@@ -48,6 +48,7 @@ public final class Neon extends JavaPlugin {
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             getLogger().info("\u001B[37mPlaceholderAPI found! Registering placeholders...\u001B[0m");
+            new HungerPlaceholder().register();
             new TimerPlaceholder().register();
             new BreakPlaceholder().register();
             new BuildPlaceholder().register();
@@ -73,6 +74,8 @@ public final class Neon extends JavaPlugin {
         getLogger().info("\u001B[37mRegistered events!\u001B[0m");
 
         getLogger().info("\u001B[37mRegistering commands...\u001B[0m");
+        getCommand("hunger").setExecutor(new Hunger());
+        getCommand("clearrevive").setExecutor(new ClearRevive(tokens));
         getCommand("timer").setExecutor(new Timer(this));
         getCommand("listclear").setExecutor(new Listclear(list));
         getCommand("tokenusage").setExecutor(new TokenUsage());
@@ -118,17 +121,19 @@ public final class Neon extends JavaPlugin {
         getCommand("reviverecent").setTabCompleter(empty);
         getCommand("spawn").setTabCompleter(empty);
         getCommand("listclear").setTabCompleter(empty);
+        getCommand("hunger").setTabCompleter(empty);
         getCommand("setspawn").setTabCompleter(empty);
         getCommand("core").setTabCompleter(empty);
-        getCommand("givetoken").setTabCompleter(tokensTab);
-        getCommand("removetoken").setTabCompleter(tokensTab);
-        getCommand("revive").setTabCompleter(playerTab);
-        getCommand("unrevive").setTabCompleter(playerTab);
-        getCommand("tokens").setTabCompleter(playerTab);
         getCommand("tpdead").setTabCompleter(empty);
         getCommand("tpalive").setTabCompleter(empty);
         getCommand("tpall").setTabCompleter(empty);
         getCommand("tokenusage").setTabCompleter(empty);
+        getCommand("givetoken").setTabCompleter(tokensTab);
+        getCommand("removetoken").setTabCompleter(tokensTab);
+        getCommand("clearrevive").setTabCompleter(playerTab);
+        getCommand("revive").setTabCompleter(playerTab);
+        getCommand("unrevive").setTabCompleter(playerTab);
+        getCommand("tokens").setTabCompleter(playerTab);
         getLogger().info("\u001B[37mRegistered tab completers!\u001B[0m");
         scoreboardManager.runScoreboardLoop();
         list.startBackupLoop();
@@ -136,6 +141,7 @@ public final class Neon extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        scoreboardManager = null;
         tokens = null;
         tokensTab = null;
         playerTab = null;

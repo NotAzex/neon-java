@@ -1,16 +1,14 @@
 package org.azex.neon.methods;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.azex.neon.commands.Flow;
-import org.azex.neon.commands.Mutechat;
-import org.azex.neon.commands.PvP;
-import org.azex.neon.commands.Revival;
+import org.azex.neon.commands.*;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 
@@ -144,4 +142,12 @@ public class EventManager implements Listener {
     public void death(PlayerDeathEvent event) {
         list.playerDeath(event.getPlayer().getUniqueId());
     }
+
+    @EventHandler
+    public void hunger(FoodLevelChangeEvent event) {
+        if (Hunger.toggle) {
+            event.setCancelled(true);
+        }
+    }
+
 }

@@ -38,7 +38,7 @@ public class ListManager {
                 public void run() {
                     backupLists();
                 }
-            }.runTaskTimer(plugin, 0L, plugin.getConfig().getLong("Other.BackupFrequency") * 20);
+            }.runTaskTimer(plugin, 0L, (plugin.getConfig().getLong("Other.BackupFrequency", 60L) * 20));
         }
     }
 
@@ -50,8 +50,8 @@ public class ListManager {
                 File file = new File(plugin.getDataFolder(), "backup.txt");
                 FileWriter writer = new FileWriter(file, true);
                 String time = "\n[" + date.format(format) + "]";
-                String txt = "\n[ALIVE]\n" + (aliveAsList().isEmpty() ? "No one!" : aliveAsList() +
-                        "\n[DEAD]\n" + (deadAsList().isEmpty() ? "No one!" : deadAsList()) + "\n");
+                String txt = "\n[" + aliveList.size() + " ALIVE]\n" + (aliveAsList().isEmpty() ? "No one!" : aliveAsList() +
+                        "\n[" + deadList.size() + " DEAD]\n" + (deadAsList().isEmpty() ? "No one!" : deadAsList()) + "\n");
                 if (!checkLists.equals(txt)) {
                     checkLists = txt;
                     writer.write(time + txt);
@@ -60,7 +60,6 @@ public class ListManager {
 
             } catch (IOException e) {
                 plugin.getLogger().warning("Failed to backup the alive list due to " + e.getMessage());
-
             }
         }
     }

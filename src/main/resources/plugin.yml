@@ -8,6 +8,12 @@ authors: [ Azex ]
 description: Neon, but it's rewritten in Java
 website: https://discord.gg/nKEa5NxRew
 commands:
+  hunger:
+    description: Toggles hunger using events.
+    permission: neon.admin
+  clearrevive:
+    description: Clears the revives of a player.
+    permission: neon.admin
   listclear:
     description: Clears the alive & dead list and then adds everyone to the dead list.
     permission: neon.admin
