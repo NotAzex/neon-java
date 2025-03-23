@@ -23,6 +23,11 @@ public class Timer implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
+        if (args.length != 2) {
+            Messages.sendMessage(sender, "<red>2 arguments required! /timer <number> <seconds/minutes>", "error");
+            return false;
+        }
+
         if (!args[1].equals("minutes") && !args[1].equals("minute") && !args[1].equals("seconds") && !args[1].equals("second")) {
             Messages.sendMessage(sender, "<red>Invalid second argument! Valid arguments: [minutes, seconds]", "error");
             return false;
