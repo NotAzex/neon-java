@@ -84,7 +84,7 @@ public class Timer implements CommandExecutor {
                 int seconds = time % 60;
                 format = (minutes > 0 ? "<light_purple>" + minutes + " <gray>minute(s),<light_purple> " : "<light_purple>")
                         + seconds + " <gray>second(s)";
-                Messages.broadcastActionBar(format + " remaining!");
+                Messages.broadcastActionBar(format + " left!");
 
                 time--;
             }
