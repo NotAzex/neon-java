@@ -34,6 +34,12 @@ public class Messages {
         }
     }
 
+    public static void broadcastActionBar(String text) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.sendActionBar(mini.deserialize(text));
+        }
+    }
+
     public static void broadcast(String text) {
         Bukkit.broadcast(mini.deserialize(text));
         for (Player player : Bukkit.getOnlinePlayers()) {

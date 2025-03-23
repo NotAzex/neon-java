@@ -8,6 +8,9 @@ authors: [ Azex ]
 description: Neon, but it's rewritten in Java
 website: https://discord.gg/nKEa5NxRew
 commands:
+  timer:
+    description: Starts a timer.
+    permission: neon.admin
   tokenusage:
     description: Used for toggling token usage.
     permission: neon.admin

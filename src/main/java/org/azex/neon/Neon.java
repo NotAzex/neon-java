@@ -63,6 +63,7 @@ public final class Neon extends JavaPlugin {
         getLogger().info("\u001B[37m Registered events!\u001B[0m");
 
         getLogger().info("\u001B[37m Registering commands...\u001B[0m");
+        getCommand("timer").setExecutor(new Timer(this));
         getCommand("tokenusage").setExecutor(new TokenUsage());
         getCommand("token").setExecutor(new AcceptDenyToken(tokens));
         getCommand("userevive").setExecutor(new UseRevive(tokens));
@@ -93,6 +94,7 @@ public final class Neon extends JavaPlugin {
         getLogger().info("\u001B[37m Registered commands!\u001B[0m");
 
         getLogger().info("\u001B[37m Registering tab completers...\u001B[0m");
+        getCommand("timer").setTabCompleter(new TimerTab());
         getCommand("token").setTabCompleter(new AcceptDenyTokenTab());
         getCommand("neon").setTabCompleter(new ReloadTab());
         getCommand("revival").setTabCompleter(new RevivalTab());
