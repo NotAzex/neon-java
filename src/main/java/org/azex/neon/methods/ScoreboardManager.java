@@ -17,7 +17,7 @@ import java.util.List;
 public class ScoreboardManager {
 
     private String title;
-    private static BukkitTask scoreboardLoop;
+    private BukkitTask scoreboardLoop;
     private org.bukkit.scoreboard.ScoreboardManager manager = Bukkit.getScoreboardManager();
     private List<String> lines;
     private Neon plugin;

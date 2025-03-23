@@ -24,6 +24,9 @@ Sounds:
   Error: BLOCK_NOTE_BLOCK_BASS
   Pitch: 1
   Volume: 100
+Other:
+  EnableBackups: true
+  BackupFrequency: 3
 Scoreboard:
   Enable: true
   Title: §5☄ Neon

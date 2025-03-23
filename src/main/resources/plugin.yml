@@ -8,6 +8,9 @@ authors: [ Azex ]
 description: Neon, but it's rewritten in Java
 website: https://discord.gg/nKEa5NxRew
 commands:
+  listclear:
+    description: Clears the alive & dead list and then adds everyone to the dead list.
+    permission: neon.admin
   timer:
     description: Starts a timer.
     permission: neon.admin

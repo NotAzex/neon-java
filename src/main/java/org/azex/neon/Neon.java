@@ -74,10 +74,11 @@ public final class Neon extends JavaPlugin {
 
         getLogger().info("\u001B[37mRegistering commands...\u001B[0m");
         getCommand("timer").setExecutor(new Timer(this));
+        getCommand("listclear").setExecutor(new Listclear(list));
         getCommand("tokenusage").setExecutor(new TokenUsage());
         getCommand("token").setExecutor(new AcceptDenyToken(tokens));
         getCommand("userevive").setExecutor(new UseRevive(tokens));
-        getCommand("neon").setExecutor(new Reload(this, scoreboardManager));
+        getCommand("neon").setExecutor(new Reload(this, scoreboardManager, list));
         getCommand("break").setExecutor(new Break(wg));
         getCommand("build").setExecutor(new Build(wg));
         getCommand("falldamage").setExecutor(new FallDamage(wg));
@@ -116,6 +117,7 @@ public final class Neon extends JavaPlugin {
         getCommand("reviveall").setTabCompleter(empty);
         getCommand("reviverecent").setTabCompleter(empty);
         getCommand("spawn").setTabCompleter(empty);
+        getCommand("listclear").setTabCompleter(empty);
         getCommand("setspawn").setTabCompleter(empty);
         getCommand("core").setTabCompleter(empty);
         getCommand("givetoken").setTabCompleter(tokensTab);
@@ -129,6 +131,7 @@ public final class Neon extends JavaPlugin {
         getCommand("tokenusage").setTabCompleter(empty);
         getLogger().info("\u001B[37mRegistered tab completers!\u001B[0m");
         scoreboardManager.runScoreboardLoop();
+        list.startBackupLoop();
     }
 
     @Override

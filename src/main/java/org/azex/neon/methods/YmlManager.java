@@ -15,12 +15,14 @@ public class YmlManager {
     private FileConfiguration tokens;
     private File spawnFile;
     private File tokensfile;
+    private File backupfile;
 
     public YmlManager(Neon plugin) {
         this.plugin = plugin;
 
         this.tokensfile = new File(plugin.getDataFolder(), "tokens.yml");
         this.spawnFile = new File(plugin.getDataFolder(), "spawn.yml");
+        this.backupfile = new File(plugin.getDataFolder(), "backup.yml");
         if (!spawnFile.exists()) {
             plugin.saveResource("spawn.yml", false);
         }

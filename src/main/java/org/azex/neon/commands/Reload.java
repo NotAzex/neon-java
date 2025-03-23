@@ -1,6 +1,7 @@
 package org.azex.neon.commands;
 
 import org.azex.neon.Neon;
+import org.azex.neon.methods.ListManager;
 import org.azex.neon.methods.Messages;
 import org.azex.neon.methods.ScoreboardManager;
 import org.bukkit.command.Command;
@@ -12,10 +13,12 @@ public class Reload implements CommandExecutor {
 
     private Neon plugin;
     private ScoreboardManager scoreboardManager;
+    private ListManager listManager;
 
-    public Reload(Neon plugin, ScoreboardManager scoreboardManager) {
+    public Reload(Neon plugin, ScoreboardManager scoreboardManager, ListManager listManager) {
         this.plugin = plugin;
         this.scoreboardManager = scoreboardManager;
+        this.listManager = listManager;
     }
 
     @Override
@@ -28,9 +31,11 @@ public class Reload implements CommandExecutor {
 
         if (args[0].equals("reload")) {
             scoreboardManager.endScoreboardLoop();
+            listManager.endBackupLoop();
             Messages.reloadConfig(plugin);
             Messages.sendMessage(sender, "<light_purple>☄ Config<gray> has been reloaded!", "msg");
             scoreboardManager.runScoreboardLoop();
+            listManager.startBackupLoop();
         }else{
             Messages.sendMessage(sender, "<red>Not a real argument! Available arguments: [reload]", "error");
             return false;
