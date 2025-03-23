@@ -31,7 +31,7 @@ public class Dead implements CommandExecutor {
                 dead.append(player.getName()).append(", ");
             }
             dead.setLength(dead.length() - 2);
-            Messages.sendMessage(commandSender, "<light_purple><bold>DEAD:<reset><gray> " + dead.toString(), "msg");
+            Messages.sendMessage(commandSender, "<light_purple><bold>DEAD:<reset><gray> " + dead, "msg");
         }
         return true;
     }

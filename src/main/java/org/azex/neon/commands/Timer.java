@@ -23,7 +23,7 @@ public class Timer implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
-        if (status == true) {
+        if (status) {
             Messages.sendMessage(sender, "<red>There is already a timer running!", "error");
             return false;
         }

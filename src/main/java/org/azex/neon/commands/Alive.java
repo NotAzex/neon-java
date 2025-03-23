@@ -30,7 +30,7 @@ public class Alive implements CommandExecutor {
                 alive.append(player.getName()).append(", ");
             }
             alive.setLength(alive.length() - 2);
-            Messages.sendMessage(commandSender, "<light_purple><bold>ALIVE:<reset><gray> " + alive.toString(), "msg");
+            Messages.sendMessage(commandSender, "<light_purple><bold>ALIVE:<reset><gray> " + alive, "msg");
         }
         return true;
     }

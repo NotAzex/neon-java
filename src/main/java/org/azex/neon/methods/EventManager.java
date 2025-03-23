@@ -1,7 +1,6 @@
 package org.azex.neon.methods;
 
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.azex.neon.Neon;
 import org.azex.neon.commands.Flow;
 import org.azex.neon.commands.Mutechat;
 import org.azex.neon.commands.PvP;
@@ -13,29 +12,42 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.*;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class EventManager implements Listener {
 
     MiniMessage mini = MiniMessage.miniMessage();
 
-    private final Neon plugin;
     private final ListManager list;
     private final YmlManager ymlManager;
-    private final VersionChecker versionChecker;
     private final WorldGuardManager wg;
 
-    public EventManager(Neon plugin, ListManager list, YmlManager ymlManager, VersionChecker versionChecker, WorldGuardManager wg) {
+    private final List<String> blockedCommands = Arrays.asList(
+            "/minecraft:teammsg ",
+            "/teammsg ",
+            "/minecraft:tm ",
+            "/tm ",
+            "/minecraft:me ",
+            "/me ");
+
+    public EventManager(ListManager list, YmlManager ymlManager, WorldGuardManager wg) {
         this.wg = wg;
         this.list = list;
-        this.plugin = plugin;
         this.ymlManager = ymlManager;
-        this.versionChecker = versionChecker;
+    }
+
+    @EventHandler
+    public void blockCommands(PlayerCommandPreprocessEvent event) {
+        for (String command : blockedCommands) {
+            if (event.getMessage().startsWith(command.toLowerCase())) {
+                event.setCancelled(true);
+                break;
+            }
+        }
     }
 
     @EventHandler

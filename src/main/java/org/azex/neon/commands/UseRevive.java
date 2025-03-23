@@ -2,7 +2,6 @@ package org.azex.neon.commands;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.azex.neon.methods.Messages;
 import org.azex.neon.methods.Tokens;
