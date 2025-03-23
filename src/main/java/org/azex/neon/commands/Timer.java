@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 public class Timer implements CommandExecutor {
@@ -19,9 +20,24 @@ public class Timer implements CommandExecutor {
     public static boolean status = false;
     public static String format;
     public static int time;
+    private static BukkitTask timerLoop;
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+
+        if (args[0].equals("cancel")) {
+            if (status) {
+                Messages.broadcastActionBar("");
+                Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has cancelled the timer.");
+                timerLoop.cancel();
+                status = false;
+                format = null;
+                return true;
+            }else{
+                Messages.sendMessage(sender, "<red>There isn't a timer running right now!", "error");
+                return false;
+            }
+        }
 
         if (status) {
             Messages.sendMessage(sender, "<red>There is already a timer running!", "error");
@@ -50,7 +66,7 @@ public class Timer implements CommandExecutor {
             time *= 60;
         }
 
-        new BukkitRunnable() {
+        timerLoop = new BukkitRunnable() {
 
             @Override
             public void run() {

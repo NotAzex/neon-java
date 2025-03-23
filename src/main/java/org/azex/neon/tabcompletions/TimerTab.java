@@ -13,7 +13,7 @@ public class TimerTab implements TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if (args.length == 1) {
-            return Collections.singletonList("<number>");
+            return List.of("<number>", "cancel");
         } else if (args.length == 2) {
             return List.of("minutes", "seconds");
         }
