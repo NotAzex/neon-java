@@ -33,7 +33,7 @@ public class YmlManager {
         String world = spawn.getString("spawn.world");
 
         if (world == null) {
-            plugin.getLogger().warning("World wasn't found when getting the location from the config, does the world exist?");
+            plugin.getLogger().warning("World wasn't found when getting the location from the spawn file, does the spawn or the world exist?");
             return null;
         }
 

@@ -4,9 +4,12 @@
 # https://docs.advntr.dev/minimessage/format
 
 # Scoreboard allows legacy color codes ('§7') to be used.
+# You can add more lines to the scoreboard.
 # The scoreboard also supports PlaceholderAPI!
 
-# Please see the 'placeholders.txt' file to see all the placeholders and what they do.
+# Please visit 'https://github.com/NotAzex/neon-java/blob/main/placeholders'
+# to see all the placeholders and what they do.
+
 # %player% returns the name of the player.
 
 WorldGuard:
@@ -23,11 +26,11 @@ Sounds:
   Volume: 100
 Scoreboard:
   Enable: true
-  Title: §5☄ Neon §7§o[premade scoreboard]
+  Title: §5☄ Neon
   Lines:
     - ""
     - " §7| &fAlive: &5%alive_size%"
     - " §7| &fDead: &5%dead_size%"
     - " §7| &fTokens: &5%tokens_%player%%"
     - " "
-    - "§7§oThis scoreboard is editable in the config!"
+    - "§7§oEdit this in the config of Neon."
