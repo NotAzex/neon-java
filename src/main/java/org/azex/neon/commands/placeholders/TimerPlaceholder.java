@@ -34,7 +34,7 @@ public class TimerPlaceholder extends PlaceholderExpansion {
                 formatted = formatted.replaceAll("<gray>", "");
                 return formatted;
             }else{
-                return "0";
+                return "A timer hasn't been set!";
             }
         }
 
