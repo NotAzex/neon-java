@@ -39,6 +39,7 @@ public final class Neon extends JavaPlugin {
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             getLogger().info("\u001B[37m PlaceholderAPI found! Registering placeholders...\u001B[0m");
+            new TimerPlaceholder().register();
             new BreakPlaceholder().register();
             new BuildPlaceholder().register();
             new FalldamagePlaceholder().register();
@@ -53,7 +54,7 @@ public final class Neon extends JavaPlugin {
             new AlivePlaceholder(list).register();
             new DeadPlaceholder(list).register();
             new TokensPlaceholder(tokens).register();
-            getLogger().info("\u001B[37m Registered 14 placeholders!\u001B[0m");
+            getLogger().info("\u001B[37m Registered 15 placeholders!\u001B[0m");
         }else{
             getLogger().info("\u001B[37m PlaceholderAPI not found, Neon will not register placeholders.\u001B[0m");
         }
