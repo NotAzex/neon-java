@@ -1,7 +1,13 @@
 
 # Important:
-# Check out the MiniMessage docs to see how to properly use colors.
+# Check out the MiniMessage docs to see how to properly use colors for messages.
 # https://docs.advntr.dev/minimessage/format
+
+# Scoreboard allows legacy color codes ('§7') to be used.
+# The scoreboard also supports PlaceholderAPI!
+
+# Please see the 'placeholders.txt' file to see all the placeholders and what they do.
+# %player% returns the name of the player.
 
 WorldGuard:
   World: world
@@ -15,3 +21,13 @@ Sounds:
   Error: BLOCK_NOTE_BLOCK_BASS
   Pitch: 1
   Volume: 100
+Scoreboard:
+  Enable: true
+  Title: §5☄ Neon §7§o[premade scoreboard]
+  Lines:
+    - ""
+    - " §7| &fAlive: &5%alive_size%"
+    - " §7| &fDead: &5%dead_size%"
+    - " §7| &fTokens: &5%tokens_%player%%"
+    - " "
+    - "§7§oThis scoreboard is editable in the config!"

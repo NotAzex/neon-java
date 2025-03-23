@@ -17,6 +17,7 @@ public final class Neon extends JavaPlugin {
     private PlayersAsTabCompletion playerTab;
     private Empty empty;
     private WorldGuardManager wg;
+    private ScoreboardManager scoreboardManager;
 
     private static Neon instance;
 
@@ -36,6 +37,7 @@ public final class Neon extends JavaPlugin {
 
         list = new ListManager(this);
         ymlManager = new YmlManager(this);
+        scoreboardManager = new ScoreboardManager(this);
         tokens = new Tokens(ymlManager, this);
         tokensTab = new TokensTab();
         versionChecker = new VersionChecker(this);
@@ -75,7 +77,7 @@ public final class Neon extends JavaPlugin {
         getCommand("tokenusage").setExecutor(new TokenUsage());
         getCommand("token").setExecutor(new AcceptDenyToken(tokens));
         getCommand("userevive").setExecutor(new UseRevive(tokens));
-        getCommand("neon").setExecutor(new Reload(this));
+        getCommand("neon").setExecutor(new Reload(this, scoreboardManager));
         getCommand("break").setExecutor(new Break(wg));
         getCommand("build").setExecutor(new Build(wg));
         getCommand("falldamage").setExecutor(new FallDamage(wg));
@@ -126,6 +128,7 @@ public final class Neon extends JavaPlugin {
         getCommand("tpall").setTabCompleter(empty);
         getCommand("tokenusage").setTabCompleter(empty);
         getLogger().info("\u001B[37mRegistered tab completers!\u001B[0m");
+        scoreboardManager.runScoreboardLoop();
     }
 
     @Override
