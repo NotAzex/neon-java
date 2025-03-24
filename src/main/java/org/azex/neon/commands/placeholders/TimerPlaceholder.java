@@ -9,6 +9,16 @@ import org.jetbrains.annotations.Nullable;
 
 public class TimerPlaceholder extends PlaceholderExpansion {
 
+    private String replace(String text) {
+        if (text != null) {
+            text = text.replace("<light_purple>", "");
+            text = text.replace("<gray>", "");
+            return text;
+        }else{
+            return "None!";
+        }
+    }
+
     @Override
     public @NotNull String getIdentifier() {
         return "timer";
@@ -26,16 +36,13 @@ public class TimerPlaceholder extends PlaceholderExpansion {
 
     @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
-        if (params.equalsIgnoreCase("formatted")) {
 
-            String formatted = Timer.format;
-            if (formatted != null) {
-                formatted = formatted.replaceAll("<light_purple>", "");
-                formatted = formatted.replaceAll("<gray>", "");
-                return formatted;
-            }else{
-                return "None!";
-            }
+        if (params.equalsIgnoreCase("mmss")) {
+            return replace(Timer.otherFormat);
+        }
+
+        if (params.equalsIgnoreCase("normal")) {
+            return replace(Timer.format);
         }
 
         if (params.equalsIgnoreCase("raw")) {

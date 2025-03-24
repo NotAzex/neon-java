@@ -19,6 +19,7 @@ public class Timer implements CommandExecutor {
 
     public static boolean status = false;
     public static String format;
+    public static String otherFormat;
     public static int time;
     private static BukkitTask timerLoop;
 
@@ -82,6 +83,8 @@ public class Timer implements CommandExecutor {
 
                 int minutes = time / 60;
                 int seconds = time % 60;
+                otherFormat = (minutes > 0 ? minutes + ":" : "")
+                        + seconds;
                 format = (minutes > 0 ? "<light_purple>" + minutes + " <gray>minute(s),<light_purple> " : "<light_purple>")
                         + seconds + " <gray>second(s)";
                 Messages.broadcastActionBar(format + " left!");
