@@ -33,6 +33,7 @@ public class Timer implements CommandExecutor {
                 timerLoop.cancel();
                 status = false;
                 format = null;
+                otherFormat = null;
                 time = 0;
                 return true;
             }else{
@@ -77,14 +78,14 @@ public class Timer implements CommandExecutor {
                     Messages.broadcast("<light_purple>☄<gray> The <light_purple>timer<gray> has ended!");
                     status = false;
                     format = null;
+                    otherFormat = null;
                     cancel();
                     return;
                 }
 
                 int minutes = time / 60;
                 int seconds = time % 60;
-                otherFormat = (minutes > 0 ? minutes + ":" : "")
-                        + seconds;
+                otherFormat = minutes + ":" + String.format("%02d", seconds);
                 format = (minutes > 0 ? "<light_purple>" + minutes + " <gray>minute(s),<light_purple> " : "<light_purple>")
                         + seconds + " <gray>second(s)";
                 Messages.broadcastActionBar(format + " left!");
