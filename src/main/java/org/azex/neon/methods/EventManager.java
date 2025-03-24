@@ -1,6 +1,9 @@
 package org.azex.neon.methods;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.azex.neon.Neon;
 import org.azex.neon.commands.*;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,7 +25,12 @@ public class EventManager implements Listener {
 
     private final ListManager list;
     private final YmlManager ymlManager;
+    private final VersionChecker versionChecker;
     private final WorldGuardManager wg;
+    private final Neon plugin;
+
+    private String color1 = Messages.color1;
+    private String color2 = Messages.color2;
 
     private final List<String> blockedCommands = Arrays.asList(
             "/minecraft:teammsg ",
@@ -32,7 +40,9 @@ public class EventManager implements Listener {
             "/minecraft:me ",
             "/me ");
 
-    public EventManager(ListManager list, YmlManager ymlManager, WorldGuardManager wg) {
+    public EventManager(Neon plugin, VersionChecker versionChecker, ListManager list, YmlManager ymlManager, WorldGuardManager wg) {
+        this.plugin = plugin;
+        this.versionChecker = versionChecker;
         this.wg = wg;
         this.list = list;
         this.ymlManager = ymlManager;
@@ -112,6 +122,25 @@ public class EventManager implements Listener {
         }
     }
 
+    @EventHandler
+    public void versionCheck(PlayerJoinEvent event) {
+        String latestVersion = versionChecker.checkForUpdates();
+        Player player = event.getPlayer();
+        if (latestVersion != null && player.hasPermission("neon.admin")) {
+            String currentVersion = plugin.getDescription().getVersion();
+
+            Component modrinth = Component.text(" • https://modrinth.com/plugin/neon-core")
+                    .clickEvent(ClickEvent.openUrl("https://modrinth.com/plugin/neon-core"));
+
+            if (!currentVersion.equalsIgnoreCase(latestVersion)) {
+                Component txt = Messages.mini.deserialize(Messages.prefix + color1 + " Neon" + color2 + " has detected an update! " +
+                        color1 + latestVersion + "\n");
+                txt = txt.append(modrinth);
+                player.sendMessage(txt);
+                Messages.playSound(player, "main");
+            }
+        }
+    }
 
     @EventHandler
     public void join(PlayerJoinEvent event) {

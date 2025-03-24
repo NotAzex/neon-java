@@ -64,16 +64,18 @@ public final class Neon extends JavaPlugin {
             new AlivePlaceholder(list).register();
             new DeadPlaceholder(list).register();
             new TokensPlaceholder(tokens).register();
+            new EventPlaceholder().register();
             getLogger().info("\u001B[37mRegistered 15 placeholders!\u001B[0m");
         }else{
             getLogger().info("\u001B[37mPlaceholderAPI not found, Neon will not register placeholders.\u001B[0m");
         }
 
         getLogger().info("\u001B[37mRegistering events...\u001B[0m");
-        getServer().getPluginManager().registerEvents(new EventManager(list, ymlManager, wg), this);
+        getServer().getPluginManager().registerEvents(new EventManager(this, versionChecker, list, ymlManager, wg), this);
         getLogger().info("\u001B[37mRegistered events!\u001B[0m");
 
         getLogger().info("\u001B[37mRegistering commands...\u001B[0m");
+        getCommand("event").setExecutor(new SetEvent());
         getCommand("hunger").setExecutor(new Hunger());
         getCommand("clearrevive").setExecutor(new ClearRevive(tokens));
         getCommand("timer").setExecutor(new Timer(this));
@@ -108,6 +110,7 @@ public final class Neon extends JavaPlugin {
         getLogger().info("\u001B[37mRegistered commands!\u001B[0m");
 
         getLogger().info("\u001B[37mRegistering tab completers...\u001B[0m");
+        getCommand("event").setTabCompleter(new SetEventTab());
         getCommand("timer").setTabCompleter(new TimerTab());
         getCommand("token").setTabCompleter(new AcceptDenyTokenTab());
         getCommand("neon").setTabCompleter(new ReloadTab());
@@ -137,6 +140,7 @@ public final class Neon extends JavaPlugin {
         getLogger().info("\u001B[37mRegistered tab completers!\u001B[0m");
         scoreboardManager.runScoreboardLoop();
         list.startBackupLoop();
+        versionChecker.checkForUpdates();
     }
 
     @Override

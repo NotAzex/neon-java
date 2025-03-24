@@ -8,6 +8,9 @@ authors: [ Azex ]
 description: Neon, but it's rewritten in Java
 website: https://discord.gg/nKEa5NxRew
 commands:
+  event:
+    description: Sets the event.
+    permission: neon.admin
   hunger:
     description: Toggles hunger using events.
     permission: neon.admin

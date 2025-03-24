@@ -27,7 +27,7 @@ public class PvPPlaceholder extends PlaceholderExpansion {
     @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
         if (params.equalsIgnoreCase("status")) {
-            return String.valueOf(!PvP.toggle);
+            return String.valueOf(PvP.toggle);
         }
         return null;
     }

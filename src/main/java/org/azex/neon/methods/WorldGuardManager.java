@@ -46,6 +46,7 @@ public class WorldGuardManager {
 
     public String getYmlRegion() {
         RegionManager regions = getRegionManager();
+        ymlRegion = plugin.getConfig().getString("WorldGuard.Region");
         region = regions.getRegion(ymlRegion);
         if (region == null) {
             return "Invalid";

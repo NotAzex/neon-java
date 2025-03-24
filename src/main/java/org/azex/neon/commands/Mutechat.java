@@ -8,14 +8,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class Mutechat implements CommandExecutor {
 
-    public static Boolean toggle = true;
+    public static Boolean toggle = false;
     private String state;
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
         toggle = !toggle;
-        state = toggle ? "unmuted" : "muted";
+        state = toggle ? "muted" : "unmuted";
         Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has <light_purple>" +
                 state + "<gray> the chat!");
         return true;

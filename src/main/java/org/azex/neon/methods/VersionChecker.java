@@ -1,39 +1,31 @@
 package org.azex.neon.methods;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import org.azex.neon.Neon;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class VersionChecker implements Listener {
     private final Neon plugin;
-    private String latestVersion = null;
+    private List<String> string = Collections.singletonList(null);
 
     public VersionChecker(Neon plugin) {
         this.plugin = plugin;
     }
 
-    public void checkForUpdates() {
+    public String checkForUpdates() {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             try {
-                String apiUrl = "https://api.modrinth.com/v2/project/neon-core/version";
-                HttpURLConnection connection = (HttpURLConnection) new URL(apiUrl).openConnection();
-
+                HttpURLConnection connection = (HttpURLConnection) new URL("https://api.modrinth.com/v2/project/neon-core/version").openConnection();
                 connection.setRequestMethod("GET");
                 connection.setConnectTimeout(5000);
                 connection.setReadTimeout(5000);
@@ -45,43 +37,27 @@ public class VersionChecker implements Listener {
                         jsonResponse.append(scanner.nextLine());
                     }
 
+                    JsonArray versionsArray = JsonParser.parseString(jsonResponse.toString()).getAsJsonArray();
+                    if (!versionsArray.isEmpty()) {
+                        JsonElement latestVersionElement = versionsArray.get(0).getAsJsonObject().get("version_number");
+                        if (latestVersionElement != null) {
+                            String latestVersion = latestVersionElement.getAsString();
+                            string = Collections.singletonList(latestVersion);
 
-                    JSONArray versionsArray = new JSONArray(jsonResponse.toString());
-                    if (versionsArray.length() > 0) {
-                        JSONObject latestVersionObject = versionsArray.getJSONObject(0);
-                        latestVersion = latestVersionObject.getString("version_number");
-                        String currentVersion = plugin.getDescription().getVersion();
-
-                        if (!currentVersion.equalsIgnoreCase(latestVersion)) {
-                            plugin.getLogger().log(Level.WARNING, "A new version has been detected: " + latestVersion);
-                            plugin.getLogger().log(Level.WARNING, "Download it from https://modrinth.com/plugin/neon-core");
-                        } else {
-                            plugin.getLogger().log(Level.INFO, "Neon is up to date!");
+                            if (!plugin.getDescription().getVersion().equalsIgnoreCase(latestVersion)) {
+                                plugin.getLogger().warning("A new version is available: " + latestVersion);
+                                plugin.getLogger().warning("Download it from https://modrinth.com/plugin/neon-core");
+                            } else {
+                                plugin.getLogger().info("Neon is up to date!");
+                            }
                         }
                     }
                 }
             } catch (Exception e) {
-                plugin.getLogger().log(Level.WARNING, "There was an issue when looking for updates: " + e.getMessage());
+                plugin.getLogger().warning("Update check failed: " + e.getMessage());
             }
         });
-    }
 
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        if (latestVersion != null && player.hasPermission("neon.admin")) {
-            String currentVersion = plugin.getDescription().getVersion();
-            MiniMessage mini = MiniMessage.miniMessage();
-
-            Component modrinth = Component.text(" • https://modrinth.com/plugin/neon-core")
-                    .color(NamedTextColor.LIGHT_PURPLE)
-                    .clickEvent(ClickEvent.openUrl("https://modrinth.com/plugin/neon-core"));
-
-            if (!currentVersion.equalsIgnoreCase(latestVersion)) {
-                player.sendMessage(mini.deserialize("<light_purple>☄ Neon<gray> has detected an update!" +
-                        "[<light_purple>v" + latestVersion + "<gray>]"));
-                player.sendMessage(modrinth);
-            }
-        }
+        return string.toString();
     }
 }

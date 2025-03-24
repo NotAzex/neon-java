@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class PvP implements CommandExecutor {
 
     private WorldGuardManager wg;
-    public static boolean toggle = true;
+    public static boolean toggle = false;
 
     public PvP(WorldGuardManager wg) {
         this.wg = wg;
@@ -22,7 +22,7 @@ public class PvP implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
         toggle = !toggle;
-        String state = toggle ? "disabled" : "enabled";
+        String state = toggle ? "enabled" : "disabled";
         Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has <light_purple>" +
                 state + "<gray> PvP!");
 

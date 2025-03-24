@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class TokenUsage implements CommandExecutor {
 
-    public static boolean toggle = true;
+    public static boolean toggle = false;
     private String state;
 
     @Override

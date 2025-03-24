@@ -35,14 +35,14 @@ public class Hide implements CommandExecutor {
             for (Player loop : Bukkit.getOnlinePlayers()) {
                 player.showPlayer(plugin, loop);
             }
-            Messages.sendMessage(player, "<light_purple>☄ You<gray> have revealed <light_purple>everyone<gray>.", "msg");
         }else{
             toggledPlayers.add(player.getUniqueId());
             for (Player loop : Bukkit.getOnlinePlayers()) {
                 player.hidePlayer(plugin, loop);
             }
-            Messages.sendMessage(player, "<light_purple>☄ You<gray> have hidden <light_purple>all players<gray>.", "msg");
         }
+        String state = toggledPlayers.contains(player.getUniqueId()) ? "hidden" : "revealed";
+        Messages.sendMessage(sender, "<light_purple>☄ You<gray> have " + state + " <light_purple>all players<gray>.", "msg");
         return true;
     }
 }

@@ -36,6 +36,11 @@ public class UseRevive implements CommandExecutor {
         Player player = (Player) sender;
         UUID uuid = player.getUniqueId();
 
+        if (TokenUsage.toggle) {
+            Messages.sendMessage(player, "<red>Tokens are disabled!", "error");
+            return false;
+        }
+
         if (!(tokens.getTokens(uuid) > 0)) {
             Messages.sendMessage(player, "<red>You don't have any tokens!", "error");
             return false;
@@ -65,7 +70,7 @@ public class UseRevive implements CommandExecutor {
         for (Player loop : Bukkit.getOnlinePlayers()) {
             if (loop.hasPermission("neon.admin")) {
                 loop.sendMessage(txt);
-                loop.playSound(loop.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 100, 1);
+                Messages.playSound(loop, "main");
             }
         }
 
