@@ -38,10 +38,16 @@ Spawn Placeholder: %spawn_location%, %spawn_status%
  | %spawn_location%: Returns the location of the spawn if it's set.
  | %spawn_status%: Returns true/false depending on if the spawn is set.
 
-Timer Placeholder: %timer_formatted%, %timer_raw%, %timer_status%
- | %timer_formatted%: Returns a string with the timer. e.g: (5 minutes, 34 seconds)
+Timer Placeholder: %timer_normal%, %timer_raw%, %timer_status%
+ | %timer_normal%: Returns a string with the timer. e.g: (5 minutes, 34 seconds)
+ | %timer_mmss%: Returns the timer as MM:SS. e.g: (5:34) equaling to 5 minutes and 34 seconds
  | %timer_raw%: Returns the timer but only as in seconds. e.g: if timer is 5 minutes & 34 seconds, it will return 334
  | %timer_status%: Returns true/false depending on if there's a timer set.
 
 Tokens Placeholder: %tokens_playernamehere%
  | %tokens_playernamehere%: Returns the tokens of the player in the parameters.
+
+Hunger Placeholder: %hunger_status%
+ | %hunger_status%: Returns true/false depending on if hunger is enabled. 
+Event Placeholder: %event_name%
+ | %event_name%: Returns the name of the event.
