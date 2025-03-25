@@ -13,15 +13,16 @@
 # %player% returns the name of the player.
 
 WorldGuard:
-  World: world
-  Region: arena
+  World: "world"
+  Region: "arena"
 Customization:
-  Prefix: <light_purple>☄
-  Color1: <light_purple>
-  Color2: <gray>
+  Prefix: "<light_purple>☄"
+  Color1: "<light_purple>"
+  Color2: "<gray>"
+  StaffChatPrefix: "<light_purple>☄ <gray>[<light_purple>STAFF<gray>] %player%:<reset> %message%"
 Sounds:
-  Main: BLOCK_NOTE_BLOCK_PLING
-  Error: BLOCK_NOTE_BLOCK_BASS
+  Main: "BLOCK_NOTE_BLOCK_PLING"
+  Error: "BLOCK_NOTE_BLOCK_BASS"
   Pitch: 1
   Volume: 100
 Other:
@@ -29,7 +30,7 @@ Other:
   BackupFrequency: 3
 Scoreboard:
   Enable: true
-  Title: §5☄ Neon
+  Title: "§5☄ Neon"
   Lines:
     - ""
     - " §7| &fAlive: &5%alive_size%"

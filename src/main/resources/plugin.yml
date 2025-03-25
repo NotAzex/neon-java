@@ -8,6 +8,10 @@ authors: [ Azex ]
 description: Neon, but it's rewritten in Java
 website: https://discord.gg/nKEa5NxRew
 commands:
+  staffchat:
+    description: Allows you to communicate with other staff.
+    permission: neon.admin
+    aliases: sc
   event:
     description: Sets the event.
     permission: neon.admin
@@ -83,9 +87,11 @@ commands:
   removetoken:
     description: Removes tokens from someone.
     permission: neon.admin
+    aliases: removerevive
   givetoken:
     description: Gives tokens to someone.
     permission: neon.admin
+    aliases: giverevive
   hide:
     description: Hides all players to the sender.
   tpalive:

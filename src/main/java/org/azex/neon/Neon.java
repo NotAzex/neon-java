@@ -75,6 +75,7 @@ public final class Neon extends JavaPlugin {
         getLogger().info("\u001B[37mRegistered events!\u001B[0m");
 
         getLogger().info("\u001B[37mRegistering commands...\u001B[0m");
+        getCommand("staffchat").setExecutor(new StaffChat(this));
         getCommand("event").setExecutor(new SetEvent());
         getCommand("hunger").setExecutor(new Hunger());
         getCommand("clearrevive").setExecutor(new ClearRevive(tokens));
@@ -110,6 +111,7 @@ public final class Neon extends JavaPlugin {
         getLogger().info("\u001B[37mRegistered commands!\u001B[0m");
 
         getLogger().info("\u001B[37mRegistering tab completers...\u001B[0m");
+        getCommand("staffchat").setTabCompleter(new TextTab());
         getCommand("event").setTabCompleter(new SetEventTab());
         getCommand("timer").setTabCompleter(new TimerTab());
         getCommand("token").setTabCompleter(new AcceptDenyTokenTab());
