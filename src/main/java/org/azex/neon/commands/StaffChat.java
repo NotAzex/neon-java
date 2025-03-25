@@ -27,7 +27,7 @@ public class StaffChat implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
         if (!(sender instanceof Player)) {
-            sender.sendMessage("<red>Only players can run this command!");
+            sender.sendMessage(Messages.ConsolePlayerError);
             return false;
         }
 
