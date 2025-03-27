@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 
 public final class Neon extends JavaPlugin {
+    private LocationManager location;
     private ListManager list;
     private YmlManager ymlManager;
     private VersionChecker versionChecker;
@@ -35,6 +36,7 @@ public final class Neon extends JavaPlugin {
 
         saveDefaultConfig();
 
+        location = new LocationManager(this);
         list = new ListManager(this);
         ymlManager = new YmlManager(this);
         scoreboardManager = new ScoreboardManager(this);
@@ -48,6 +50,7 @@ public final class Neon extends JavaPlugin {
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             getLogger().info("\u001B[37mPlaceholderAPI found! Registering placeholders...\u001B[0m");
+            new PrizePlaceholder().register();
             new HungerPlaceholder().register();
             new TimerPlaceholder().register();
             new BreakPlaceholder().register();
@@ -58,7 +61,7 @@ public final class Neon extends JavaPlugin {
             new PvPPlaceholder().register();
             new RevivalPlaceholder().register();
             new ReviveRecentPlaceholder(list).register();
-            new SpawnPlaceholder(ymlManager).register();
+            new SpawnPlaceholder(location).register();
             new TokensPlaceholder(tokens).register();
             new TokenusagePlaceholder().register();
             new AlivePlaceholder(list).register();
@@ -71,10 +74,12 @@ public final class Neon extends JavaPlugin {
         }
 
         getLogger().info("\u001B[37mRegistering events...\u001B[0m");
-        getServer().getPluginManager().registerEvents(new EventManager(this, versionChecker, list, ymlManager, wg), this);
+        getServer().getPluginManager().registerEvents(new EventManager(this, versionChecker, list, location, wg), this);
         getLogger().info("\u001B[37mRegistered events!\u001B[0m");
 
         getLogger().info("\u001B[37mRegistering commands...\u001B[0m");
+        getCommand("prize").setExecutor(new Prize());
+        getCommand("warp").setExecutor(new Warps(location, ymlManager, list));
         getCommand("staffchat").setExecutor(new StaffChat(this));
         getCommand("event").setExecutor(new SetEvent());
         getCommand("hunger").setExecutor(new Hunger());
@@ -98,8 +103,8 @@ public final class Neon extends JavaPlugin {
         getCommand("reviveall").setExecutor(new ReviveAll(list));
         getCommand("reviverecent").setExecutor(new ReviveRecent(list));
         getCommand("unrevive").setExecutor(new Unrevive(list));
-        getCommand("spawn").setExecutor(new Spawn(ymlManager, list));
-        getCommand("setspawn").setExecutor(new SetSpawn(ymlManager, this));
+        getCommand("spawn").setExecutor(new Spawn(location, list));
+        getCommand("setspawn").setExecutor(new SetSpawn(location, this));
         getCommand("givetoken").setExecutor(new GiveTokens(tokens));
         getCommand("removetoken").setExecutor(new RemoveTokens(tokens));
         getCommand("tokens").setExecutor(new TokenBalance(tokens));
@@ -111,12 +116,14 @@ public final class Neon extends JavaPlugin {
         getLogger().info("\u001B[37mRegistered commands!\u001B[0m");
 
         getLogger().info("\u001B[37mRegistering tab completers...\u001B[0m");
+        getCommand("warp").setTabCompleter(new WarpsTab(ymlManager));
         getCommand("staffchat").setTabCompleter(new TextTab());
         getCommand("event").setTabCompleter(new SetEventTab());
         getCommand("timer").setTabCompleter(new TimerTab());
         getCommand("token").setTabCompleter(new AcceptDenyTokenTab());
         getCommand("neon").setTabCompleter(new ReloadTab());
         getCommand("revival").setTabCompleter(new RevivalTab());
+        getCommand("prize").setTabCompleter(new PrizeTab());
         getCommand("userevive").setTabCompleter(empty);
         getCommand("hide").setTabCompleter(empty);
         getCommand("alive").setTabCompleter(empty);

@@ -8,6 +8,11 @@ authors: [ Azex ]
 description: Neon, but it's rewritten in Java
 website: https://discord.gg/nKEa5NxRew
 commands:
+  prize:
+    description: Sets the prize.
+    permission: neon.admin
+  warp:
+    description: Allows you to create warps that you can teleport to.
   staffchat:
     description: Allows you to communicate with other staff.
     permission: neon.admin

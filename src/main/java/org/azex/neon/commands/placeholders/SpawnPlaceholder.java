@@ -1,18 +1,20 @@
 package org.azex.neon.commands.placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.azex.neon.methods.LocationManager;
 import org.azex.neon.methods.Messages;
 import org.azex.neon.methods.YmlManager;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SpawnPlaceholder extends PlaceholderExpansion {
 
-    private YmlManager ymlManager;
+    private LocationManager locationManager;
 
-    public SpawnPlaceholder(YmlManager ymlManager) {
-        this.ymlManager = ymlManager;
+    public SpawnPlaceholder(LocationManager locationManager) {
+        this.locationManager = locationManager;
     }
 
     @Override
@@ -32,10 +34,13 @@ public class SpawnPlaceholder extends PlaceholderExpansion {
 
     @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
+
+        Location location = locationManager.getLocation("spawn.yml", "spawn");
+
         if (params.equalsIgnoreCase("status")) {
-            return ymlManager.getLocation() == null ? "Not set!" : "Set!";
+            return location == null ? "Not set!" : "Set!";
         }else if (params.equalsIgnoreCase("location")) {
-            return ymlManager.getLocation() == null ? "Not set!" : String.valueOf(ymlManager.getLocation());
+            return location == null ? "Not set!" : String.valueOf(location);
         }
         return null;
     }

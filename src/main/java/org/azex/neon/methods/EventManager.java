@@ -5,6 +5,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.azex.neon.Neon;
 import org.azex.neon.commands.*;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,7 +25,7 @@ public class EventManager implements Listener {
     MiniMessage mini = MiniMessage.miniMessage();
 
     private final ListManager list;
-    private final YmlManager ymlManager;
+    private final LocationManager locationManager;
     private final VersionChecker versionChecker;
     private final WorldGuardManager wg;
     private final Neon plugin;
@@ -40,12 +41,12 @@ public class EventManager implements Listener {
             "/minecraft:me ",
             "/me ");
 
-    public EventManager(Neon plugin, VersionChecker versionChecker, ListManager list, YmlManager ymlManager, WorldGuardManager wg) {
+    public EventManager(Neon plugin, VersionChecker versionChecker, ListManager list, LocationManager locationManager, WorldGuardManager wg) {
         this.plugin = plugin;
         this.versionChecker = versionChecker;
         this.wg = wg;
         this.list = list;
-        this.ymlManager = ymlManager;
+        this.locationManager = locationManager;
     }
 
     @EventHandler
@@ -144,8 +145,11 @@ public class EventManager implements Listener {
 
     @EventHandler
     public void join(PlayerJoinEvent event) {
-        if (ymlManager.getLocation() != null) {
-            event.getPlayer().teleport(ymlManager.getLocation());
+
+        Location location = locationManager.getLocation("spawn.yml", "spawn");
+
+        if (location != null) {
+            event.getPlayer().teleport(location);
         }
         UUID player = event.getPlayer().getUniqueId();
         list.unrevive(player);
@@ -154,8 +158,11 @@ public class EventManager implements Listener {
 
     @EventHandler
     public void respawn(PlayerRespawnEvent event) {
-        if (ymlManager.getLocation() != null) {
-            event.setRespawnLocation(ymlManager.getLocation());
+
+        Location location = locationManager.getLocation("spawn.yml", "spawn");
+
+        if (location != null) {
+            event.setRespawnLocation(location);
         }
     }
 

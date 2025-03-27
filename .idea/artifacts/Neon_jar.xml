@@ -7,7 +7,7 @@
       <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/spawn.yml" />
       <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/tokens.yml" />
       <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/config.yml" />
-      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/placeholders.txt" />
+      <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/warps.yml" />
     </root>
   </artifact>
 </component>

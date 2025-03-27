@@ -1,6 +1,7 @@
 package org.azex.neon.commands;
 
 import org.azex.neon.Neon;
+import org.azex.neon.methods.LocationManager;
 import org.azex.neon.methods.Messages;
 import org.azex.neon.methods.YmlManager;
 import org.bukkit.command.Command;
@@ -15,37 +16,12 @@ import java.io.IOException;
 
 public class SetSpawn implements CommandExecutor {
 
-    private final YmlManager ymlManager;
+    private final LocationManager locationManager;
     private final Neon plugin;
 
-    private File spawn;
-    private YamlConfiguration spawnFile;
-
-    public SetSpawn(YmlManager ymlManager, Neon plugin) {
-        this.ymlManager = ymlManager;
+    public SetSpawn(LocationManager locationManager, Neon plugin) {
+        this.locationManager = locationManager;
         this.plugin = plugin;
-    }
-
-    private void saveLocation(Player player) {
-
-        spawn = new File(plugin.getDataFolder(), "spawn.yml");
-        spawnFile = YamlConfiguration.loadConfiguration(spawn);
-
-        spawnFile.set("spawn.world", player.getWorld().getName());
-
-        spawnFile.set("spawn.x", player.getX());
-        spawnFile.set("spawn.y", player.getY());
-        spawnFile.set("spawn.z", player.getZ());
-
-        spawnFile.set("spawn.pitch", player.getPitch());
-        spawnFile.set("spawn.yaw", player.getYaw());
-
-        try {
-            spawnFile.save(spawn);
-        }catch (IOException e) {
-            plugin.getLogger().warning("Failed to save the spawn due to " + e.getMessage());
-        }
-
     }
 
     @Override
@@ -56,7 +32,7 @@ public class SetSpawn implements CommandExecutor {
         }
 
         Player player = (Player) sender;
-        saveLocation(player);
+        locationManager.saveLocation("spawn.yml", "spawn", player);
 
         int x = player.getLocation().getBlockX();
         int y = player.getLocation().getBlockY();

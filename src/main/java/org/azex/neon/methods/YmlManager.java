@@ -1,51 +1,64 @@
 package org.azex.neon.methods;
 
 import org.azex.neon.Neon;
-import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 public class YmlManager {
 
     private final Neon plugin;
-    private FileConfiguration spawn;
     private FileConfiguration tokens;
-    private File spawnFile;
     private File tokensfile;
-    private File backupfile;
+    private FileConfiguration warpsConfig;
+    private File warpsFile;
 
     public YmlManager(Neon plugin) {
         this.plugin = plugin;
-
-        this.tokensfile = new File(plugin.getDataFolder(), "tokens.yml");
-        this.spawnFile = new File(plugin.getDataFolder(), "spawn.yml");
-        this.backupfile = new File(plugin.getDataFolder(), "backup.yml");
-        if (!spawnFile.exists()) {
-            plugin.saveResource("spawn.yml", false);
-        }
+        loadWarpsFile();
     }
 
-    public Location getLocation() {
+    public Set getWarps() {
+        File warps = new File(plugin.getDataFolder(), "warps.yml");
+        try {
+            InputStream i = new FileInputStream(warps);
+            Yaml yaml = new Yaml();
+            Map<String, Object> data = yaml.load(i);
 
-        spawn = YamlConfiguration.loadConfiguration(spawnFile);
+            if (data == null) {
+                return Collections.emptySet();
+            }
+            return data.keySet();
 
-        String world = spawn.getString("spawn.world");
-
-        if (world == null) {
-            plugin.getLogger().warning("World wasn't found when getting the location from the spawn file, does the spawn or the world exist?");
-            return null;
+        } catch (FileNotFoundException e) {
+            plugin.getLogger().warning("Couldn't get the warps due to " + e.getMessage());
         }
+        return Collections.emptySet();
+    }
 
-        double x = spawn.getDouble("spawn.x");
-        double y = spawn.getDouble("spawn.y");
-        double z = spawn.getDouble("spawn.z");
-        float pitch = (float) spawn.getDouble("spawn.pitch");
-        float yaw = (float) spawn.getDouble("spawn.yaw");
+    private void loadWarpsFile() {
+        warpsFile = new File(plugin.getDataFolder(), "warps.yml");
+        if (!warpsFile.exists()) {
+            plugin.saveResource("warps.yml", false);
+        }
+        warpsConfig = YamlConfiguration.loadConfiguration(warpsFile);
+    }
 
-        return new Location(plugin.getServer().getWorld(world), x, y, z, yaw, pitch);
+    public FileConfiguration getWarpsFile() {
+        return warpsConfig;
+    }
+
+    public void saveWarpsFile() {
+        try {
+            warpsConfig.save(warpsFile);
+        } catch (IOException e) {
+            plugin.getLogger().warning("Failed to save the warps file due to " + e.getMessage());
+        }
     }
 
     public FileConfiguration getTokensFile() {
