@@ -2,7 +2,7 @@
 build/
 .idea/
 *.iml
-workspace.xml
+.idea/workspace.xml
 .classpath
 .project
 out/
