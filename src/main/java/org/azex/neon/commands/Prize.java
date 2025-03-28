@@ -13,13 +13,13 @@ public class Prize implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
-        if (args.length != 1) {
-            Messages.sendMessage(sender, "<red>You used the command wrong!", "error");
+        if (args.length == 0) {
+            Messages.sendMessage(sender, "<red>Must provide an argument!", "error");
             return false;
         }
 
         prize = String.join(" ", args);
-        Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has set the event to" +
+        Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has set the prize to" +
                 "<light_purple> " + prize + "<gray>.");
 
         return true;

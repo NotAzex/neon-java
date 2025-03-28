@@ -7,7 +7,6 @@ import org.azex.neon.tabcompletions.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-
 public final class Neon extends JavaPlugin {
     private LocationManager location;
     private ListManager list;
@@ -19,6 +18,7 @@ public final class Neon extends JavaPlugin {
     private Empty empty;
     private WorldGuardManager wg;
     private ScoreboardManager scoreboardManager;
+    private ClearInventories inventories;
 
     private static Neon instance;
 
@@ -38,6 +38,7 @@ public final class Neon extends JavaPlugin {
 
         location = new LocationManager(this);
         list = new ListManager(this);
+        inventories = new ClearInventories(list);
         ymlManager = new YmlManager(this);
         scoreboardManager = new ScoreboardManager(this);
         tokens = new Tokens(ymlManager, this);
@@ -78,6 +79,8 @@ public final class Neon extends JavaPlugin {
         getLogger().info("\u001B[37mRegistered events!\u001B[0m");
 
         getLogger().info("\u001B[37mRegistering commands...\u001B[0m");
+        getCommand("clearalive").setExecutor(inventories);
+        getCommand("cleardead").setExecutor(inventories);
         getCommand("prize").setExecutor(new Prize());
         getCommand("warp").setExecutor(new Warps(location, ymlManager, list));
         getCommand("staffchat").setExecutor(new StaffChat(this));
@@ -124,6 +127,8 @@ public final class Neon extends JavaPlugin {
         getCommand("neon").setTabCompleter(new ReloadTab());
         getCommand("revival").setTabCompleter(new RevivalTab());
         getCommand("prize").setTabCompleter(new PrizeTab());
+        getCommand("clearalive").setTabCompleter(empty);
+        getCommand("cleardead").setTabCompleter(empty);
         getCommand("userevive").setTabCompleter(empty);
         getCommand("hide").setTabCompleter(empty);
         getCommand("alive").setTabCompleter(empty);
