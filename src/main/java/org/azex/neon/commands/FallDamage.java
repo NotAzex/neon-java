@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class FallDamage implements CommandExecutor {
 
-    private WorldGuardManager wg;
-    private Flag flag = Flags.FALL_DAMAGE;
+    private final WorldGuardManager wg;
+    private final Flag flag = Flags.FALL_DAMAGE;
     public static boolean toggle = false;
 
     public FallDamage(WorldGuardManager wg) {

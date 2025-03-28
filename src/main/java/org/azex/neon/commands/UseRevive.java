@@ -2,11 +2,9 @@ package org.azex.neon.commands;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.azex.neon.methods.Messages;
 import org.azex.neon.methods.Tokens;
 import org.bukkit.Bukkit;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +15,7 @@ import java.util.UUID;
 
 public class UseRevive implements CommandExecutor {
 
-    private Tokens tokens;
+    private final Tokens tokens;
     private String color1 = Messages.color1;
     private String color2 = Messages.color2;
 

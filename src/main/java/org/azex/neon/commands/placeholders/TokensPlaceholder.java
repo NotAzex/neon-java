@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class TokensPlaceholder extends PlaceholderExpansion {
 
-    private Tokens tokens;
+    private final Tokens tokens;
 
     public TokensPlaceholder(Tokens tokens) {
         this.tokens = tokens;

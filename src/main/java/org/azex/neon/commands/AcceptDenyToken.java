@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class AcceptDenyToken implements CommandExecutor {
 
-    private Tokens tokens;
+    private final Tokens tokens;
 
     public AcceptDenyToken(Tokens tokens) {
         this.tokens = tokens;

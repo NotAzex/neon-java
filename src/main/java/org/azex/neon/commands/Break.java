@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class Break implements CommandExecutor {
 
-    private WorldGuardManager wg;
-    private Flag flag = Flags.BLOCK_BREAK;
+    private final WorldGuardManager wg;
+    private final Flag flag = Flags.BLOCK_BREAK;
     public static boolean toggle = false;
 
     public Break(WorldGuardManager wg) {

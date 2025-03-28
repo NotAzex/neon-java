@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClearRevive implements CommandExecutor {
 
-    private Tokens tokens;
+    private final Tokens tokens;
 
     public ClearRevive(Tokens tokens) {
         this.tokens = tokens;

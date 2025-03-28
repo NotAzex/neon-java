@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class AlivePlaceholder extends PlaceholderExpansion {
 
-    private ListManager list;
+    private final ListManager list;
 
     public AlivePlaceholder(ListManager list) {
         this.list = list;

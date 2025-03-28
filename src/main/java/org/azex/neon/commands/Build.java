@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class Build implements CommandExecutor {
 
-    private WorldGuardManager wg;
-    private Flag flag = Flags.BLOCK_PLACE;
+    private final WorldGuardManager wg;
+    private final Flag flag = Flags.BLOCK_PLACE;
     public static boolean toggle = false;
 
     public Build(WorldGuardManager wg) {

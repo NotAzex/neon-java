@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class Reload implements CommandExecutor {
 
-    private Neon plugin;
-    private ScoreboardManager scoreboardManager;
-    private ListManager listManager;
+    private final Neon plugin;
+    private final ScoreboardManager scoreboardManager;
+    private final ListManager listManager;
 
     public Reload(Neon plugin, ScoreboardManager scoreboardManager, ListManager listManager) {
         this.plugin = plugin;

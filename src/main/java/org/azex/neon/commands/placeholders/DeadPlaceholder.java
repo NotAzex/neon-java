@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class DeadPlaceholder extends PlaceholderExpansion {
 
-    private ListManager list;
+    private final ListManager list;
 
     public DeadPlaceholder(ListManager list) {
         this.list = list;

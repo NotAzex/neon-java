@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Timer implements CommandExecutor {
 
-    private Neon plugin;
+    private final Neon plugin;
 
     public Timer(Neon plugin) {
         this.plugin = plugin;

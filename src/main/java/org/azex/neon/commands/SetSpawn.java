@@ -1,6 +1,5 @@
 package org.azex.neon.commands;
 
-import org.azex.neon.Neon;
 import org.azex.neon.methods.LocationManager;
 import org.azex.neon.methods.Messages;
 import org.bukkit.command.Command;
@@ -12,11 +11,9 @@ import org.jetbrains.annotations.NotNull;
 public class SetSpawn implements CommandExecutor {
 
     private final LocationManager locationManager;
-    private final Neon plugin;
 
-    public SetSpawn(LocationManager locationManager, Neon plugin) {
+    public SetSpawn(LocationManager locationManager) {
         this.locationManager = locationManager;
-        this.plugin = plugin;
     }
 
     @Override

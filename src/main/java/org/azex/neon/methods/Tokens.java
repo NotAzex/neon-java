@@ -11,11 +11,9 @@ public class Tokens {
     public final Set<UUID> requestedToken = new HashSet<>();
 
     private final YmlManager ymlManager;
-    private final Neon plugin;
 
-    public Tokens(YmlManager ymlManager, Neon plugin) {
+    public Tokens(YmlManager ymlManager) {
         this.ymlManager = ymlManager;
-        this.plugin = plugin;
     }
 
     public int getTokens(UUID uuid) {

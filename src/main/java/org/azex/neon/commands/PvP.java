@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class PvP implements CommandExecutor {
 
-    private WorldGuardManager wg;
+    private final WorldGuardManager wg;
     public static boolean toggle = false;
 
     public PvP(WorldGuardManager wg) {

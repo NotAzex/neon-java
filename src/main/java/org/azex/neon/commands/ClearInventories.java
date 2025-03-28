@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class ClearInventories implements CommandExecutor {
 
-    private ListManager listManager;
+    private final ListManager listManager;
 
     public ClearInventories(ListManager listManager) {
         this.listManager = listManager;

@@ -1,6 +1,5 @@
 package org.azex.neon.tabcompletions;
 
-import org.azex.neon.methods.Messages;
 import org.azex.neon.methods.YmlManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

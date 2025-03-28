@@ -16,7 +16,7 @@ import java.util.UUID;
 public class StaffChat implements CommandExecutor {
 
     private String format;
-    private Neon plugin;
+    private final Neon plugin;
     private final Set<UUID> toggled = new HashSet<>();
 
     public StaffChat(Neon plugin) {

@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class WorldGuardManager {
 
-    private Neon plugin;
+    private final Neon plugin;
     private ProtectedRegion region;
     private String ymlRegion;
     private RegionContainer container;

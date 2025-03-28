@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class LocationManager {
 
-    private Neon plugin;
+    private final Neon plugin;
 
     public LocationManager(Neon plugin) {
         this.plugin = plugin;

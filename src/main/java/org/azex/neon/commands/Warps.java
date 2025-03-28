@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class Warps implements CommandExecutor {
 
-    private LocationManager locationManager;
-    private YmlManager ymlManager;
-    private ListManager listManager;
+    private final LocationManager locationManager;
+    private final YmlManager ymlManager;
+    private final ListManager listManager;
 
     public Warps(LocationManager locationManager, YmlManager ymlManager, ListManager listManager) {
         this.locationManager = locationManager;

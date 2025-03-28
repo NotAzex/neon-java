@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class Listclear implements CommandExecutor {
 
-    private ListManager listManager;
+    private final ListManager listManager;
 
     public Listclear(ListManager listManager) {
         this.listManager = listManager;

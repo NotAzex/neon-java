@@ -41,7 +41,7 @@ public final class Neon extends JavaPlugin {
         inventories = new ClearInventories(list);
         ymlManager = new YmlManager(this);
         scoreboardManager = new ScoreboardManager(this);
-        tokens = new Tokens(ymlManager, this);
+        tokens = new Tokens(ymlManager);
         tokensTab = new TokensTab();
         versionChecker = new VersionChecker(this);
         playerTab = new PlayersAsTabCompletion();
@@ -107,7 +107,7 @@ public final class Neon extends JavaPlugin {
         getCommand("reviverecent").setExecutor(new ReviveRecent(list));
         getCommand("unrevive").setExecutor(new Unrevive(list));
         getCommand("spawn").setExecutor(new Spawn(location, list));
-        getCommand("setspawn").setExecutor(new SetSpawn(location, this));
+        getCommand("setspawn").setExecutor(new SetSpawn(location));
         getCommand("givetoken").setExecutor(new GiveTokens(tokens));
         getCommand("removetoken").setExecutor(new RemoveTokens(tokens));
         getCommand("tokens").setExecutor(new TokenBalance(tokens));

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class Flow implements CommandExecutor {
 
     public static Boolean toggle = false;
-    private WorldGuardManager wg;
+    private final WorldGuardManager wg;
 
     public Flow(WorldGuardManager wg) {
         this.wg = wg;

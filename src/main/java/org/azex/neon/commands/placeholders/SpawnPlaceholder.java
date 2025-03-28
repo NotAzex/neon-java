@@ -3,7 +3,6 @@ package org.azex.neon.commands.placeholders;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.azex.neon.methods.LocationManager;
 import org.azex.neon.methods.Messages;
-import org.azex.neon.methods.YmlManager;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SpawnPlaceholder extends PlaceholderExpansion {
 
-    private LocationManager locationManager;
+    private final LocationManager locationManager;
 
     public SpawnPlaceholder(LocationManager locationManager) {
         this.locationManager = locationManager;

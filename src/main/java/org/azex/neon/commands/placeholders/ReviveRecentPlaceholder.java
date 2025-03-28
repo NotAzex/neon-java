@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ReviveRecentPlaceholder extends PlaceholderExpansion {
 
-    private ListManager listManager;
+    private final ListManager listManager;
 
     public ReviveRecentPlaceholder(ListManager listManager) {
         this.listManager = listManager;
