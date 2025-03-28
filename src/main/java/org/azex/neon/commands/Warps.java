@@ -23,6 +23,11 @@ public class Warps implements CommandExecutor {
         this.listManager = listManager;
     }
 
+    private void teleportToWarp(Player player, String warp) {
+        player.teleport(locationManager.getLocation("warps.yml", warp));
+        player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100, 1);
+    }
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
@@ -38,16 +43,19 @@ public class Warps implements CommandExecutor {
             return false;
         }
 
+        if (!args[0].equals("create")) {
+            if (!ymlManager.getWarps().contains(args[1])) {
+                Messages.sendMessage(sender, "<red>That warp doesn't exist!", "error");
+                return false;
+            }
+        }
+
         if (player.hasPermission("neon.admin")) {
             if (args[0].equals("delete")) {
-                if (ymlManager.getWarps().contains(args[1])) {
-                    Messages.sendMessage(sender, "<light_purple>☄ <gray>You have deleted the <light_purple>" +
-                            "'" + args[1] + "'<gray> warp!", "msg");
-                    ymlManager.getWarpsFile().set(args[1], null);
-                    ymlManager.saveWarpsFile();
-                }else{
-                    Messages.sendMessage(sender, "<red>That warp doesn't exist!", "error");
-                }
+                Messages.sendMessage(sender, "<light_purple>☄ <gray>You have deleted the <light_purple>" +
+                        "'" + args[1] + "'<gray> warp!", "msg");
+                ymlManager.getWarpsFile().set(args[1], null);
+                ymlManager.saveWarpsFile();
             }
 
             if (args[0].equals("create")) {
@@ -55,7 +63,7 @@ public class Warps implements CommandExecutor {
                     locationManager.saveLocation("warps.yml", args[1], player);
                     Messages.sendMessage(player, "<light_purple>☄ <gray>You have created a warp" +
                             " called <light_purple>'" + args[1] + "'<gray> at your location.", "msg");
-                }else{
+                } else {
                     Messages.sendMessage(player, "<red>That warp already exists!", "error");
                 }
             }
@@ -63,14 +71,17 @@ public class Warps implements CommandExecutor {
 
         if (args[0].equals("teleport")) {
             if (!listManager.aliveList.contains(player.getUniqueId())) {
-                if (ymlManager.getWarps().contains(args[1])) {
-                    player.teleport(locationManager.getLocation("warps.yml", args[1]));
-                    player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100, 1);
+                if (args[1].startsWith("-")) {
+                    if (player.hasPermission("neon.warps")) {
+                        teleportToWarp(player, args[1]);
+                    }else{
+                        Messages.sendMessage(sender, "<red>You don't have access to that warp!", "error");
+                    }
                 }else{
-                    Messages.sendMessage(player, "<red>That warp doesn't exist!", "error");
+                    teleportToWarp(player, args[1]);
                 }
             }else{
-                Messages.sendMessage(player, "<red>You can't use warps while you're alive!", "error");
+                Messages.sendMessage(sender, "<red>Alive players can't use warps!", "error");
             }
         }
         return true;
