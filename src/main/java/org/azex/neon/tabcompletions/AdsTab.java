@@ -7,21 +7,22 @@ import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class WarpsTab implements TabCompleter {
-
+public class AdsTab implements TabCompleter {
     private final YmlManager ymlManager;
     private List list;
 
-    public WarpsTab(YmlManager ymlManager) {
+    public AdsTab(YmlManager ymlManager) {
         this.ymlManager = ymlManager;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
-        list = new ArrayList<String>(ymlManager.getSections("warps.yml"));
+        list = new ArrayList<String>(ymlManager.getSections("ads.yml"));
 
         if (args.length == 2) {
             if (!args[0].equals("create")) {
@@ -30,11 +31,7 @@ public class WarpsTab implements TabCompleter {
         }
 
         if (args.length == 1) {
-            if (sender.hasPermission("neon.admin")) {
-                return List.of("create", "teleport", "delete");
-            }else{
-                return Collections.singletonList("teleport");
-            }
+            return List.of("create", "send", "delete");
         }
 
         return Collections.emptyList();

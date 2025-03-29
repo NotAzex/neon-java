@@ -16,17 +16,20 @@ public class YmlManager {
     private FileConfiguration tokens;
     private File tokensfile;
     private FileConfiguration warpsConfig;
+    private FileConfiguration adsConfig;
     private File warpsFile;
+    private File adsFile;
 
     public YmlManager(Neon plugin) {
         this.plugin = plugin;
         loadWarpsFile();
+        loadAdsFile();
     }
 
-    public Set getWarps() {
-        File warps = new File(plugin.getDataFolder(), "warps.yml");
+    public Set getSections(String file) { // string should be warps.yml or soemthing
+        File getfrom = new File(plugin.getDataFolder(), file);
         try {
-            InputStream i = new FileInputStream(warps);
+            InputStream i = new FileInputStream(getfrom);
             Yaml yaml = new Yaml();
             Map<String, Object> data = yaml.load(i);
 
@@ -34,11 +37,18 @@ public class YmlManager {
                 return Collections.emptySet();
             }
             return data.keySet();
-
         } catch (FileNotFoundException e) {
-            plugin.getLogger().warning("Couldn't get the warps due to " + e.getMessage());
+            plugin.getLogger().warning("Couldn't get sections from " + getfrom + " due to " + e.getMessage());
         }
         return Collections.emptySet();
+    }
+
+    private void loadAdsFile() {
+        adsFile = new File(plugin.getDataFolder(), "ads.yml");
+        if (!adsFile.exists()) {
+            plugin.saveResource("ads.yml", false);
+        }
+        adsConfig = YamlConfiguration.loadConfiguration(adsFile);
     }
 
     private void loadWarpsFile() {
@@ -47,6 +57,10 @@ public class YmlManager {
             plugin.saveResource("warps.yml", false);
         }
         warpsConfig = YamlConfiguration.loadConfiguration(warpsFile);
+    }
+
+    public FileConfiguration getAdsFile() {
+        return adsConfig;
     }
 
     public FileConfiguration getWarpsFile() {

@@ -11,11 +11,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Set;
+
 public class Warps implements CommandExecutor {
 
     private final LocationManager locationManager;
     private final YmlManager ymlManager;
     private final ListManager listManager;
+
+    private Set<String> sections;
 
     public Warps(LocationManager locationManager, YmlManager ymlManager, ListManager listManager) {
         this.locationManager = locationManager;
@@ -31,6 +35,8 @@ public class Warps implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
+        sections = ymlManager.getSections("warps.yml");
+
         if (!(sender instanceof Player)) {
             Messages.sendMessage(sender, "<red>Only players can run this command!", "error");
             return false;
@@ -44,7 +50,7 @@ public class Warps implements CommandExecutor {
         }
 
         if (!args[0].equals("create")) {
-            if (!ymlManager.getWarps().contains(args[1])) {
+            if (!sections.contains(args[1])) {
                 Messages.sendMessage(sender, "<red>That warp doesn't exist!", "error");
                 return false;
             }
@@ -59,7 +65,7 @@ public class Warps implements CommandExecutor {
             }
 
             if (args[0].equals("create")) {
-                if (!ymlManager.getWarps().contains(args[1])) {
+                if (!sections.contains(args[1])) {
                     locationManager.saveLocation("warps.yml", args[1], player);
                     Messages.sendMessage(player, "<light_purple>☄ <gray>You have created a warp" +
                             " called <light_purple>'" + args[1] + "'<gray> at your location.", "msg");

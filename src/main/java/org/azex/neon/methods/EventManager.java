@@ -87,7 +87,7 @@ public class EventManager implements Listener {
             return;
         }
         event.setCancelled(true);
-        event.getPlayer().sendMessage(mini.deserialize("<red>The chat is muted!"));
+        Messages.sendMessage(event.getPlayer(), "<red>The chat is muted!", "error");
     }
 
     @EventHandler
@@ -137,7 +137,7 @@ public class EventManager implements Listener {
                 Component txt = Messages.mini.deserialize(Messages.prefix + color1 + " Neon" + color2 + " has detected an update! " +
                         color1 + latestVersion + "\n");
                 txt = txt.append(modrinth);
-                player.sendMessage(txt);
+                Messages.sendMessage(player, Messages.mini.serialize(txt), "msg");
                 Messages.playSound(player, "main");
             }
         }

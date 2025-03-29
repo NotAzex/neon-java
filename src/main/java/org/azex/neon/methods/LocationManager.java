@@ -44,17 +44,18 @@ public class LocationManager {
 
     public void saveLocation(String file, String prefix, Player player) {
 
+        Location playerLoc = player.getLocation();
         location = new File(plugin.getDataFolder(), file);
         locationConfig = YamlConfiguration.loadConfiguration(location);
 
         locationConfig.set(prefix + ".world", player.getWorld().getName());
 
-        locationConfig.set(prefix + ".x", player.getX());
-        locationConfig.set(prefix + ".y", player.getY());
-        locationConfig.set(prefix + ".z", player.getZ());
+        locationConfig.set(prefix + ".x", playerLoc.getX());
+        locationConfig.set(prefix + ".y", playerLoc.getY());
+        locationConfig.set(prefix + ".z", playerLoc.getZ());
 
-        locationConfig.set(prefix + ".pitch", player.getPitch());
-        locationConfig.set(prefix + ".yaw", player.getYaw());
+        locationConfig.set(prefix + ".pitch", playerLoc.getPitch());
+        locationConfig.set(prefix + ".yaw", playerLoc.getYaw());
 
         try {
             locationConfig.save(location);

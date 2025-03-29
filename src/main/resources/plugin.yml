@@ -8,6 +8,9 @@ authors: [ Azex ]
 description: Neon, but it's rewritten in Java
 website: https://discord.gg/nKEa5NxRew
 commands:
+  ad:
+    description: Lets you send, delete and create custom ads.
+    permission: neon.admin
   clearalive:
     description: Clears the inventories of alive people.
     permission: neon.admin

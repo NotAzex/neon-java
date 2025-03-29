@@ -81,6 +81,7 @@ public final class Neon extends JavaPlugin {
         getLogger().info("\u001B[37mRegistering commands...\u001B[0m");
         getCommand("clearalive").setExecutor(inventories);
         getCommand("cleardead").setExecutor(inventories);
+        getCommand("ad").setExecutor(new Advertising(ymlManager, this));
         getCommand("prize").setExecutor(new Prize());
         getCommand("warp").setExecutor(new Warps(location, ymlManager, list));
         getCommand("staffchat").setExecutor(new StaffChat(this));
@@ -120,6 +121,7 @@ public final class Neon extends JavaPlugin {
 
         getLogger().info("\u001B[37mRegistering tab completers...\u001B[0m");
         getCommand("warp").setTabCompleter(new WarpsTab(ymlManager));
+        getCommand("ad").setTabCompleter(new AdsTab(ymlManager));
         getCommand("staffchat").setTabCompleter(new TextTab());
         getCommand("event").setTabCompleter(new SetEventTab());
         getCommand("timer").setTabCompleter(new TimerTab());

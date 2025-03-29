@@ -2,6 +2,7 @@ package org.azex.neon.methods;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.md_5.bungee.api.ChatMessageType;
 import org.azex.neon.Neon;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -51,7 +52,8 @@ public class Messages {
         message = replace(message);
         if (recipient instanceof Player) {
             Player player = (Player) recipient;
-            player.sendMessage(mini.deserialize(message));
+            Component comp = Messages.mini.deserialize(message);
+            player.sendMessage(comp);
             if (type.equals("error")) {
                 playSound(player, "error");
             }else{
@@ -79,7 +81,8 @@ public class Messages {
 
     public static void broadcast(String text) {
         text = replace(text);
-        Bukkit.broadcast(mini.deserialize(text));
+        Component string = mini.deserialize(text);
+        Bukkit.broadcast(string);
         for (Player player : Bukkit.getOnlinePlayers()) {
             playSound(player, "main");
         }
