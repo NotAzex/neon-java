@@ -1,5 +1,5 @@
 name: Neon
-version: '1.0.5'
+version: '1.0.6'
 main: org.azex.neon.Neon
 api-version: '1.21'
 softdepend: [PlaceholderAPI]
