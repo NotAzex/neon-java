@@ -59,10 +59,6 @@ public class YmlManager {
         warpsConfig = YamlConfiguration.loadConfiguration(warpsFile);
     }
 
-    public FileConfiguration getAdsFile() {
-        return adsConfig;
-    }
-
     public FileConfiguration getWarpsFile() {
         return warpsConfig;
     }
