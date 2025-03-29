@@ -1,7 +1,5 @@
 package org.azex.neon.methods;
 
-import org.azex.neon.Neon;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;

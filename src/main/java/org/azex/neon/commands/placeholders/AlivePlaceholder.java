@@ -3,6 +3,7 @@ package org.azex.neon.commands.placeholders;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.azex.neon.methods.ListManager;
 import org.azex.neon.methods.Messages;
+import org.azex.neon.methods.ScoreboardManager;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 

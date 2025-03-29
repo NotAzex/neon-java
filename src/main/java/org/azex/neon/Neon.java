@@ -69,7 +69,7 @@ public final class Neon extends JavaPlugin {
             new DeadPlaceholder(list).register();
             new TokensPlaceholder(tokens).register();
             new EventPlaceholder().register();
-            getLogger().info("\u001B[37mRegistered 15 placeholders!\u001B[0m");
+            getLogger().info("\u001B[37mRegistered 17 placeholders!\u001B[0m");
         }else{
             getLogger().info("\u001B[37mPlaceholderAPI not found, Neon will not register placeholders.\u001B[0m");
         }

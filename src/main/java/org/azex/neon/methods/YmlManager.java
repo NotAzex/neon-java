@@ -14,9 +14,10 @@ public class YmlManager {
 
     private final Neon plugin;
     private FileConfiguration tokens;
-    private File tokensfile;
+    private File tokensFile;
     private FileConfiguration warpsConfig;
     private FileConfiguration adsConfig;
+    private FileConfiguration tokensConfig;
     private File warpsFile;
     private File adsFile;
 
@@ -24,6 +25,7 @@ public class YmlManager {
         this.plugin = plugin;
         loadWarpsFile();
         loadAdsFile();
+        loadTokensFile();
     }
 
     public Set getSections(String file) { // string should be warps.yml or soemthing
@@ -59,8 +61,21 @@ public class YmlManager {
         warpsConfig = YamlConfiguration.loadConfiguration(warpsFile);
     }
 
+    private void loadTokensFile() {
+        tokensFile = new File(plugin.getDataFolder(), "tokens.yml");
+        if (!tokensFile.exists()) {
+            plugin.saveResource("tokens.yml", false);
+        }
+        tokensConfig = YamlConfiguration.loadConfiguration(tokensFile);
+    }
+
     public FileConfiguration getWarpsFile() {
         return warpsConfig;
+    }
+
+
+    public FileConfiguration getTokensFile() {
+        return tokensConfig;
     }
 
     public void saveWarpsFile() {
@@ -71,15 +86,9 @@ public class YmlManager {
         }
     }
 
-    public FileConfiguration getTokensFile() {
-        File tokensfile = new File(plugin.getDataFolder(), "tokens.yml");
-        tokens = YamlConfiguration.loadConfiguration(tokensfile);
-        return tokens;
-    }
-
     public void saveTokensFile() {
         try {
-            tokens.save(tokensfile);
+            tokensConfig.save(tokensFile);
         } catch (IOException e) {
             plugin.getLogger().warning("Unable to save the tokens due to " + e.getMessage());
         }
