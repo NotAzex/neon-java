@@ -2,7 +2,6 @@ package org.azex.neon.methods;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.azex.neon.Neon;
 import org.azex.neon.commands.*;
 import org.bukkit.Location;
@@ -17,18 +16,32 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class EventManager implements Listener {
+// used for the rejoin system !
 
-    MiniMessage mini = MiniMessage.miniMessage();
+class playerInfo {
+    long leaveTime;
+    Location location;
+
+    public playerInfo(long leaveTime, Location location) {
+        this.leaveTime = leaveTime;
+        this.location = location;
+    }
+}
+
+// -
+
+public class EventManager implements Listener {
 
     private final ListManager list;
     private final LocationManager locationManager;
     private final VersionChecker versionChecker;
     private final WorldGuardManager wg;
     private final Neon plugin;
+    private HashMap<UUID, playerInfo> rejoinMap = new HashMap<UUID, playerInfo>();
 
     private String color1 = Messages.color1;
     private String color2 = Messages.color2;
@@ -48,6 +61,58 @@ public class EventManager implements Listener {
         this.list = list;
         this.locationManager = locationManager;
     }
+
+    // REJOINING SYSTEM
+
+    @EventHandler
+    public void disconnect(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
+        if (list.aliveList.contains(uuid)) {
+            if (Rejoin.toggle) {
+                rejoinMap.put(uuid, new playerInfo(System.currentTimeMillis(), player.getLocation()));
+                return;
+            }
+        }
+        list.aliveList.remove(uuid);
+        list.deadList.remove(uuid);
+        list.ReviveRecentMap.remove(uuid);
+    }
+
+    @EventHandler
+    public void join(PlayerJoinEvent event) {
+
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
+
+        if (!rejoinMap.containsKey(uuid)) {
+            Location location = locationManager.getLocation("spawn.yml", "spawn");
+
+            if (location != null) {
+                event.getPlayer().teleport(location);
+            }
+
+            list.unrevive(uuid);
+            list.ReviveRecentMap.remove(uuid);
+
+        }else{
+            playerInfo info = rejoinMap.get(uuid);
+            long diff = System.currentTimeMillis() - info.leaveTime;
+            long takenTime = diff / 1000;
+
+            rejoinMap.remove(uuid);
+            if (takenTime <= Rejoin.rejoinSeconds) {
+                list.revive(uuid);
+                player.teleport(info.location);
+                Messages.broadcast("<light_purple>" + player.getName() + " <gray>has joined back in" +
+                        "<light_purple> " + takenTime + "<gray> second(s).");
+            } else {
+                plugin.getLogger().info(player.getName() + " didn't join back in time! (they took " + takenTime + " seconds.)");
+            }
+        }
+    }
+
+    // ----------------
 
     @EventHandler
     public void blockCommands(PlayerCommandPreprocessEvent event) {
@@ -128,7 +193,7 @@ public class EventManager implements Listener {
         String latestVersion = versionChecker.checkForUpdates();
         Player player = event.getPlayer();
         if (latestVersion != null && player.hasPermission("neon.admin")) {
-            String currentVersion = plugin.getDescription().getVersion();
+            String currentVersion = "[" + plugin.getDescription().getVersion() + "]";
 
             Component modrinth = Component.text(" • https://modrinth.com/plugin/neon-core")
                     .clickEvent(ClickEvent.openUrl("https://modrinth.com/plugin/neon-core"));
@@ -144,34 +209,12 @@ public class EventManager implements Listener {
     }
 
     @EventHandler
-    public void join(PlayerJoinEvent event) {
-
-        Location location = locationManager.getLocation("spawn.yml", "spawn");
-
-        if (location != null) {
-            event.getPlayer().teleport(location);
-        }
-        UUID player = event.getPlayer().getUniqueId();
-        list.unrevive(player);
-        list.reviveRecentList.remove(player);
-    }
-
-    @EventHandler
     public void respawn(PlayerRespawnEvent event) {
 
         Location location = locationManager.getLocation("spawn.yml", "spawn");
-
         if (location != null) {
             event.setRespawnLocation(location);
         }
-    }
-
-    @EventHandler
-    public void quit(PlayerQuitEvent event) {
-        UUID player = event.getPlayer().getUniqueId();
-        list.aliveList.remove(player);
-        list.deadList.remove(player);
-        list.reviveRecentList.remove(player);
     }
 
     @EventHandler

@@ -19,6 +19,8 @@ public final class Neon extends JavaPlugin {
     private WorldGuardManager wg;
     private ScoreboardManager scoreboardManager;
     private ClearInventories inventories;
+    private Killing killing;
+    private TimespanTab timespanTab;
 
     private static Neon instance;
 
@@ -46,6 +48,8 @@ public final class Neon extends JavaPlugin {
         versionChecker = new VersionChecker(this);
         playerTab = new PlayersAsTabCompletion();
         wg = new WorldGuardManager(this);
+        killing = new Killing(list);
+        timespanTab = new TimespanTab();
 
         empty = new Empty();
 
@@ -61,7 +65,6 @@ public final class Neon extends JavaPlugin {
             new MutechatPlaceholder().register();
             new PvPPlaceholder().register();
             new RevivalPlaceholder().register();
-            new ReviveRecentPlaceholder(list).register();
             new SpawnPlaceholder(location).register();
             new TokensPlaceholder(tokens).register();
             new TokenusagePlaceholder().register();
@@ -81,6 +84,9 @@ public final class Neon extends JavaPlugin {
         getLogger().info("\u001B[37mRegistering commands...\u001B[0m");
         getCommand("clearalive").setExecutor(inventories);
         getCommand("cleardead").setExecutor(inventories);
+        getCommand("killdead").setExecutor(killing);
+        getCommand("killalive").setExecutor(killing);
+        getCommand("rejoin").setExecutor(new Rejoin());
         getCommand("ad").setExecutor(new Advertising(ymlManager, this));
         getCommand("prize").setExecutor(new Prize());
         getCommand("warp").setExecutor(new Warps(location, ymlManager, list));
@@ -129,6 +135,8 @@ public final class Neon extends JavaPlugin {
         getCommand("neon").setTabCompleter(new ReloadTab());
         getCommand("revival").setTabCompleter(new RevivalTab());
         getCommand("prize").setTabCompleter(new PrizeTab());
+        getCommand("killdead").setTabCompleter(empty);
+        getCommand("killalive").setTabCompleter(empty);
         getCommand("clearalive").setTabCompleter(empty);
         getCommand("cleardead").setTabCompleter(empty);
         getCommand("userevive").setTabCompleter(empty);
@@ -147,6 +155,8 @@ public final class Neon extends JavaPlugin {
         getCommand("tpalive").setTabCompleter(empty);
         getCommand("tpall").setTabCompleter(empty);
         getCommand("tokenusage").setTabCompleter(empty);
+        getCommand("rejoin").setTabCompleter(timespanTab);
+        getCommand("reviverecent").setTabCompleter(timespanTab);
         getCommand("givetoken").setTabCompleter(tokensTab);
         getCommand("removetoken").setTabCompleter(tokensTab);
         getCommand("clearrevive").setTabCompleter(playerTab);

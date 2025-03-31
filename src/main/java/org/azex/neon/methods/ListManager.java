@@ -22,7 +22,7 @@ public class ListManager {
 
     public final Set<UUID> aliveList = new HashSet<>();
     public final Set<UUID> deadList = new HashSet<>();
-    public final Set<UUID> reviveRecentList = new HashSet<>();
+    public final HashMap<UUID, Long> ReviveRecentMap = new HashMap<UUID, Long>();
 
     private BukkitTask backupLoop;
     private String checkLists = "Empty";
@@ -66,9 +66,7 @@ public class ListManager {
 
     private String turnToList(Set<UUID> set) {
         List<String> names = new ArrayList<>();
-        for (UUID uuid : set) {
-            names.add(Bukkit.getPlayer(uuid).getName());
-        }
+        for (UUID uuid : set) { names.add(Bukkit.getPlayer(uuid).getName()); }
         return String.join(", ", names);
     }
 
@@ -80,23 +78,11 @@ public class ListManager {
         return turnToList(deadList);
     }
 
-    public String reviveRecentAsList() {
-        return turnToList(reviveRecentList);
-    }
-
     public void playerDeath(UUID uuid) {
-        if (aliveList.contains(uuid)) {
-            reviveRecentList.add(uuid);
-        }
+        if (aliveList.contains(uuid)) { ReviveRecentMap.put(uuid, System.currentTimeMillis()); }
         deadList.add(uuid);
         aliveList.remove(uuid);
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (reviveRecentList.contains(uuid)) {
-                reviveRecentList.remove(uuid);
-                plugin.getLogger().info("Removed " + Bukkit.getPlayer(uuid).getName() + " from" +
-                        " revive recent list...");
-            }}, 600L);
-        }
+    }
 
     public void unrevive(UUID uuid) {
         aliveList.remove(uuid);
@@ -107,7 +93,7 @@ public class ListManager {
         if (!aliveList.contains(uuid)) {
             aliveList.add(uuid);
             deadList.remove(uuid);
-            reviveRecentList.remove(uuid);
+            ReviveRecentMap.remove(uuid);
         }
 
     }

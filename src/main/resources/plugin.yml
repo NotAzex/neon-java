@@ -8,6 +8,15 @@ authors: [ Azex ]
 description: Neon, but it's rewritten in Java
 website: https://discord.gg/nKEa5NxRew
 commands:
+  killalive:
+    description: Kills alive people.
+    permission: neon.admin
+  killdead:
+    description: Kills dead people.
+    permission: neon.admin
+  rejoin:
+    description: Lets you toggle rejoining and change the time of it.
+    permission: neon.admin
   ad:
     description: Lets you send, delete and create custom ads.
     permission: neon.admin

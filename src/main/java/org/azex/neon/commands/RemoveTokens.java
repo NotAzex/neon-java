@@ -19,15 +19,6 @@ public class RemoveTokens implements CommandExecutor {
         this.tokens = tokens;
     }
 
-    private boolean isInteger(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
@@ -36,7 +27,7 @@ public class RemoveTokens implements CommandExecutor {
             return false;
         }
 
-        if (!isInteger(args[1])) {
+        if (!GiveTokens.isInteger(args[1])) {
             Messages.sendMessage(sender, Messages.mini.serialize(Messages.UsedCommandWrong), "error");
             return false;
         }

@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.UUID;
 
 public class ReviveAll implements CommandExecutor {
@@ -36,16 +36,20 @@ public class ReviveAll implements CommandExecutor {
         }
 
         if (args.length < 1) {
-            Messages.broadcast("<light_purple>☄ " + player.getName() +
-                    "<gray> has revived everyone!");
 
-            for (UUID revivable : new ArrayList<>(list.deadList)) {
-                list.revive(revivable);
+            Iterator<UUID> reviveAll = list.deadList.iterator();
+
+            while (reviveAll.hasNext()) {
+                UUID revivable = reviveAll.next();
                 Player target = Bukkit.getPlayer(revivable);
-                if (target != null) {
+                if (target != null) { continue; }
+                if (!target.hasPermission("neon.admin")) {
+                    list.revive(revivable);
                     target.teleport(player);
                 }
             }
+            Messages.broadcast("<light_purple>☄ " + player.getName() +
+                    "<gray> has revived everyone!");
 
         } else {
             Messages.sendMessage(player, "<red>Arguments for this command (slow|fast)" +
