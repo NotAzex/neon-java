@@ -20,7 +20,9 @@ public class TeleportAll implements CommandExecutor {
 
         Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has teleported all players to them!");
         for (Player loop : Bukkit.getOnlinePlayers()) {
-            loop.teleport(player);
+            if (loop != null) {
+                loop.teleport(player);
+            }
         }
         return true;
     }

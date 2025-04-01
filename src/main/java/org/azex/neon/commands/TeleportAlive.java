@@ -36,7 +36,11 @@ public class TeleportAlive implements CommandExecutor {
 
         Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has teleported alive players to them!");
         for (UUID uuid : listManager.aliveList) {
-            Bukkit.getPlayer(uuid).teleport(player);
+            Player loop = Bukkit.getPlayer(uuid);
+            if (loop != null) {
+                loop.teleport(player);
+
+            }
         }
         return true;
     }
