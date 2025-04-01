@@ -27,7 +27,9 @@ public class Alive implements CommandExecutor {
             StringBuilder alive = new StringBuilder();
             for (UUID uuid : list.aliveList) {
                 Player player = Bukkit.getPlayer(uuid);
-                alive.append(player.getName()).append(", ");
+                if (player != null) {
+                    alive.append(player.getName()).append(", ");
+                }
             }
             alive.setLength(alive.length() - 2);
             Messages.sendMessage(commandSender, "<light_purple><bold>ALIVE:<reset><gray> " + alive, "msg");

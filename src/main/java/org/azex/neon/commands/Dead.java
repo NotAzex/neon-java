@@ -28,7 +28,9 @@ public class Dead implements CommandExecutor {
             StringBuilder dead = new StringBuilder();
             for (UUID uuid : list.deadList) {
                 Player player = Bukkit.getPlayer(uuid);
-                dead.append(player.getName()).append(", ");
+                if (player != null) {
+                    dead.append(player.getName()).append(", ");
+                }
             }
             dead.setLength(dead.length() - 2);
             Messages.sendMessage(commandSender, "<light_purple><bold>DEAD:<reset><gray> " + dead, "msg");
