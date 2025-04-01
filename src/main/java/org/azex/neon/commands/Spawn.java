@@ -32,7 +32,7 @@ public class Spawn implements CommandExecutor {
         Player player = (Player) sender;
         Location location = locationManager.getLocation("spawn.yml", "spawn");
 
-        if (list.aliveList.contains(player.getUniqueId())) {
+        if (list.getPlayers("alive").contains(player.getUniqueId())) {
             Messages.sendMessage(player, "<red>Alive players can't use this command!", "error");
         }else{
             if (location != null) {

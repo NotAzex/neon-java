@@ -29,13 +29,13 @@ public class TeleportAlive implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (listManager.aliveList.isEmpty()) {
+        if (listManager.isEmpty("alive")) {
             Messages.sendMessage(player, "<red>No one is alive!", "error");
             return false;
         }
 
         Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has teleported alive players to them!");
-        for (UUID uuid : listManager.aliveList) {
+        for (UUID uuid : listManager.getPlayers("alive")) {
             Player loop = Bukkit.getPlayer(uuid);
             if (loop != null) {
                 loop.teleport(player);

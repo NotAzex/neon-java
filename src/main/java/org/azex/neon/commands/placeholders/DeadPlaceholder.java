@@ -32,9 +32,9 @@ public class DeadPlaceholder extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
         if (params.equalsIgnoreCase("players")) {
-            return list.deadList.isEmpty() ? "No one!" : list.deadAsList();
+            return list.isEmpty("dead") ? "No one!" : list.statusAsList("dead");
         }else if (params.equalsIgnoreCase("size")) {
-            return String.valueOf(list.deadList.size());
+            return String.valueOf(list.getPlayers("dead").size());
         }
         return null;
     }

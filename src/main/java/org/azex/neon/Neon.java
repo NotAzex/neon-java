@@ -98,7 +98,7 @@ public final class Neon extends JavaPlugin {
         getCommand("listclear").setExecutor(new Listclear(list));
         getCommand("tokenusage").setExecutor(new TokenUsage());
         getCommand("token").setExecutor(new AcceptDenyToken(tokens));
-        getCommand("userevive").setExecutor(new UseRevive(tokens));
+        getCommand("userevive").setExecutor(new UseRevive(tokens, list));
         getCommand("neon").setExecutor(new Reload(this, scoreboardManager, list));
         getCommand("break").setExecutor(new Break(wg));
         getCommand("build").setExecutor(new Build(wg));

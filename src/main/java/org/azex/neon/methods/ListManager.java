@@ -2,6 +2,7 @@ package org.azex.neon.methods;
 
 import org.azex.neon.Neon;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -11,6 +12,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class ListManager {
 
@@ -20,8 +23,8 @@ public class ListManager {
         this.plugin = plugin;
     }
 
-    public final Set<UUID> aliveList = new HashSet<>();
-    public final Set<UUID> deadList = new HashSet<>();
+    public final ConcurrentHashMap<UUID, String> status = new ConcurrentHashMap<>();
+
     public final HashMap<UUID, Long> ReviveRecentMap = new HashMap<UUID, Long>();
 
     private BukkitTask backupLoop;
@@ -43,15 +46,15 @@ public class ListManager {
     }
 
     public void backupLists() {
-        if (!aliveList.isEmpty()) {
+        if (!status.isEmpty()) {
             try {
                 LocalDateTime date = LocalDateTime.now();
                 DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
                 File file = new File(plugin.getDataFolder(), "backup.txt");
                 FileWriter writer = new FileWriter(file, true);
                 String time = "\n[" + date.format(format) + "]";
-                String txt = "\n[" + aliveList.size() + " ALIVE]\n" + (aliveAsList().isEmpty() ? "No one!" : aliveAsList() +
-                        "\n[" + deadList.size() + " DEAD]\n" + (deadAsList().isEmpty() ? "No one!" : deadAsList()) + "\n");
+                String txt = "\n[" + status.size() + " ALIVE]\n" + (statusAsList("alive").isEmpty() ? "No one!" : statusAsList("alive") +
+                        "\n[" + status.size() + " DEAD]\n" + (statusAsList("dead").isEmpty() ? "No one!" : statusAsList("dead")) + "\n");
                 if (!checkLists.equals(txt)) {
                     checkLists = txt;
                     writer.write(time + txt);
@@ -64,35 +67,37 @@ public class ListManager {
         }
     }
 
-    private String turnToList(Set<UUID> set) {
-        List<String> names = new ArrayList<>();
-        for (UUID uuid : set) { names.add(Bukkit.getPlayer(uuid).getName()); }
-        return String.join(", ", names);
+    public List<UUID> getPlayers(String who) {
+         return status.entrySet().stream()
+                 .filter(entry -> who.equals(entry.getValue()))
+                 .map(Map.Entry::getKey)
+                 .collect(Collectors.toList());
     }
 
-    public String aliveAsList() {
-        return turnToList(aliveList);
+    public String statusAsList(String who) {
+        return getPlayers(who).stream()
+                .map(Bukkit::getPlayer)
+                .filter(player -> player != null)
+                .map(Player::getName)
+                .collect(Collectors.joining(", "));
     }
 
-    public String deadAsList() {
-        return turnToList(deadList);
+    public boolean isEmpty(String who) {
+        return status.values().stream().noneMatch(status -> who.equals(status));
     }
 
     public void playerDeath(UUID uuid) {
-        if (aliveList.contains(uuid)) { ReviveRecentMap.put(uuid, System.currentTimeMillis()); }
-        deadList.add(uuid);
-        aliveList.remove(uuid);
+        if (status.get(uuid).equals("alive")) { ReviveRecentMap.put(uuid, System.currentTimeMillis()); }
+        status.put(uuid, "dead");
     }
 
     public void unrevive(UUID uuid) {
-        aliveList.remove(uuid);
-        deadList.add(uuid);
+        status.put(uuid, "dead");
     }
 
     public void revive(UUID uuid) {
-        if (!aliveList.contains(uuid)) {
-            aliveList.add(uuid);
-            deadList.remove(uuid);
+        if (!status.get(uuid).equals("alive")) {
+            status.put(uuid, "alive");
             ReviveRecentMap.remove(uuid);
         }
 

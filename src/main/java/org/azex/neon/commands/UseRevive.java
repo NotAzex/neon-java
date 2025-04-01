@@ -2,6 +2,7 @@ package org.azex.neon.commands;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import org.azex.neon.methods.ListManager;
 import org.azex.neon.methods.Messages;
 import org.azex.neon.methods.Tokens;
 import org.bukkit.Bukkit;
@@ -16,10 +17,12 @@ import java.util.UUID;
 public class UseRevive implements CommandExecutor {
 
     private final Tokens tokens;
+    private final ListManager list;
     private String color1 = Messages.color1;
     private String color2 = Messages.color2;
 
-    public UseRevive(Tokens tokens) {
+    public UseRevive(Tokens tokens, ListManager list) {
+        this.list = list;
         this.tokens = tokens;
     }
 
@@ -36,6 +39,11 @@ public class UseRevive implements CommandExecutor {
 
         if (TokenUsage.toggle) {
             Messages.sendMessage(player, "<red>Tokens are disabled!", "error");
+            return false;
+        }
+
+        if (list.getPlayers("alive").contains(uuid)) {
+            Messages.sendMessage(player, "<red>Alive players can't run this command!", "error");
             return false;
         }
 

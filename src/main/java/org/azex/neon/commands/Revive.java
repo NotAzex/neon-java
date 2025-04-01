@@ -9,6 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 public class Revive implements CommandExecutor {
 
     private final ListManager list;
@@ -33,16 +35,17 @@ public class Revive implements CommandExecutor {
         }
 
         Player revivable = Bukkit.getPlayer(args[0]);
+        UUID uuid = revivable.getUniqueId();
 
         if (revivable == null) {
             Messages.sendMessage(player, Messages.mini.serialize(Messages.PlayerNotOnline), "error");
             return false;
         }
 
-        if (list.aliveList.contains(revivable.getUniqueId())) {
+        if (list.getPlayers("alive").contains(uuid)) {
             Messages.sendMessage(player, "<red>This player is already alive!", "error");
         }else{
-            list.revive(revivable.getUniqueId());
+            list.revive(uuid);
             revivable.teleport(player.getLocation());
             Messages.broadcast("<light_purple>☄ " + player.getName() +
                     " <gray>has revived<light_purple> " + revivable.getName() + "<gray>!");

@@ -68,14 +68,13 @@ public class EventManager implements Listener {
     public void disconnect(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
-        if (list.aliveList.contains(uuid)) {
+        if (list.getPlayers("alive").contains(uuid)) {
             if (Rejoin.toggle) {
                 rejoinMap.put(uuid, new playerInfo(System.currentTimeMillis(), player.getLocation()));
                 return;
             }
         }
-        list.aliveList.remove(uuid);
-        list.deadList.remove(uuid);
+        list.status.remove(uuid);
         list.ReviveRecentMap.remove(uuid);
     }
 
@@ -89,7 +88,7 @@ public class EventManager implements Listener {
             Location location = locationManager.getLocation("spawn.yml", "spawn");
 
             if (location != null) {
-                event.getPlayer().teleport(location);
+                player.teleport(location);
             }
 
             list.unrevive(uuid);
@@ -127,17 +126,19 @@ public class EventManager implements Listener {
     @EventHandler
     public void revivalWinner(AsyncPlayerChatEvent event) {
 
+        Player player = event.getPlayer();
+
         if (!Revival.isRevivalActive) {
             return;
         }
         if (!(Integer.parseInt(event.getMessage()) == Revival.number)) {
             return;
         }
-        if (list.aliveList.contains(event.getPlayer().getUniqueId())) {
+        if (list.getPlayers("alive").contains(player.getUniqueId())) {
             return;
         }
 
-        Messages.broadcast("<light_purple>☄ " + event.getPlayer().getName() + " <gray>has won the revival!");
+        Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has won the revival!");
         Revival.number = null;
         Revival.isRevivalActive = false;
     }

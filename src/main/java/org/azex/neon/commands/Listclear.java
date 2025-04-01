@@ -20,10 +20,9 @@ public class Listclear implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
-        listManager.aliveList.clear();
-        listManager.deadList.clear();
+        listManager.status.clear();
         for (Player player : Bukkit.getOnlinePlayers()) {
-            listManager.deadList.add(player.getUniqueId());
+            listManager.status.put(player.getUniqueId(), "dead");
         }
 
         Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has cleared the alive & dead list.");

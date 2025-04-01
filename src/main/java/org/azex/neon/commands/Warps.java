@@ -76,7 +76,7 @@ public class Warps implements CommandExecutor {
         }
 
         if (args[0].equals("teleport")) {
-            if (!listManager.aliveList.contains(player.getUniqueId())) {
+            if (!listManager.getPlayers("alive").contains(player.getUniqueId())) {
                 if (args[1].startsWith("-")) {
                     if (player.hasPermission("neon.warps")) {
                         teleportToWarp(player, args[1]);

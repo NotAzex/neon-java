@@ -30,14 +30,14 @@ public class ReviveAll implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (list.deadList.isEmpty()) {
+        if (list.isEmpty("dead")) {
             Messages.sendMessage(player, "<red>No one is dead!", "error");
             return false;
         }
 
         if (args.length < 1) {
 
-            Iterator<UUID> reviveAll = list.deadList.iterator();
+            Iterator<UUID> reviveAll = list.getPlayers("dead").iterator();
 
             while (reviveAll.hasNext()) {
                 UUID revivable = reviveAll.next();

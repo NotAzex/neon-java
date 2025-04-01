@@ -28,13 +28,13 @@ public class TeleportDead implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (listManager.deadList.isEmpty()) {
+        if (listManager.isEmpty("dead")) {
             Messages.sendMessage(sender, "<red>No one is dead!", "error");
             return false;
         }
 
         Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has teleported dead players to them!");
-        for (UUID uuid : listManager.deadList) {
+        for (UUID uuid : listManager.getPlayers("dead")) {
             Player loop = Bukkit.getPlayer(uuid);
             if (loop != null) {
                 loop.teleport(player);

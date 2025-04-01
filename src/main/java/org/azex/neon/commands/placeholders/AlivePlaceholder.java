@@ -33,9 +33,9 @@ public class AlivePlaceholder extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
         if (params.equalsIgnoreCase("players")) {
-            return list.aliveList.isEmpty() ? "No one!" : list.aliveAsList();
+            return list.isEmpty("alive") ? "No one!" : list.statusAsList("alive");
         }else if (params.equalsIgnoreCase("size")) {
-            return String.valueOf(list.aliveList.size());
+            return String.valueOf(list.getPlayers("alive").size());
         }
         return null;
     }
