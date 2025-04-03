@@ -1,0 +1,13 @@
+# Example scoreboard.
+# Add more or remove lines if you want!
+
+Scoreboard:
+  Enable: true
+  Title: §5☄ Neon
+  Lines:
+  - ''
+  - ' §7| &fAlive: &5%alive_size%'
+  - ' §7| &fDead: &5%dead_size%'
+  - ' §7| &fTokens: &5%tokens_%player%%'
+  - ' '
+  - §7§oEdit this in the config of Neon.
