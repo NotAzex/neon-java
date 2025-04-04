@@ -21,6 +21,9 @@ public class Kicking implements CommandExecutor {
     }
 
     private void process(CommandSender sender, StringBuilder builder, String who, String dueTo) {
+        if (!builder.toString().equals("<red><group> players were kicked.")) {
+            builder.replace(40, 54, "<red>");
+        }
         builder.replace(5, 12, who);
         Component component = Messages.mini.deserialize(builder.toString());
         kickGroup(component, who.toLowerCase());
@@ -60,6 +63,9 @@ public class Kicking implements CommandExecutor {
             process(sender, builder, "Dead", dueTo);
         }
         if (name.equals("kickall")) {
+            if (!builder.toString().equals("<red><group> players were kicked.")) {
+                builder.replace(40, 54, "<red>");
+            }
             builder.replace(5, 12, "All");
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (!player.hasPermission("neon.admin")) {
