@@ -6,9 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class YmlManager {
 
@@ -23,9 +21,7 @@ public class YmlManager {
 
     public YmlManager(Neon plugin) {
         this.plugin = plugin;
-        loadWarpsFile();
-        loadAdsFile();
-        loadTokensFile();
+        loadFiles();
     }
 
     public Set getSections(String file) { // string should be warps.yml or soemthing
@@ -45,27 +41,19 @@ public class YmlManager {
         return Collections.emptySet();
     }
 
-    private void loadAdsFile() {
-        adsFile = new File(plugin.getDataFolder(), "ads.yml");
-        if (!adsFile.exists()) {
-            plugin.saveResource("ads.yml", false);
+    private void loadFiles() {
+        File dataFolder = plugin.getDataFolder();
+        adsFile = new File(dataFolder, "ads.yml");
+        warpsFile = new File(dataFolder, "warps.yml");
+        tokensFile = new File(dataFolder, "tokens.yml");
+        List<File> filesToSave = List.of(adsFile, warpsFile, tokensFile);
+        for (File file : filesToSave) {
+            if (!file.exists()) {
+                plugin.saveResource(file.getName(), false);
+            }
         }
         adsConfig = YamlConfiguration.loadConfiguration(adsFile);
-    }
-
-    private void loadWarpsFile() {
-        warpsFile = new File(plugin.getDataFolder(), "warps.yml");
-        if (!warpsFile.exists()) {
-            plugin.saveResource("warps.yml", false);
-        }
         warpsConfig = YamlConfiguration.loadConfiguration(warpsFile);
-    }
-
-    private void loadTokensFile() {
-        tokensFile = new File(plugin.getDataFolder(), "tokens.yml");
-        if (!tokensFile.exists()) {
-            plugin.saveResource("tokens.yml", false);
-        }
         tokensConfig = YamlConfiguration.loadConfiguration(tokensFile);
     }
 
@@ -73,6 +61,9 @@ public class YmlManager {
         return warpsConfig;
     }
 
+    public FileConfiguration getAdsFile() {
+        return adsConfig;
+    }
 
     public FileConfiguration getTokensFile() {
         return tokensConfig;
@@ -93,5 +84,14 @@ public class YmlManager {
             plugin.getLogger().warning("Unable to save the tokens due to " + e.getMessage());
         }
     }
+
+    public void saveAdsFile() {
+        try {
+            adsConfig.save(adsFile);
+        } catch (IOException e) {
+            plugin.getLogger().warning("Unable to save the ads due to " + e.getMessage());
+        }
+    }
+
 }
 

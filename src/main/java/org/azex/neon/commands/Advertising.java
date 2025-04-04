@@ -11,7 +11,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,18 +22,16 @@ public class Advertising implements CommandExecutor {
     private final YmlManager ymlManager;
     private final Neon plugin;
 
-    private String link;
-    private String ad;
-    private File ads;
-    private FileConfiguration adsConfig;
-
     public Advertising(YmlManager ymlManager, Neon plugin) {
         this.ymlManager = ymlManager;
         this.plugin = plugin;
     }
 
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+
+        File ads = new File(plugin.getDataFolder(), "ads.yml");
 
         if (args.length != 2) {
             Messages.sendMessage(sender, "<red>Must provide an argument!", "error");
@@ -48,8 +45,7 @@ public class Advertising implements CommandExecutor {
             }
         }
 
-        ads = new File(plugin.getDataFolder(), "ads.yml");
-        adsConfig = YamlConfiguration.loadConfiguration(ads);
+        FileConfiguration adsConfig = ymlManager.getAdsFile();
 
         if (args[0].equals("delete")) {
             adsConfig.set(args[1], null);
@@ -91,8 +87,8 @@ public class Advertising implements CommandExecutor {
 
         if (args[0].equals("send")) {
 
-            link = adsConfig.getString(args[1] + ".Link", "<link>");
-            ad = adsConfig.getString(args[1] + ".Advertisement", "<red>Failed to fetch the ad due to missing fields. Delete this ad and create it again!");
+            String link = adsConfig.getString(args[1] + ".Link", "<link>");
+            String ad = adsConfig.getString(args[1] + ".Advertisement", "<red>Failed to fetch the ad due to missing fields. Delete this ad and create it again!");
 
             try {
                 Component advertisement = Component.newline()

@@ -8,6 +8,15 @@ authors: [ Azex ]
 description: Neon, but it's rewritten in Java
 website: https://discord.gg/nKEa5NxRew
 commands:
+  kickalive:
+    description: Kicks alive people.
+    permission: neon.admin
+  kickdead:
+    description: Kicks dead people.
+    permission: neon.admin
+  kickall:
+    description: Kicks everyone except people with the permission 'neon.kick'.
+    permission: neon.admin
   killalive:
     description: Kills alive people.
     permission: neon.admin

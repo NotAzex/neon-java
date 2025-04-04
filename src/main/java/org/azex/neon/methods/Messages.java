@@ -2,7 +2,6 @@ package org.azex.neon.methods;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.md_5.bungee.api.ChatMessageType;
 import org.azex.neon.Neon;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;

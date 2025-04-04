@@ -1,11 +1,16 @@
 package org.azex.neon;
 
 import org.azex.neon.commands.*;
+import org.azex.neon.commands.Timer;
 import org.azex.neon.commands.placeholders.*;
 import org.azex.neon.methods.*;
 import org.azex.neon.tabcompletions.*;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.*;
 
 public final class Neon extends JavaPlugin {
     private LocationManager location;
@@ -21,11 +26,111 @@ public final class Neon extends JavaPlugin {
     private ClearInventories inventories;
     private Killing killing;
     private TimespanTab timespanTab;
+    private Kicking kicking;
 
     private static Neon instance;
 
     public static Neon getInstance() {
         return instance;
+    }
+
+    private void loadCommands() {
+        HashMap<String, CommandExecutor> map = new HashMap<>();
+                map.put("kickalive", kicking);
+                map.put("kickdead", kicking);
+                map.put("kickall", kicking);
+                map.put("clearalive", inventories);
+                map.put("cleardead", inventories);
+                map.put("killdead", killing);
+                map.put("killalive", killing);
+                map.put("rejoin", new Rejoin());
+                map.put("ad", new Advertising(ymlManager, this));
+                map.put("prize", new Prize());
+                map.put("warp", new Warps(location, ymlManager, list));
+                map.put("staffchat", new StaffChat(this));
+                map.put("event", new SetEvent());
+                map.put("hunger", new Hunger());
+                map.put("clearrevive", new ClearRevive(tokens));
+                map.put("timer", new Timer(this));
+                map.put("listclear", new Listclear(list));
+                map.put("tokenusage", new TokenUsage());
+                map.put("token", new AcceptDenyToken(tokens));
+                map.put("userevive", new UseRevive(tokens, list));
+                map.put("neon", new Reload(this, scoreboardManager, list));
+                map.put("break", new Break(wg));
+                map.put("build", new Build(wg));
+                map.put("falldamage", new FallDamage(wg));
+                map.put("pvp", new PvP(wg));
+                map.put("flow", new Flow(wg));
+                map.put("revive", new Revive(list));
+                map.put("core", new Core());
+                map.put("alive", new Alive(list));
+                map.put("dead", new Dead(list));
+                map.put("mutechat", new Mutechat());
+                map.put("reviveall", new ReviveAll(list));
+                map.put("reviverecent", new ReviveRecent(list));
+                map.put("unrevive", new Unrevive(list));
+                map.put("spawn", new Spawn(location, list));
+                map.put("setspawn", new SetSpawn(location));
+                map.put("givetoken", new GiveTokens(tokens));
+                map.put("removetoken", new RemoveTokens(tokens));
+                map.put("tokens", new TokenBalance(tokens));
+                map.put("hide", new Hide(this));
+                map.put("tpalive", new TeleportAlive(list));
+                map.put("tpdead", new TeleportDead(list));
+                map.put("tpall", new TeleportAll());
+                map.put("revival", new Revival());
+
+        map.forEach((cmd, executor) -> {
+            try {
+                getCommand(cmd).setExecutor(executor);
+            }catch(NullPointerException e) {
+                getLogger().info("Couldn't load the command " + cmd + " due to NullPointerException! Report to the developer.");
+            }
+        });
+    }
+
+    private void registerTab(String command, TabCompleter tabCompleter) {
+        if (tabCompleter != null) {
+            getCommand(command).setTabCompleter(tabCompleter);
+        }else{
+            getLogger().info("Couldn't load the tab completer for command '" + command + "' due to" +
+                    " NullPointerException! Report this to the developer.");
+        }
+
+    }
+
+    private void loadTabs() {
+        Set<String> emptytabs = new HashSet<>(Arrays.asList(
+                "kickalive", "kickdead", "kickall", "killdead", "killalive", "clearalive", "cleardead", "userevive", "hide", "alive", "dead",
+                "mutechat", "reviveall", "reviverecent", "spawn", "listclear", "hunger", "setspawn",
+                "core", "tpdead", "tpalive", "tpall", "tokenusage"
+        ));
+        HashMap<String, TabCompleter> tabs = new HashMap<>();
+        tabs.put("warp", new WarpsTab(ymlManager));
+        tabs.put("ad", new AdsTab(ymlManager));
+        tabs.put("staffchat", new TextTab());
+        tabs.put("event", new SetEventTab());
+        tabs.put("timer", new TimerTab());
+        tabs.put("neon", new ReloadTab());
+        tabs.put("revival", new RevivalTab());
+        tabs.put("prize", new PrizeTab());
+        tabs.put("rejoin", timespanTab);
+        tabs.put("reviverecent", timespanTab);
+        tabs.put("givetoken", tokensTab);
+        tabs.put("removetoken", tokensTab);
+        tabs.put("clearrevive", playerTab);
+        tabs.put("revive", playerTab);
+        tabs.put("unrevive", playerTab);
+        tabs.put("tokens", playerTab);
+
+        tabs.forEach((command, tabCompleter) -> {
+            registerTab(command, tabCompleter);
+        });
+
+        emptytabs.forEach((emptycmd) -> {
+            registerTab(emptycmd, empty);
+        });
     }
 
     @Override
@@ -34,7 +139,6 @@ public final class Neon extends JavaPlugin {
         instance = this;
         int pluginId = 25207;
         Metrics metrics = new Metrics(this, pluginId);
-        this.getLogger().info("\u001B[37m Loaded bStats...\u001B[0m");
 
         saveDefaultConfig();
 
@@ -50,6 +154,7 @@ public final class Neon extends JavaPlugin {
         wg = new WorldGuardManager(this);
         killing = new Killing(list);
         timespanTab = new TimespanTab();
+        kicking = new Kicking(list);
 
         empty = new Empty();
 
@@ -82,87 +187,11 @@ public final class Neon extends JavaPlugin {
         getLogger().info("\u001B[37mRegistered events!\u001B[0m");
 
         getLogger().info("\u001B[37mRegistering commands...\u001B[0m");
-        getCommand("clearalive").setExecutor(inventories);
-        getCommand("cleardead").setExecutor(inventories);
-        getCommand("killdead").setExecutor(killing);
-        getCommand("killalive").setExecutor(killing);
-        getCommand("rejoin").setExecutor(new Rejoin());
-        getCommand("ad").setExecutor(new Advertising(ymlManager, this));
-        getCommand("prize").setExecutor(new Prize());
-        getCommand("warp").setExecutor(new Warps(location, ymlManager, list));
-        getCommand("staffchat").setExecutor(new StaffChat(this));
-        getCommand("event").setExecutor(new SetEvent());
-        getCommand("hunger").setExecutor(new Hunger());
-        getCommand("clearrevive").setExecutor(new ClearRevive(tokens));
-        getCommand("timer").setExecutor(new Timer(this));
-        getCommand("listclear").setExecutor(new Listclear(list));
-        getCommand("tokenusage").setExecutor(new TokenUsage());
-        getCommand("token").setExecutor(new AcceptDenyToken(tokens));
-        getCommand("userevive").setExecutor(new UseRevive(tokens, list));
-        getCommand("neon").setExecutor(new Reload(this, scoreboardManager, list));
-        getCommand("break").setExecutor(new Break(wg));
-        getCommand("build").setExecutor(new Build(wg));
-        getCommand("falldamage").setExecutor(new FallDamage(wg));
-        getCommand("pvp").setExecutor(new PvP(wg));
-        getCommand("flow").setExecutor(new Flow(wg));
-        getCommand("revive").setExecutor(new Revive(list));
-        getCommand("core").setExecutor(new Core());
-        getCommand("alive").setExecutor(new Alive(list));
-        getCommand("dead").setExecutor(new Dead(list));
-        getCommand("mutechat").setExecutor(new Mutechat());
-        getCommand("reviveall").setExecutor(new ReviveAll(list));
-        getCommand("reviverecent").setExecutor(new ReviveRecent(list));
-        getCommand("unrevive").setExecutor(new Unrevive(list));
-        getCommand("spawn").setExecutor(new Spawn(location, list));
-        getCommand("setspawn").setExecutor(new SetSpawn(location));
-        getCommand("givetoken").setExecutor(new GiveTokens(tokens));
-        getCommand("removetoken").setExecutor(new RemoveTokens(tokens));
-        getCommand("tokens").setExecutor(new TokenBalance(tokens));
-        getCommand("hide").setExecutor(new Hide(this));
-        getCommand("tpalive").setExecutor(new TeleportAlive(list));
-        getCommand("tpdead").setExecutor(new TeleportDead(list));
-        getCommand("tpall").setExecutor(new TeleportAll());
-        getCommand("revival").setExecutor(new Revival());
+        loadCommands();
         getLogger().info("\u001B[37mRegistered commands!\u001B[0m");
 
         getLogger().info("\u001B[37mRegistering tab completers...\u001B[0m");
-        getCommand("warp").setTabCompleter(new WarpsTab(ymlManager));
-        getCommand("ad").setTabCompleter(new AdsTab(ymlManager));
-        getCommand("staffchat").setTabCompleter(new TextTab());
-        getCommand("event").setTabCompleter(new SetEventTab());
-        getCommand("timer").setTabCompleter(new TimerTab());
-        getCommand("token").setTabCompleter(new AcceptDenyTokenTab());
-        getCommand("neon").setTabCompleter(new ReloadTab());
-        getCommand("revival").setTabCompleter(new RevivalTab());
-        getCommand("prize").setTabCompleter(new PrizeTab());
-        getCommand("killdead").setTabCompleter(empty);
-        getCommand("killalive").setTabCompleter(empty);
-        getCommand("clearalive").setTabCompleter(empty);
-        getCommand("cleardead").setTabCompleter(empty);
-        getCommand("userevive").setTabCompleter(empty);
-        getCommand("hide").setTabCompleter(empty);
-        getCommand("alive").setTabCompleter(empty);
-        getCommand("dead").setTabCompleter(empty);
-        getCommand("mutechat").setTabCompleter(empty);
-        getCommand("reviveall").setTabCompleter(empty);
-        getCommand("reviverecent").setTabCompleter(empty);
-        getCommand("spawn").setTabCompleter(empty);
-        getCommand("listclear").setTabCompleter(empty);
-        getCommand("hunger").setTabCompleter(empty);
-        getCommand("setspawn").setTabCompleter(empty);
-        getCommand("core").setTabCompleter(empty);
-        getCommand("tpdead").setTabCompleter(empty);
-        getCommand("tpalive").setTabCompleter(empty);
-        getCommand("tpall").setTabCompleter(empty);
-        getCommand("tokenusage").setTabCompleter(empty);
-        getCommand("rejoin").setTabCompleter(timespanTab);
-        getCommand("reviverecent").setTabCompleter(timespanTab);
-        getCommand("givetoken").setTabCompleter(tokensTab);
-        getCommand("removetoken").setTabCompleter(tokensTab);
-        getCommand("clearrevive").setTabCompleter(playerTab);
-        getCommand("revive").setTabCompleter(playerTab);
-        getCommand("unrevive").setTabCompleter(playerTab);
-        getCommand("tokens").setTabCompleter(playerTab);
+        loadTabs();
         getLogger().info("\u001B[37mRegistered tab completers!\u001B[0m");
         scoreboardManager.runScoreboardLoop();
         list.startBackupLoop();
@@ -171,15 +200,12 @@ public final class Neon extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        scoreboardManager = null;
-        tokens = null;
-        tokensTab = null;
-        playerTab = null;
-        ymlManager = null;
-        list = null;
-        versionChecker = null;
-        empty = null;
-        wg = null;
+        saveConfig();
+        ymlManager.saveTokensFile();
+        ymlManager.saveWarpsFile();
+        ymlManager.saveAdsFile();
 
+        Bukkit.getScheduler().cancelTasks(this);
+        getLogger().info("Saved info and stopped Neon.");
     }
 }

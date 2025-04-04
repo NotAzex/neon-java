@@ -59,7 +59,7 @@ public class AcceptDenyToken implements CommandExecutor {
             tokens.setTokens(uuid, tokens.getTokens(uuid) - 1);
             Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has accepted" +
                     "<light_purple> " + target.getName() + "<gray>'s token.");
-        } else if (args[0].equals("deny")) {
+        } else {
             Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has denied" +
                     "<light_purple> " + target.getName() + "<gray>'s token.");
         }
