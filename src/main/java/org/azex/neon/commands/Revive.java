@@ -34,13 +34,13 @@ public class Revive implements CommandExecutor {
             return false;
         }
 
-        Player revivable = Bukkit.getPlayer(args[0]);
-        UUID uuid = revivable.getUniqueId();
-
-        if (revivable == null) {
+        if (Bukkit.getPlayer(args[0]) == null) {
             Messages.sendMessage(player, Messages.mini.serialize(Messages.PlayerNotOnline), "error");
             return false;
         }
+
+        Player revivable = Bukkit.getPlayer(args[0]);
+        UUID uuid = revivable.getUniqueId();
 
         if (list.getPlayers("alive").contains(uuid)) {
             Messages.sendMessage(player, "<red>This player is already alive!", "error");
