@@ -15,7 +15,7 @@ import java.util.UUID;
 public class Hide implements CommandExecutor {
 
     private final Neon plugin;
-    private final HashSet<UUID> toggledPlayers = new HashSet<>();
+    public static HashSet<UUID> toggledPlayers = new HashSet<>();
 
     public Hide(Neon plugin) {
         this.plugin = plugin;

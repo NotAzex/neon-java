@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.azex.neon.Neon;
 import org.azex.neon.commands.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -76,6 +77,7 @@ public class EventManager implements Listener {
         }
         list.status.remove(uuid);
         list.ReviveRecentMap.remove(uuid);
+        Hide.toggledPlayers.remove(uuid);
     }
 
     @EventHandler
@@ -112,6 +114,19 @@ public class EventManager implements Listener {
     }
 
     // ----------------
+
+    @EventHandler
+    public void hidePlayers(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        if (!Hide.toggledPlayers.isEmpty()) {
+            for (UUID uuid : Hide.toggledPlayers) {
+                if (Bukkit.getPlayer(uuid) != null) {
+                    Player loop = Bukkit.getPlayer(uuid);
+                    loop.hidePlayer(plugin, player);
+                }
+            }
+        }
+    }
 
     @EventHandler
     public void blockCommands(PlayerCommandPreprocessEvent event) {

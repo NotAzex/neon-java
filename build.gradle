@@ -25,6 +25,7 @@ repositories {
 }
 
 dependencies {
+
     implementation("org.json:json:20240303", "org.yaml:snakeyaml:2.0")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT", "me.clip:placeholderapi:2.11.6", "com.sk89q.worldguard:worldguard-bukkit:7.0.13")
 }
