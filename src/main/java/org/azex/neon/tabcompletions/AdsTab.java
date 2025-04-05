@@ -4,6 +4,7 @@ import org.azex.neon.methods.YmlManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,16 +23,19 @@ public class AdsTab implements TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
+        final List<String> validArguments = new ArrayList<>();
         list = new ArrayList<String>(ymlManager.getSections("ads.yml"));
 
         if (args.length == 2) {
             if (!args[0].equals("create")) {
-                return list;
+                StringUtil.copyPartialMatches(args[1], list, validArguments);
+                return validArguments;
             }
         }
 
         if (args.length == 1) {
-            return List.of("create", "send", "delete");
+            StringUtil.copyPartialMatches(args[0], List.of("create", "send", "delete"), validArguments);
+            return validArguments;
         }
 
         return Collections.emptyList();

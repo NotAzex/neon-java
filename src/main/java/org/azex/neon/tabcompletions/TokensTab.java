@@ -8,22 +8,25 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TokensTab implements TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
+        final List<String> validArguments = new ArrayList<>();
+
         if (args.length == 2) {
-            return Collections.singletonList("<how many>");
+            return Collections.singletonList("<amount>");
         }
 
         if (args.length == 1) {
             return Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
-                    .collect(Collectors.toList());
+                    .toList();
+
         }
         return Collections.emptyList();
     }

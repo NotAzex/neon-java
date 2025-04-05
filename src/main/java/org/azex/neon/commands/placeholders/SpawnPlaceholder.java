@@ -32,6 +32,11 @@ public class SpawnPlaceholder extends PlaceholderExpansion {
     }
 
     @Override
+    public boolean persist() {
+        return true;
+    }
+
+    @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
 
         Location location = locationManager.getLocation("spawn.yml", "spawn");

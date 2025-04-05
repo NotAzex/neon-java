@@ -56,7 +56,7 @@ public final class Neon extends JavaPlugin {
                 map.put("tokenusage", new TokenUsage());
                 map.put("token", new AcceptDenyToken(tokens));
                 map.put("userevive", new UseRevive(tokens, list));
-                map.put("neon", new Reload(this, scoreboardManager, list));
+                map.put("neon", new NeonCommand(this, scoreboardManager, list));
                 map.put("break", new Break(wg));
                 map.put("build", new Build(wg));
                 map.put("falldamage", new FallDamage(wg));
@@ -103,16 +103,17 @@ public final class Neon extends JavaPlugin {
     private void loadTabs() {
         Set<String> emptytabs = new HashSet<>(Arrays.asList(
                 "kickalive", "kickdead", "kickall", "killdead", "killalive", "clearalive", "cleardead", "userevive", "hide", "alive", "dead",
-                "mutechat", "reviveall", "reviverecent", "spawn", "listclear", "hunger", "setspawn",
+                "mutechat", "reviveall", "spawn", "listclear", "hunger", "setspawn",
                 "core", "tpdead", "tpalive", "tpall", "tokenusage"
         ));
         HashMap<String, TabCompleter> tabs = new HashMap<>();
+        tabs.put("token", new AcceptDenyTokenTab());
         tabs.put("warp", new WarpsTab(ymlManager));
         tabs.put("ad", new AdsTab(ymlManager));
         tabs.put("staffchat", new TextTab());
         tabs.put("event", new SetEventTab());
         tabs.put("timer", new TimerTab());
-        tabs.put("neon", new ReloadTab());
+        tabs.put("neon", new ConfigTab());
         tabs.put("revival", new RevivalTab());
         tabs.put("prize", new PrizeTab());
         tabs.put("rejoin", timespanTab);
@@ -175,6 +176,7 @@ public final class Neon extends JavaPlugin {
             new TokenusagePlaceholder().register();
             new AlivePlaceholder(list).register();
             new DeadPlaceholder(list).register();
+            new StatusPlaceholder(list).register();
             new TokensPlaceholder(tokens).register();
             new EventPlaceholder().register();
             getLogger().info("\u001B[37mRegistered 17 placeholders!\u001B[0m");

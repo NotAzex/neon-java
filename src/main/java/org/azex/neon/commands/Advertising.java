@@ -102,8 +102,6 @@ public class Advertising implements CommandExecutor {
             }catch (ParsingExceptionImpl e) {
                 Messages.sendMessage(sender, "<red>Legacy color codes 'e.g &7' aren't supported. Please use MiniMessage colors.", "error");
             }
-
-
         }
         return true;
     }

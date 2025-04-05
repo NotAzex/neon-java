@@ -200,8 +200,8 @@ public class EventManager implements Listener {
                     .clickEvent(ClickEvent.openUrl("https://modrinth.com/plugin/neon-core"));
 
             if (!currentVersion.equalsIgnoreCase(latestVersion)) {
-                Component txt = Messages.mini.deserialize(Messages.prefix + color1 + " Neon" + color2 + " has detected an update! " +
-                        color1 + latestVersion + "\n");
+                Component txt = Messages.mini.deserialize(color1 + Messages.prefix + color1 + " Neon" + color2 + " has detected an update! " +
+                        color1 + latestVersion + "\n" + color1);
                 txt = txt.append(modrinth);
                 Messages.sendMessage(player, Messages.mini.serialize(txt), "msg");
                 Messages.playSound(player, "main");

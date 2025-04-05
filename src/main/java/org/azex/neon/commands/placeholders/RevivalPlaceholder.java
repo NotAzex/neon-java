@@ -25,6 +25,11 @@ public class RevivalPlaceholder extends PlaceholderExpansion {
     }
 
     @Override
+    public boolean persist() {
+        return true;
+    }
+
+    @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
         if (params.equalsIgnoreCase("status")) {
             return String.valueOf(Revival.isRevivalActive);

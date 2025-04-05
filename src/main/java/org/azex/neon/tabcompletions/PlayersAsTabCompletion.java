@@ -17,8 +17,10 @@ public class PlayersAsTabCompletion implements TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
         if (args.length == 1) {
+            String names = args[0].toLowerCase();
             return Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
+                    .filter(name -> name.toLowerCase().startsWith(names))
                     .collect(Collectors.toList());
         }
 

@@ -32,6 +32,11 @@ public class TokensPlaceholder extends PlaceholderExpansion {
     }
 
     @Override
+    public boolean persist() {
+        return true;
+    }
+
+    @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
 
         Player p = Bukkit.getPlayer(params);
