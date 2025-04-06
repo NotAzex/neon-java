@@ -9,7 +9,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.UUID;
 
 public class ReviveRecent implements CommandExecutor {
@@ -50,18 +52,15 @@ public class ReviveRecent implements CommandExecutor {
         }
 
         int time;
-        if (args[1].equals("minutes")) {
+        if (args[1].equals("minutes") || args[1].equals("minute")) {
             time = Integer.parseInt(args[0]) * 60;
         } else {
             time = Integer.parseInt(args[0]);
         }
 
         int looped = 0;
-
-        Iterator<UUID> reviveRecentLoop = list.ReviveRecentMap.keySet().iterator();
-
-        while (reviveRecentLoop.hasNext()) {
-            UUID revivable = reviveRecentLoop.next();
+        Set<UUID> copykeys = new HashSet<>(list.ReviveRecentMap.keySet());
+        for (UUID revivable : copykeys) {
             Player loop = Bukkit.getPlayer(revivable);
             if (loop != null) {
                 long diff = System.currentTimeMillis() - list.ReviveRecentMap.get(revivable);

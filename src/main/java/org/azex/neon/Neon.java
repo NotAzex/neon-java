@@ -27,6 +27,7 @@ public final class Neon extends JavaPlugin {
     private Killing killing;
     private TimespanTab timespanTab;
     private Kicking kicking;
+    private ConfigManager configManager;
 
     private static Neon instance;
 
@@ -143,7 +144,6 @@ public final class Neon extends JavaPlugin {
 
         saveDefaultConfig();
 
-        location = new LocationManager(this);
         list = new ListManager(this);
         inventories = new ClearInventories(list);
         ymlManager = new YmlManager(this);
@@ -156,6 +156,8 @@ public final class Neon extends JavaPlugin {
         killing = new Killing(list);
         timespanTab = new TimespanTab();
         kicking = new Kicking(list);
+        location = new LocationManager(this);
+        configManager = new ConfigManager(this);
 
         empty = new Empty();
 

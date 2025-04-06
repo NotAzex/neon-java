@@ -43,13 +43,6 @@ public class VersionChecker implements Listener {
                         if (latestVersionElement != null) {
                             String latestVersion = latestVersionElement.getAsString();
                             string = Collections.singletonList(latestVersion);
-
-                            if (!plugin.getDescription().getVersion().equalsIgnoreCase(latestVersion)) {
-                                plugin.getLogger().warning("A new version is available: " + latestVersion);
-                                plugin.getLogger().warning("Download it from https://modrinth.com/plugin/neon-core");
-                            } else {
-                                plugin.getLogger().info("Neon is up to date!");
-                            }
                         }
                     }
                 }

@@ -20,15 +20,15 @@ public class Kicking implements CommandExecutor {
         this.listManager = listManager;
     }
 
-    private void process(CommandSender sender, StringBuilder builder, String who, String dueTo) {
+    private Component process(CommandSender sender, StringBuilder builder, String who, String dueTo) {
         if (!builder.toString().equals("<red><group> players were kicked.")) {
             builder.replace(40, 54, "<red>");
         }
         builder.replace(5, 12, who);
         Component component = Messages.mini.deserialize(builder.toString());
-        kickGroup(component, who.toLowerCase());
         Messages.broadcast("<light_purple>☄ " + sender.getName() + "<gray>" +
                 " has kicked " + who.toLowerCase() + " players" + dueTo);
+        return component;
     }
 
     private void kickGroup(Component kickMessage, String who) {
@@ -55,12 +55,13 @@ public class Kicking implements CommandExecutor {
             dueTo = ".";
             builder.append(".");
         }
-
         if (name.equals("kickalive")) {
-            process(sender, builder, "Alive", dueTo);
+            Component comp = process(sender, builder, "alive", dueTo);
+            kickGroup(comp, "alive");
         }
         if (name.equals("kickdead")) {
-            process(sender, builder, "Dead", dueTo);
+            Component comp = process(sender, builder, "alive", dueTo);
+            kickGroup(comp, "dead");
         }
         if (name.equals("kickall")) {
             if (!builder.toString().equals("<red><group> players were kicked.")) {

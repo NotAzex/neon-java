@@ -72,7 +72,6 @@ public class EventManager implements Listener {
         if (list.getPlayers("alive").contains(uuid)) {
             if (Rejoin.toggle) {
                 rejoinMap.put(uuid, new playerInfo(System.currentTimeMillis(), player.getLocation()));
-                return;
             }
         }
         list.status.remove(uuid);
@@ -83,18 +82,17 @@ public class EventManager implements Listener {
     @EventHandler
     public void join(PlayerJoinEvent event) {
 
+        Location location = locationManager.getLocation("spawn.yml", "spawn");
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
+        list.unrevive(uuid);
+        list.ReviveRecentMap.remove(uuid);
 
         if (!rejoinMap.containsKey(uuid)) {
-            Location location = locationManager.getLocation("spawn.yml", "spawn");
 
             if (location != null) {
                 player.teleport(location);
             }
-
-            list.unrevive(uuid);
-            list.ReviveRecentMap.remove(uuid);
 
         }else{
             playerInfo info = rejoinMap.get(uuid);
@@ -152,10 +150,9 @@ public class EventManager implements Listener {
         if (list.getPlayers("alive").contains(player.getUniqueId())) {
             return;
         }
-
-        Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has won the revival!");
         Revival.number = null;
         Revival.isRevivalActive = false;
+        Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has won the revival!");
     }
 
     @EventHandler

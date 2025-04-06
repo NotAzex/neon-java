@@ -31,11 +31,11 @@ public class ListManager {
     private String checkLists = "Empty";
 
     public void endBackupLoop() {
-        backupLoop.cancel();
+        if (backupLoop != null) { backupLoop.cancel(); }
     }
 
     public void startBackupLoop() {
-        if (plugin.getConfig().getBoolean("Other.EnableBackups")) {
+        if (plugin.getConfig().getString("Other.EnableBackups").equals("true")) {
             backupLoop = new BukkitRunnable() {
                 @Override
                 public void run() {

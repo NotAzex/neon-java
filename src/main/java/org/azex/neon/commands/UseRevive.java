@@ -18,8 +18,6 @@ public class UseRevive implements CommandExecutor {
 
     private final Tokens tokens;
     private final ListManager list;
-    private String color1 = Messages.color1;
-    private String color2 = Messages.color2;
 
     public UseRevive(Tokens tokens, ListManager list) {
         this.list = list;
@@ -57,6 +55,9 @@ public class UseRevive implements CommandExecutor {
             return false;
         }
 
+        String color1 = Messages.color1;
+        String color2 = Messages.color2;
+        String prefix = Messages.prefix;
         tokens.requestedToken.add(uuid);
 
         Component deny = Component.text("deny")
@@ -65,7 +66,7 @@ public class UseRevive implements CommandExecutor {
         Component accept = Component.text("accept")
                 .clickEvent(ClickEvent.runCommand("/token accept " + player.getName()));
 
-        Component txt = Messages.mini.deserialize(Messages.prefix + " " + player.getName()
+        Component txt = Messages.mini.deserialize(color1 + prefix + " " + player.getName()
         + color2 + " has used a token! Do you want to");
         txt = txt.append(Messages.mini.deserialize(color1 + " "))
                 .append(accept)

@@ -8,6 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -22,35 +23,34 @@ public class ScoreboardManager {
     private List<String> lines;
     private final Neon plugin;
     private Scoreboard scoreboard;
-
     public ScoreboardManager(Neon plugin) {
         this.plugin = plugin;
     }
 
     public void endScoreboardLoop() {
-        scoreboardLoop.cancel();
+        if (scoreboardLoop != null) { scoreboardLoop.cancel(); }
     }
 
     public void runScoreboardLoop() {
-        if (plugin.getConfig().getBoolean("Scoreboard.Enable")) {
+        if (plugin.getConfig().getString("Scoreboard.Enable").equals("true")) {
             scoreboardLoop = new BukkitRunnable() {
                 @Override
                 public void run() {
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        UpdateScoreboard(player);
+                        updateScoreboard(player);
                     }
                 }
             }.runTaskTimer(plugin, 0L, 20L);
         }
     }
 
-    private void UpdateScoreboard(Player player) {
+    private void updateScoreboard(Player player) {
         FileConfiguration config = plugin.getConfig();
         title = config.getString("Scoreboard.Title");
         lines = config.getStringList("Scoreboard.Lines");
         scoreboard = manager.getNewScoreboard();
         int size = lines.size();
-        Objective objective = scoreboard.registerNewObjective("sb", "dummy", title);
+        Objective objective = scoreboard.registerNewObjective("sb", Criteria.DUMMY, title);
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         for (String line : lines) {
@@ -58,7 +58,7 @@ public class ScoreboardManager {
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 line = PlaceholderAPI.setPlaceholders(player, line);
             }
-            objective.getScore(ChatColor.translateAlternateColorCodes('&', line)).setScore(size);
+            objective.getScore(ChatColor.translateAlternateColorCodes('&', line + "&r ".repeat(size))).setScore(size);
             size--;
         }
         player.setScoreboard(scoreboard);

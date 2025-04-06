@@ -27,8 +27,12 @@ public class Messages {
     public static void loadConfig(Neon plugin) {
         mainSound = plugin.getConfig().getString("Sounds.Main", "BLOCK_NOTE_BLOCK_PLING");
         errorSound = plugin.getConfig().getString("Sounds.Error", "BLOCK_NOTE_BLOCK_BASS");
-        pitch = (float) plugin.getConfig().getDouble("Sounds.Pitch", 1.0);
-        volume = (float) plugin.getConfig().getDouble("Sounds.Volume", 1.0);
+        try {
+            pitch = Float.parseFloat(plugin.getConfig().getString("Sounds.Pitch", "1.0"));
+            volume = Float.parseFloat(plugin.getConfig().getString("Sounds.Volume", "100"));
+        } catch (NumberFormatException e) {
+            plugin.getLogger().info("The pitch/volume in the config of Neon is not a number, they will not work now.");
+        }
         color1 = plugin.getConfig().getString("Customization.Color1", "<light_purple>");
         color2 = plugin.getConfig().getString("Customization.Color2", "<gray>");
         prefix = plugin.getConfig().getString("Customization.Prefix", "☄");
