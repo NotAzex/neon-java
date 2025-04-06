@@ -25,7 +25,7 @@ public class ListManager {
 
     public final ConcurrentHashMap<UUID, String> status = new ConcurrentHashMap<>();
 
-    public final HashMap<UUID, Long> ReviveRecentMap = new HashMap<UUID, Long>();
+    public final HashMap<UUID, Long> ReviveRecentMap = new HashMap<>();
 
     private BukkitTask backupLoop;
     private String checkLists = "Empty";
@@ -35,35 +35,28 @@ public class ListManager {
     }
 
     public void startBackupLoop() {
-        if (plugin.getConfig().getString("Other.EnableBackups").equals("true")) {
+        long frequency = 3L;
+        String value;
+        try {
+            frequency = Long.parseLong(plugin.getConfig().getString("Other.BackupFrequency", "3"));
+        } catch (NumberFormatException e) {
+            plugin.getLogger().info("The frequency for backups is invalid. Defaulting to 3...");
+        }
+
+        if (plugin.getConfig().getString("Other.EnableBackups") != null) {
+            value = plugin.getConfig().getString("Other.EnableBackups");
+        }else{
+            plugin.getLogger().info("The boolean for 'Enable Backups' option is invalid, defaulting to false...");
+            value = "false";
+        }
+
+        if (value.equals("true")) {
             backupLoop = new BukkitRunnable() {
                 @Override
                 public void run() {
                     backupLists();
                 }
-            }.runTaskTimer(plugin, 0L, (plugin.getConfig().getLong("Other.BackupFrequency", 60L) * 20));
-        }
-    }
-
-    public void backupLists() {
-        if (!status.isEmpty()) {
-            try {
-                LocalDateTime date = LocalDateTime.now();
-                DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-                File file = new File(plugin.getDataFolder(), "backup.txt");
-                FileWriter writer = new FileWriter(file, true);
-                String time = "\n[" + date.format(format) + "]";
-                String txt = "\n[" + status.size() + " ALIVE]\n" + (statusAsList("alive").isEmpty() ? "No one!" : statusAsList("alive") +
-                        "\n[" + status.size() + " DEAD]\n" + (statusAsList("dead").isEmpty() ? "No one!" : statusAsList("dead")) + "\n");
-                if (!checkLists.equals(txt)) {
-                    checkLists = txt;
-                    writer.write(time + txt);
-                    writer.flush();
-                }
-
-            } catch (IOException e) {
-                plugin.getLogger().warning("Failed to backup the alive list due to " + e.getMessage());
-            }
+            }.runTaskTimer(plugin, 0L, frequency * 20);
         }
     }
 
@@ -85,6 +78,39 @@ public class ListManager {
     public boolean isEmpty(String who) {
         return status.values().stream().noneMatch(status -> who.equals(status));
     }
+
+    public void backupLists() {
+        if (!status.isEmpty()) {
+            try {
+                LocalDateTime date = LocalDateTime.now();
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                String time = "\n[" + date.format(format) + "]";
+
+                String aliveList = statusAsList("alive");
+                String deadList = statusAsList("dead");
+
+                if (aliveList == null) aliveList = "No one!";
+                if (deadList == null) deadList = "No one!";
+
+                String txt = "\n[" + getPlayers("alive").size() + " ALIVE]\n" + (aliveList.isEmpty() ? "No one!" : String.join(", ", aliveList)) +
+                        "\n[" + getPlayers("dead").size() + " DEAD]\n" + (deadList.isEmpty() ? "No one!" : String.join(", ", deadList)) + "\n";
+
+                if (!txt.equals(checkLists)) {
+                    checkLists = txt;
+
+                    File file = new File(plugin.getDataFolder(), "backup.txt");
+                    try (FileWriter writer = new FileWriter(file, true)) {
+                        writer.write(time + txt);
+                    } catch (IOException e) {
+                        plugin.getLogger().warning("Failed to backup the alive list due to " + e.getMessage());
+                    }
+                }
+            } catch (Exception e) {
+                plugin.getLogger().warning("Failed to backup the lists due to " + e.getMessage());
+            }
+        }
+    }
+
 
     public void playerDeath(UUID uuid) {
         if (status.get(uuid).equals("alive")) { ReviveRecentMap.put(uuid, System.currentTimeMillis()); }

@@ -56,11 +56,11 @@ public class Kicking implements CommandExecutor {
             builder.append(".");
         }
         if (name.equals("kickalive")) {
-            Component comp = process(sender, builder, "alive", dueTo);
+            Component comp = process(sender, builder, "Alive", dueTo);
             kickGroup(comp, "alive");
         }
         if (name.equals("kickdead")) {
-            Component comp = process(sender, builder, "alive", dueTo);
+            Component comp = process(sender, builder, "Dead", dueTo);
             kickGroup(comp, "dead");
         }
         if (name.equals("kickall")) {
