@@ -11,17 +11,24 @@ import java.util.*;
 public class YmlManager {
 
     private final Neon plugin;
-    private FileConfiguration tokens;
-    private File tokensFile;
-    private FileConfiguration warpsConfig;
-    private FileConfiguration adsConfig;
-    private FileConfiguration tokensConfig;
-    private File warpsFile;
-    private File adsFile;
+    public File tokensFile;
+    public File warpsFile;
+    public File adsFile;
+    public FileConfiguration tokensConfig;
+    public FileConfiguration adsConfig;
+    public FileConfiguration warpsConfig;
 
     public YmlManager(Neon plugin) {
         this.plugin = plugin;
+        this.tokensFile = new File(plugin.getDataFolder(), "tokens.yml");
+        this.warpsFile = new File(plugin.getDataFolder(), "warps.yml");
+        this.adsFile = new File(plugin.getDataFolder(), "ads.yml");
+
         loadFiles();
+
+        this.tokensConfig = YamlConfiguration.loadConfiguration(tokensFile);
+        this.warpsConfig = YamlConfiguration.loadConfiguration(warpsFile);
+        this.adsConfig = YamlConfiguration.loadConfiguration(adsFile);
     }
 
     public Set getSections(String file) { // string should be warps.yml or soemthing
@@ -42,6 +49,7 @@ public class YmlManager {
     }
 
     private void loadFiles() {
+
         File dataFolder = plugin.getDataFolder();
         adsFile = new File(dataFolder, "ads.yml");
         warpsFile = new File(dataFolder, "warps.yml");
@@ -52,9 +60,6 @@ public class YmlManager {
                 plugin.saveResource(file.getName(), false);
             }
         }
-        adsConfig = YamlConfiguration.loadConfiguration(adsFile);
-        warpsConfig = YamlConfiguration.loadConfiguration(warpsFile);
-        tokensConfig = YamlConfiguration.loadConfiguration(tokensFile);
     }
 
     public FileConfiguration getWarpsFile() {
@@ -88,6 +93,7 @@ public class YmlManager {
     public void saveAdsFile() {
         try {
             adsConfig.save(adsFile);
+            adsFile = new File(plugin.getDataFolder(), "ads.yml");
         } catch (IOException e) {
             plugin.getLogger().warning("Unable to save the ads due to " + e.getMessage());
         }

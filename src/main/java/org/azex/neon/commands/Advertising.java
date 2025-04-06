@@ -10,12 +10,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 
 public class Advertising implements CommandExecutor {
 
@@ -31,8 +30,6 @@ public class Advertising implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
-        File ads = new File(plugin.getDataFolder(), "ads.yml");
-
         if (args.length != 2) {
             Messages.sendMessage(sender, "<red>Must provide an argument!", "error");
             return false;
@@ -45,40 +42,24 @@ public class Advertising implements CommandExecutor {
             }
         }
 
-        FileConfiguration adsConfig = ymlManager.getAdsFile();
-
         if (args[0].equals("delete")) {
-            adsConfig.set(args[1], null);
-            try {
-                adsConfig.save(ads);
-                Messages.sendMessage(sender, "<light_purple>☄<gray> Successfully" +
-                        " deleted the ad <light_purple>'" + args[1] + "'<gray>!" , "msg");
-            }catch (IOException e) {
-                Messages.sendMessage(sender, "<red>Neon couldn't delete the ad due to an exception.", "error");
-                plugin.getLogger().warning("Failed to save " + ads + " due to " + e.getMessage());
-                return false;
-            }
+            ymlManager.getAdsFile().set(args[1], null);
+            ymlManager.saveAdsFile();
+            Messages.sendMessage(sender, "<light_purple>☄<gray> Successfully" +
+                    " deleted the ad <light_purple>'" + args[1] + "'<gray>!" , "msg");
         }
 
         if (args[0].equals("create")) {
             if (!ymlManager.getSections("ads.yml").contains(args[1])) {
 
-                String prefix = args[1];
-
-                adsConfig.set(prefix + ".Advertisement", "<light_purple>☄<gray> Change the" +
+                ymlManager.getAdsFile().set(args[1] + ".Advertisement", "<light_purple>☄<gray> Change the" +
                         " message of this ad at <light_purple>'plugins/Neon/ads.yml'<gray>.");
-                adsConfig.set(prefix + ".Link", "<change this to a link>");
+                ymlManager.getAdsFile().set(args[1] + ".Link", "<change this to a link>");
 
-                try {
-                    adsConfig.save(ads);
-                    Messages.sendMessage(sender, "<light_purple>☄<gray> Successfully created an" +
-                            " ad called <light_purple>'" + args[1] + "'<gray>! You" +
-                            " can edit the link & message of the ad in <light_purple>'plugins/Neon/ads.yml'<gray> file.", "msg");
-                }catch (IOException e) {
-                    Messages.sendMessage(sender, "<red>Neon couldn't create the ad due to an exception.", "error");
-                    plugin.getLogger().warning("Failed to save " + ads + " due to " + e.getMessage());
-                    return false;
-                }
+                ymlManager.saveAdsFile();
+                Messages.sendMessage(sender, "<light_purple>☄<gray> Successfully created an" +
+                        " ad called <light_purple>'" + args[1] + "'<gray>! You" +
+                        " can edit the link & message of the ad in <light_purple>'plugins/Neon/ads.yml'<gray> file.", "msg");
 
             }else{
                 Messages.sendMessage(sender, "<red>That ad already exists!", "error");
@@ -86,9 +67,11 @@ public class Advertising implements CommandExecutor {
         }
 
         if (args[0].equals("send")) {
+            File file = new File(plugin.getDataFolder(), "ads.yml");
+            YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 
-            String link = adsConfig.getString(args[1] + ".Link", "<link>");
-            String ad = adsConfig.getString(args[1] + ".Advertisement", "<red>Failed to fetch the ad due to missing fields. Delete this ad and create it again!");
+            String link = config.getString(args[1] + ".Link", "<link>");
+            String ad = config.getString(args[1] + ".Advertisement", "<red>Failed to fetch the ad due to missing fields. Delete this ad and create it again!");
 
             try {
                 Component advertisement = Component.newline()

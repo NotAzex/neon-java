@@ -205,10 +205,6 @@ public final class Neon extends JavaPlugin {
     @Override
     public void onDisable() {
         saveConfig();
-        ymlManager.saveTokensFile();
-        ymlManager.saveWarpsFile();
-        ymlManager.saveAdsFile();
-
         Bukkit.getScheduler().cancelTasks(this);
         getLogger().info("Saved info and stopped Neon.");
     }

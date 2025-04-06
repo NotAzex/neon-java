@@ -43,7 +43,7 @@ public class RemoveTokens implements CommandExecutor {
         int value = Integer.parseInt(args[1]);
         int currentTokens = tokens.getTokens(uuid);
 
-        if (currentTokens - value <= 0) {
+        if (currentTokens - value < 0) {
             Messages.sendMessage(sender, "<red>Removing that many tokens from that player" +
                     " would put them in token debt.", "error");
             return false;
