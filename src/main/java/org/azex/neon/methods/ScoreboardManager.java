@@ -8,10 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.scoreboard.Criteria;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.*;
 
 import java.util.List;
 
@@ -61,6 +58,14 @@ public class ScoreboardManager {
             objective.getScore(ChatColor.translateAlternateColorCodes('&', line + "&r ".repeat(size))).setScore(size);
             size--;
         }
+
+        Team team = scoreboard.getTeam("nocollision");
+        if (team == null) {
+            team = scoreboard.registerNewTeam("nocollision");
+            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+        }
+
+        team.addEntry(player.getName());
         player.setScoreboard(scoreboard);
 
     }

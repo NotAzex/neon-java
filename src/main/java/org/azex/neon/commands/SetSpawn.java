@@ -2,6 +2,7 @@ package org.azex.neon.commands;
 
 import org.azex.neon.methods.LocationManager;
 import org.azex.neon.methods.Messages;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -26,14 +27,11 @@ public class SetSpawn implements CommandExecutor {
         Player player = (Player) sender;
         locationManager.saveLocation("spawn.yml", "spawn", player);
 
-        int x = player.getLocation().getBlockX();
-        int y = player.getLocation().getBlockY();
-        int z = player.getLocation().getBlockZ();
-        String world = player.getLocation().getWorld().getName();
+        Location location = player.getLocation();
 
         Messages.sendMessage(player, "<gray>You have set the spawn location to <light_purple>" +
-                x + "<gray>, <light_purple>" + y + "<gray>, <light_purple>"
-                + z + "<gray> in world<light_purple> " + world + "<gray>.", "msg");
+                location.getBlockX() + "<gray>, <light_purple>" + location.getBlockY() + "<gray>, <light_purple>"
+                + location.getBlockZ() + "<gray> in world<light_purple> " + location.getWorld().getName() + "<gray>.", "msg");
         return true;
     }
 }

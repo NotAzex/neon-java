@@ -35,7 +35,7 @@ public class UseRevive implements CommandExecutor {
         Player player = (Player) sender;
         UUID uuid = player.getUniqueId();
 
-        if (TokenUsage.toggle) {
+        if (!Togglables.toggle.getOrDefault("tokenusage", true)) {
             Messages.sendMessage(player, "<red>Tokens are disabled!", "error");
             return false;
         }
@@ -54,6 +54,9 @@ public class UseRevive implements CommandExecutor {
             Messages.sendMessage(player, "<red>You have already requested to use a revive!", "error");
             return false;
         }
+
+        Messages.sendMessage(sender, "<light_purple>☄ <gray>You have used a <light_purple>token<gray>!" +
+                " Wait for a <light_purple>staff member<gray> to respond to it.", "msg");
 
         String color1 = Messages.color1;
         String color2 = Messages.color2;

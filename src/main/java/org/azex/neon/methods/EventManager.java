@@ -138,58 +138,63 @@ public class EventManager implements Listener {
 
     @EventHandler
     public void revivalWinner(AsyncPlayerChatEvent event) {
-
         Player player = event.getPlayer();
 
         if (!Revival.isRevivalActive) {
             return;
         }
-        if (!(Integer.parseInt(event.getMessage()) == Revival.number)) {
+
+        int guess;
+        try {
+            guess = Integer.parseInt(event.getMessage());
+        } catch (NumberFormatException e) {
             return;
         }
+
+        if (guess != Revival.number) {
+            return;
+        }
+
         if (list.getPlayers("alive").contains(player.getUniqueId())) {
             return;
         }
+
         Revival.number = null;
         Revival.isRevivalActive = false;
         Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has won the revival!");
     }
 
+
     @EventHandler
     public void chat(AsyncPlayerChatEvent event) {
-
-        if (!Mutechat.toggle) {
-            return;
+        if (Togglables.toggle.getOrDefault("mutechat", false) && !event.getPlayer().hasPermission("neon.chat")) {
+            event.setCancelled(true);
+            Messages.sendMessage(event.getPlayer(), "<red>The chat is muted!", "error");
         }
-        if (event.getPlayer().hasPermission("neon.chat")) {
-            return;
-        }
-        event.setCancelled(true);
-        Messages.sendMessage(event.getPlayer(), "<red>The chat is muted!", "error");
     }
 
     @EventHandler
     public void flowing(BlockFromToEvent event) {
         Material blockType = event.getBlock().getType();
-        if (blockType != Material.WATER || blockType != Material.LAVA) {
+        if (blockType != Material.WATER && blockType != Material.LAVA) {
             return;
         }
 
-        if (Flow.toggle) {
+        if (Togglables.toggle.getOrDefault("flow", false)) {
             return;
         }
         event.setCancelled(true);
     }
 
     @EventHandler
-    public void onPvP(EntityDamageByEntityEvent event) {
+    public void pvp(EntityDamageByEntityEvent event) {
         if (!(event.getDamager() instanceof Player && event.getEntity() instanceof Player)) {
             return;
         }
 
         Player damager = (Player) event.getDamager();
 
-        if (PvP.toggle) {
+        if (Togglables.toggle.getOrDefault("pvp", false)) {
             return;
         }
         if (damager.hasPermission("neon.pvp")) {
@@ -237,7 +242,7 @@ public class EventManager implements Listener {
 
     @EventHandler
     public void hunger(FoodLevelChangeEvent event) {
-        if (Hunger.toggle) {
+        if (!Togglables.toggle.getOrDefault("hunger", false)) {
             event.setCancelled(true);
         }
     }

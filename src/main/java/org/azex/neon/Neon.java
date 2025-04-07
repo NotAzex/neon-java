@@ -7,7 +7,6 @@ import org.azex.neon.methods.*;
 import org.azex.neon.tabcompletions.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
@@ -18,16 +17,14 @@ public final class Neon extends JavaPlugin {
     private YmlManager ymlManager;
     private VersionChecker versionChecker;
     private Tokens tokens;
-    private TokensTab tokensTab;
-    private PlayersAsTabCompletion playerTab;
-    private Empty empty;
     private WorldGuardManager wg;
     private ScoreboardManager scoreboardManager;
     private ClearInventories inventories;
     private Killing killing;
-    private TimespanTab timespanTab;
     private Kicking kicking;
-    private ConfigManager configManager;
+    private Togglables togglables;
+    private Teleports teleports;
+    private Giving giving;
 
     private static Neon instance;
 
@@ -37,6 +34,8 @@ public final class Neon extends JavaPlugin {
 
     private void loadCommands() {
         HashMap<String, CommandExecutor> map = new HashMap<>();
+                map.put("givealive", giving);
+                map.put("givedead", giving);
                 map.put("kickalive", kicking);
                 map.put("kickdead", kicking);
                 map.put("kickall", kicking);
@@ -50,24 +49,24 @@ public final class Neon extends JavaPlugin {
                 map.put("warp", new Warps(location, ymlManager, list));
                 map.put("staffchat", new StaffChat(this));
                 map.put("event", new SetEvent());
-                map.put("hunger", new Hunger());
+                map.put("hunger", togglables);
                 map.put("clearrevive", new ClearRevive(tokens));
                 map.put("timer", new Timer(this));
                 map.put("listclear", new Listclear(list));
-                map.put("tokenusage", new TokenUsage());
+                map.put("tokenusage", togglables);
                 map.put("token", new AcceptDenyToken(tokens));
                 map.put("userevive", new UseRevive(tokens, list));
                 map.put("neon", new NeonCommand(this, scoreboardManager, list));
-                map.put("break", new Break(wg));
-                map.put("build", new Build(wg));
-                map.put("falldamage", new FallDamage(wg));
-                map.put("pvp", new PvP(wg));
-                map.put("flow", new Flow(wg));
+                map.put("break", togglables);
+                map.put("build", togglables);
+                map.put("falldamage", togglables);
+                map.put("pvp", togglables);
+                map.put("flow", togglables);
                 map.put("revive", new Revive(list));
                 map.put("core", new Core());
                 map.put("alive", new Alive(list));
                 map.put("dead", new Dead(list));
-                map.put("mutechat", new Mutechat());
+                map.put("mutechat", togglables);
                 map.put("reviveall", new ReviveAll(list));
                 map.put("reviverecent", new ReviveRecent(list));
                 map.put("unrevive", new Unrevive(list));
@@ -77,61 +76,18 @@ public final class Neon extends JavaPlugin {
                 map.put("removetoken", new RemoveTokens(tokens));
                 map.put("tokens", new TokenBalance(tokens));
                 map.put("hide", new Hide(this));
-                map.put("tpalive", new TeleportAlive(list));
-                map.put("tpdead", new TeleportDead(list));
-                map.put("tpall", new TeleportAll());
+                map.put("tpalive", teleports);
+                map.put("tpdead", teleports);
+                map.put("tpall", teleports);
                 map.put("revival", new Revival());
 
         map.forEach((cmd, executor) -> {
             try {
                 getCommand(cmd).setExecutor(executor);
+                getCommand(cmd).setTabCompleter(new Tabs(ymlManager));
             }catch(NullPointerException e) {
                 getLogger().info("Couldn't load the command " + cmd + " due to NullPointerException! Report to the developer.");
             }
-        });
-    }
-
-    private void registerTab(String command, TabCompleter tabCompleter) {
-        if (tabCompleter != null) {
-            getCommand(command).setTabCompleter(tabCompleter);
-        }else{
-            getLogger().info("Couldn't load the tab completer for command '" + command + "' due to" +
-                    " NullPointerException! Report this to the developer.");
-        }
-
-    }
-
-    private void loadTabs() {
-        Set<String> emptytabs = new HashSet<>(Arrays.asList(
-                "kickalive", "kickdead", "kickall", "killdead", "killalive", "clearalive", "cleardead", "userevive", "hide", "alive", "dead",
-                "mutechat", "reviveall", "spawn", "listclear", "hunger", "setspawn",
-                "core", "tpdead", "tpalive", "tpall", "tokenusage"
-        ));
-        HashMap<String, TabCompleter> tabs = new HashMap<>();
-        tabs.put("token", new AcceptDenyTokenTab());
-        tabs.put("warp", new WarpsTab(ymlManager));
-        tabs.put("ad", new AdsTab(ymlManager));
-        tabs.put("staffchat", new TextTab());
-        tabs.put("event", new SetEventTab());
-        tabs.put("timer", new TimerTab());
-        tabs.put("neon", new ConfigTab());
-        tabs.put("revival", new RevivalTab());
-        tabs.put("prize", new PrizeTab());
-        tabs.put("rejoin", timespanTab);
-        tabs.put("reviverecent", timespanTab);
-        tabs.put("givetoken", tokensTab);
-        tabs.put("removetoken", tokensTab);
-        tabs.put("clearrevive", playerTab);
-        tabs.put("revive", playerTab);
-        tabs.put("unrevive", playerTab);
-        tabs.put("tokens", playerTab);
-
-        tabs.forEach((command, tabCompleter) -> {
-            registerTab(command, tabCompleter);
-        });
-
-        emptytabs.forEach((emptycmd) -> {
-            registerTab(emptycmd, empty);
         });
     }
 
@@ -145,43 +101,24 @@ public final class Neon extends JavaPlugin {
         saveDefaultConfig();
 
         list = new ListManager(this);
+        teleports = new Teleports(list);
         inventories = new ClearInventories(list);
         ymlManager = new YmlManager(this);
         scoreboardManager = new ScoreboardManager(this);
         tokens = new Tokens(ymlManager);
-        tokensTab = new TokensTab();
         versionChecker = new VersionChecker(this);
-        playerTab = new PlayersAsTabCompletion();
         wg = new WorldGuardManager(this);
+        togglables = new Togglables(wg);
         killing = new Killing(list);
-        timespanTab = new TimespanTab();
         kicking = new Kicking(list);
         location = new LocationManager(this);
-        configManager = new ConfigManager(this);
-
-        empty = new Empty();
+        giving = new Giving(list);
+        ConfigManager configManager = new ConfigManager(this);
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             getLogger().info("\u001B[37mPlaceholderAPI found! Registering placeholders...\u001B[0m");
-            new PrizePlaceholder().register();
-            new HungerPlaceholder().register();
-            new TimerPlaceholder().register();
-            new BreakPlaceholder().register();
-            new BuildPlaceholder().register();
-            new FalldamagePlaceholder().register();
-            new FlowPlaceholder().register();
-            new MutechatPlaceholder().register();
-            new PvPPlaceholder().register();
-            new RevivalPlaceholder().register();
-            new SpawnPlaceholder(location).register();
-            new TokensPlaceholder(tokens).register();
-            new TokenusagePlaceholder().register();
-            new AlivePlaceholder(list).register();
-            new DeadPlaceholder(list).register();
-            new StatusPlaceholder(list).register();
-            new TokensPlaceholder(tokens).register();
-            new EventPlaceholder().register();
-            getLogger().info("\u001B[37mRegistered 17 placeholders!\u001B[0m");
+            new AllPlaceholders(list, tokens).register();
+            getLogger().info("\u001B[37mRegistered all placeholders!\u001B[0m");
         }else{
             getLogger().info("\u001B[37mPlaceholderAPI not found, Neon will not register placeholders.\u001B[0m");
         }
@@ -194,9 +131,6 @@ public final class Neon extends JavaPlugin {
         loadCommands();
         getLogger().info("\u001B[37mRegistered commands!\u001B[0m");
 
-        getLogger().info("\u001B[37mRegistering tab completers...\u001B[0m");
-        loadTabs();
-        getLogger().info("\u001B[37mRegistered tab completers!\u001B[0m");
         scoreboardManager.runScoreboardLoop();
         list.startBackupLoop();
         versionChecker.checkForUpdates();
