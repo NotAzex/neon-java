@@ -16,10 +16,10 @@ public class ScoreboardManager {
 
     private String title;
     private BukkitTask scoreboardLoop;
-    private final org.bukkit.scoreboard.ScoreboardManager manager = Bukkit.getScoreboardManager();
     private List<String> lines;
+    private int size;
+
     private final Neon plugin;
-    private Scoreboard scoreboard;
     public ScoreboardManager(Neon plugin) {
         this.plugin = plugin;
     }
@@ -29,44 +29,47 @@ public class ScoreboardManager {
     }
 
     public void runScoreboardLoop() {
+        FileConfiguration config = plugin.getConfig();
+        title = config.getString("Scoreboard.Title");
+        if (title == null) { title = "&5☄ Neon"; }
+        lines = config.getStringList("Scoreboard.Lines");
+
         if (plugin.getConfig().getString("Scoreboard.Enable").equals("true")) {
             scoreboardLoop = new BukkitRunnable() {
                 @Override
                 public void run() {
                     for (Player player : Bukkit.getOnlinePlayers()) {
-                        updateScoreboard(player);
+                        setScoreboard(player);
                     }
                 }
             }.runTaskTimer(plugin, 0L, 20L);
         }
     }
 
-    private void updateScoreboard(Player player) {
-        FileConfiguration config = plugin.getConfig();
-        title = config.getString("Scoreboard.Title");
-        lines = config.getStringList("Scoreboard.Lines");
-        scoreboard = manager.getNewScoreboard();
-        int size = lines.size();
-        Objective objective = scoreboard.registerNewObjective("sb", Criteria.DUMMY, title);
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+    private void setScoreboard(Player player) {
+        Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+        Objective obj = board.registerNewObjective(plugin.getName(), "dummy", plugin.getConfig().getString("Scoreboard.Title"));
+        obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+        lines = plugin.getConfig().getStringList("Scoreboard.Lines");
+        size = lines.size();
 
         for (String line : lines) {
-            line = line.replace("%player%", player.getName());
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 line = PlaceholderAPI.setPlaceholders(player, line);
             }
-            objective.getScore(ChatColor.translateAlternateColorCodes('&', line + "&r ".repeat(size))).setScore(size);
+
+            Team team = board.getTeam("line" + size);
+            if (team == null) {
+                team = board.registerNewTeam("line" + size);
+                team.addEntry(ChatColor.BLACK + "" + ChatColor.WHITE);
+                team.setPrefix(ChatColor.translateAlternateColorCodes('&', line + "&r ".repeat(size)));
+                team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+            }
+            obj.getScore(team.getPrefix()).setScore(size);
             size--;
         }
 
-        Team team = scoreboard.getTeam("nocollision");
-        if (team == null) {
-            team = scoreboard.registerNewTeam("nocollision");
-            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
-        }
-
-        team.addEntry(player.getName());
-        player.setScoreboard(scoreboard);
+        player.setScoreboard(board);
 
     }
 
