@@ -8,6 +8,17 @@ authors: [ Azex ]
 description: Neon, but it's rewritten in Java
 website: https://discord.gg/nKEa5NxRew
 commands:
+  wins:
+    description: Returns the wins of a player.
+  givewins:
+    description: Gives a player wins.
+    permission: neon.admin
+  removewins:
+    description: Removes wins from a player.
+    permission: neon.admin
+  clearwins:
+    description: Clears the wins of a player.
+    permission: neon.admin
   givealive:
     description: Gives items to alive people.
     permission: neon.admin
@@ -56,9 +67,10 @@ commands:
   hunger:
     description: Toggles hunger using events.
     permission: neon.admin
-  clearrevive:
+  cleartokens:
     description: Clears the revives of a player.
     permission: neon.admin
+    aliases: clearrevives
   listclear:
     description: Clears the alive & dead list and then adds everyone to the dead list.
     permission: neon.admin
@@ -122,11 +134,12 @@ commands:
     permission: neon.admin
   tokens:
     description: Returns the tokens of someone.
-  removetoken:
+    aliases: revives
+  removetokens:
     description: Removes tokens from someone.
     permission: neon.admin
     aliases: removerevive
-  givetoken:
+  givetokens:
     description: Gives tokens to someone.
     permission: neon.admin
     aliases: giverevive

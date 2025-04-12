@@ -1,6 +1,7 @@
 package org.azex.neon.commands;
 
 import org.azex.neon.methods.Messages;
+import org.azex.neon.methods.Utilities;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -29,16 +30,18 @@ public class Rejoin implements CommandExecutor {
             return true;
         }
 
-        if (!GiveTokens.isInteger(args[0])) {
-            Messages.sendMessage(sender, "<red>You used the command wrong! Use it like this: /rejoin <number> <seconds/minutes>", "error");
+        if (!Utilities.isInteger(args[0])) {
+            Messages.sendMessage(sender, "<red>The first argument must be a number.", "error");
             return false;
         }
 
+        int amount = Integer.parseInt(args[0]);
+
         if (args.length == 2) {
             if (args[1].equals("minutes") || args[1].equals("minute")) {
-                rejoinSeconds = Integer.parseInt(args[0]) * 60;
+                rejoinSeconds = amount * 60;
             } else if (args[1].equals("seconds") || args[1].equals("second")) {
-                rejoinSeconds = Integer.parseInt(args[0]);
+                rejoinSeconds = amount;
             } else {
                 Messages.sendMessage(sender, "<red>2nd argument must be 'minutes' or 'seconds'!", "error");
                 return false;

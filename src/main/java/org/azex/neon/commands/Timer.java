@@ -2,6 +2,7 @@ package org.azex.neon.commands;
 
 import org.azex.neon.Neon;
 import org.azex.neon.methods.Messages;
+import org.azex.neon.methods.Utilities;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -57,7 +58,7 @@ public class Timer implements CommandExecutor {
             return false;
         }
 
-        if (!GiveTokens.isInteger(args[0])) {
+        if (!Utilities.isInteger(args[0])) {
             Messages.sendMessage(sender, "<red>First argument must be a valid number.", "error");
             return false;
         }

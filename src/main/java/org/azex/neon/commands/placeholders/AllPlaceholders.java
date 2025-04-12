@@ -2,9 +2,9 @@ package org.azex.neon.commands.placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.azex.neon.commands.*;
+import org.azex.neon.methods.Currencies;
 import org.azex.neon.methods.ListManager;
 import org.azex.neon.methods.Messages;
-import org.azex.neon.methods.Tokens;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,11 +22,11 @@ public class AllPlaceholders extends PlaceholderExpansion {
     }
 
     private final ListManager list;
-    private final Tokens tokens;
+    private final Currencies currencies;
 
-    public AllPlaceholders(ListManager list, Tokens tokens) {
+    public AllPlaceholders(ListManager list, Currencies currencies) {
         this.list = list;
-        this.tokens = tokens;
+        this.currencies = currencies;
     }
 
     @Override
@@ -52,6 +52,12 @@ public class AllPlaceholders extends PlaceholderExpansion {
     @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
 
+        // %neon_wins%
+        if (params.equalsIgnoreCase("wins")) {
+            if (player == null) { return "0"; }
+            return String.valueOf(currencies.getTokens(player.getUniqueId()));
+        }
+
         // %neon_status%
         if (params.equalsIgnoreCase("status")) {
             if (player == null) { return "§cDead"; }
@@ -65,7 +71,7 @@ public class AllPlaceholders extends PlaceholderExpansion {
         // %neon_tokens%
         if (player == null) { return "0"; }
         if (params.equalsIgnoreCase("tokens")) {
-            return String.valueOf(tokens.getTokens(player.getUniqueId()));
+            return String.valueOf(currencies.getTokens(player.getUniqueId()));
         }
 
         // %neon_timer_mmss/normal/raw/status%

@@ -14,21 +14,27 @@ public class YmlManager {
     public File tokensFile;
     public File warpsFile;
     public File adsFile;
+    public File winsFile;
     public FileConfiguration tokensConfig;
     public FileConfiguration adsConfig;
     public FileConfiguration warpsConfig;
+    public FileConfiguration winsConfig;
 
     public YmlManager(Neon plugin) {
         this.plugin = plugin;
-        this.tokensFile = new File(plugin.getDataFolder(), "tokens.yml");
-        this.warpsFile = new File(plugin.getDataFolder(), "warps.yml");
-        this.adsFile = new File(plugin.getDataFolder(), "ads.yml");
+
+        File dataFolder = plugin.getDataFolder();
+        this.tokensFile = new File(dataFolder, "tokens.yml");
+        this.warpsFile = new File(dataFolder, "warps.yml");
+        this.adsFile = new File(dataFolder, "ads.yml");
+        this.winsFile = new File(dataFolder, "wins.yml");
 
         loadFiles();
 
         this.tokensConfig = YamlConfiguration.loadConfiguration(tokensFile);
         this.warpsConfig = YamlConfiguration.loadConfiguration(warpsFile);
         this.adsConfig = YamlConfiguration.loadConfiguration(adsFile);
+        this.winsConfig = YamlConfiguration.loadConfiguration(winsFile);
     }
 
     public Set getSections(String file) { // string should be warps.yml or soemthing
@@ -54,6 +60,7 @@ public class YmlManager {
         adsFile = new File(dataFolder, "ads.yml");
         warpsFile = new File(dataFolder, "warps.yml");
         tokensFile = new File(dataFolder, "tokens.yml");
+        winsFile = new File(dataFolder, "wins.yml");
         List<File> filesToSave = List.of(adsFile, warpsFile, tokensFile);
         for (File file : filesToSave) {
             if (!file.exists()) {
@@ -74,11 +81,15 @@ public class YmlManager {
         return tokensConfig;
     }
 
+    public FileConfiguration getWinsFile() {
+        return winsConfig;
+    }
+
     public void saveWarpsFile() {
         try {
             warpsConfig.save(warpsFile);
         } catch (IOException e) {
-            plugin.getLogger().warning("Failed to save the warps file due to " + e.getMessage());
+            plugin.getLogger().warning("Unable to save the warps file due to " + e.getMessage());
         }
     }
 
@@ -93,9 +104,16 @@ public class YmlManager {
     public void saveAdsFile() {
         try {
             adsConfig.save(adsFile);
-            adsFile = new File(plugin.getDataFolder(), "ads.yml");
         } catch (IOException e) {
             plugin.getLogger().warning("Unable to save the ads due to " + e.getMessage());
+        }
+    }
+
+    public void saveWinsFile() {
+        try {
+            winsConfig.save(winsFile);
+        } catch (IOException e) {
+            plugin.getLogger().warning("Unable to save the wins due to " + e.getMessage());
         }
     }
 

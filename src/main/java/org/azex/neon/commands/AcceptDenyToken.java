@@ -1,7 +1,7 @@
 package org.azex.neon.commands;
 
+import org.azex.neon.methods.Currencies;
 import org.azex.neon.methods.Messages;
-import org.azex.neon.methods.Tokens;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,10 +13,10 @@ import java.util.UUID;
 
 public class AcceptDenyToken implements CommandExecutor {
 
-    private final Tokens tokens;
+    private final Currencies currencies;
 
-    public AcceptDenyToken(Tokens tokens) {
-        this.tokens = tokens;
+    public AcceptDenyToken(Currencies currencies) {
+        this.currencies = currencies;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class AcceptDenyToken implements CommandExecutor {
 
         UUID uuid = target.getUniqueId();
 
-        if (!tokens.requestedToken.contains(uuid)) {
+        if (!UseRevive.requests.contains(uuid)) {
             Messages.sendMessage(sender, "<red>That player hasn't used a token!", "error");
             return false;
         }
@@ -52,11 +52,11 @@ public class AcceptDenyToken implements CommandExecutor {
             return false;
         }
 
-        tokens.requestedToken.remove(uuid);
+        UseRevive.requests.remove(uuid);
 
         if (args[0].equals("accept")) {
             target.teleport(player);
-            tokens.setTokens(uuid, tokens.getTokens(uuid) - 1);
+            currencies.setTokens(uuid, currencies.getTokens(uuid) - 1);
             Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has accepted" +
                     "<light_purple> " + target.getName() + "<gray>'s token.");
         } else {

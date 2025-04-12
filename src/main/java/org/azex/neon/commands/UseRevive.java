@@ -2,9 +2,9 @@ package org.azex.neon.commands;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import org.azex.neon.methods.Currencies;
 import org.azex.neon.methods.ListManager;
 import org.azex.neon.methods.Messages;
-import org.azex.neon.methods.Tokens;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,16 +12,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class UseRevive implements CommandExecutor {
 
-    private final Tokens tokens;
+    private final Currencies currencies;
     private final ListManager list;
+    public static Set<UUID> requests = new HashSet<>();
 
-    public UseRevive(Tokens tokens, ListManager list) {
+    public UseRevive(Currencies currencies, ListManager list) {
         this.list = list;
-        this.tokens = tokens;
+        this.currencies = currencies;
     }
 
     @Override
@@ -45,12 +48,12 @@ public class UseRevive implements CommandExecutor {
             return false;
         }
 
-        if (!(tokens.getTokens(uuid) > 0)) {
+        if (!(currencies.getTokens(uuid) > 0)) {
             Messages.sendMessage(player, "<red>You don't have any tokens!", "error");
             return false;
         }
 
-        if (tokens.requestedToken.contains(uuid)) {
+        if (requests.contains(uuid)) {
             Messages.sendMessage(player, "<red>You have already requested to use a revive!", "error");
             return false;
         }
@@ -61,7 +64,7 @@ public class UseRevive implements CommandExecutor {
         String color1 = Messages.color1;
         String color2 = Messages.color2;
         String prefix = Messages.prefix;
-        tokens.requestedToken.add(uuid);
+        requests.add(uuid);
 
         Component deny = Component.text("deny")
                 .clickEvent(ClickEvent.runCommand("/token deny " + player.getName()));

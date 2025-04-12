@@ -19,9 +19,9 @@ public class ConfigManager {
     private void setValues() {
         scoreboard = Arrays.asList(
                 "",
-                " §7| &fAlive: &5%alive_size%",
-                " §7| &fDead: &5%dead_size%",
-                " §7| &fTokens: &5%tokens_%player%%",
+                " §7| &fAlive: &5%neon_alive_size%",
+                " §7| &fDead: &5%neon_dead_size%",
+                " §7| &fTokens: &5%neon_tokens%",
                 "",
                 "§7§oEdit this in the config of Neon."
         );

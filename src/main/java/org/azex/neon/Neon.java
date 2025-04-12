@@ -16,7 +16,7 @@ public final class Neon extends JavaPlugin {
     private ListManager list;
     private YmlManager ymlManager;
     private VersionChecker versionChecker;
-    private Tokens tokens;
+    private Currencies currencies;
     private WorldGuardManager wg;
     private ScoreboardManager scoreboardManager;
     private ClearInventories inventories;
@@ -25,6 +25,8 @@ public final class Neon extends JavaPlugin {
     private Togglables togglables;
     private Teleports teleports;
     private Giving giving;
+    private WinsCommands winsCommands;
+    private TokensCommands tokensCommands;
 
     private static Neon instance;
 
@@ -34,6 +36,10 @@ public final class Neon extends JavaPlugin {
 
     private void loadCommands() {
         HashMap<String, CommandExecutor> map = new HashMap<>();
+                map.put("givewins", winsCommands);
+                map.put("removewins", winsCommands);
+                map.put("wins", winsCommands);
+                map.put("clearwins", winsCommands);
                 map.put("givealive", giving);
                 map.put("givedead", giving);
                 map.put("kickalive", kicking);
@@ -50,12 +56,12 @@ public final class Neon extends JavaPlugin {
                 map.put("staffchat", new StaffChat(this));
                 map.put("event", new SetEvent());
                 map.put("hunger", togglables);
-                map.put("clearrevive", new ClearRevive(tokens));
+                map.put("cleartokens", tokensCommands);
                 map.put("timer", new Timer(this));
                 map.put("listclear", new Listclear(list));
                 map.put("tokenusage", togglables);
-                map.put("token", new AcceptDenyToken(tokens));
-                map.put("userevive", new UseRevive(tokens, list));
+                map.put("token", new AcceptDenyToken(currencies));
+                map.put("userevive", new UseRevive(currencies, list));
                 map.put("neon", new NeonCommand(this, scoreboardManager, list));
                 map.put("break", togglables);
                 map.put("build", togglables);
@@ -72,9 +78,9 @@ public final class Neon extends JavaPlugin {
                 map.put("unrevive", new Unrevive(list));
                 map.put("spawn", new Spawn(location, list));
                 map.put("setspawn", new SetSpawn(location));
-                map.put("givetoken", new GiveTokens(tokens));
-                map.put("removetoken", new RemoveTokens(tokens));
-                map.put("tokens", new TokenBalance(tokens));
+                map.put("givetokens", tokensCommands);
+                map.put("removetokens", tokensCommands);
+                map.put("tokens", tokensCommands);
                 map.put("hide", new Hide(this));
                 map.put("tpalive", teleports);
                 map.put("tpdead", teleports);
@@ -105,7 +111,7 @@ public final class Neon extends JavaPlugin {
         inventories = new ClearInventories(list);
         ymlManager = new YmlManager(this);
         scoreboardManager = new ScoreboardManager(this);
-        tokens = new Tokens(ymlManager);
+        currencies = new Currencies(ymlManager);
         versionChecker = new VersionChecker(this);
         wg = new WorldGuardManager(this);
         togglables = new Togglables(wg);
@@ -113,11 +119,14 @@ public final class Neon extends JavaPlugin {
         kicking = new Kicking(list);
         location = new LocationManager(this);
         giving = new Giving(list);
+        currencies = new Currencies(ymlManager);
+        tokensCommands = new TokensCommands(currencies);
+        winsCommands = new WinsCommands(currencies);
         ConfigManager configManager = new ConfigManager(this);
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             getLogger().info("\u001B[37mPlaceholderAPI found! Registering placeholders...\u001B[0m");
-            new AllPlaceholders(list, tokens).register();
+            new AllPlaceholders(list, currencies).register();
             getLogger().info("\u001B[37mRegistered all placeholders!\u001B[0m");
         }else{
             getLogger().info("\u001B[37mPlaceholderAPI not found, Neon will not register placeholders.\u001B[0m");

@@ -2,6 +2,7 @@ package org.azex.neon.commands;
 
 import org.azex.neon.methods.ListManager;
 import org.azex.neon.methods.Messages;
+import org.azex.neon.methods.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
@@ -46,16 +46,14 @@ public class ReviveRecent implements CommandExecutor {
             return false;
         }
 
-        if (!GiveTokens.isInteger(args[0])) {
-            Messages.sendMessage(sender, error, "error");
+        if (!Utilities.isInteger(args[0])) {
+            Messages.sendMessage(sender, "<red>First argument must be a number!", "error");
             return false;
         }
 
-        int time;
+        int time = Integer.parseInt(args[0]);
         if (args[1].equals("minutes") || args[1].equals("minute")) {
-            time = Integer.parseInt(args[0]) * 60;
-        } else {
-            time = Integer.parseInt(args[0]);
+            time = time * 60;
         }
 
         int looped = 0;
