@@ -9,6 +9,8 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.UUID;
+
 public class AllPlaceholders extends PlaceholderExpansion {
 
     private String replace(String text) {
@@ -52,16 +54,18 @@ public class AllPlaceholders extends PlaceholderExpansion {
     @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
 
+        UUID uuid = player.getUniqueId();
+
         // %neon_wins%
         if (params.equalsIgnoreCase("wins")) {
             if (player == null) { return "0"; }
-            return String.valueOf(currencies.getTokens(player.getUniqueId()));
+            return String.valueOf(currencies.getWins(uuid));
         }
 
         // %neon_status%
         if (params.equalsIgnoreCase("status")) {
             if (player == null) { return "§cDead"; }
-            if (list.getPlayers("alive").contains(player.getUniqueId())) {
+            if (list.getPlayers("alive").contains(uuid)) {
                 return "§aAlive";
             }else{
                 return "§cDead";
@@ -71,7 +75,7 @@ public class AllPlaceholders extends PlaceholderExpansion {
         // %neon_tokens%
         if (player == null) { return "0"; }
         if (params.equalsIgnoreCase("tokens")) {
-            return String.valueOf(currencies.getTokens(player.getUniqueId()));
+            return String.valueOf(currencies.getTokens(uuid));
         }
 
         // %neon_timer_mmss/normal/raw/status%

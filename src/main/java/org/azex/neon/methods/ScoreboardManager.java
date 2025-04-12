@@ -69,7 +69,7 @@ public class ScoreboardManager {
             size--;
         }
 
-        player.setScoreboard(board);
+        if (player.getScoreboard() != board) { player.setScoreboard(board); }
 
     }
 

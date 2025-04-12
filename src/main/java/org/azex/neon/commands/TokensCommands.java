@@ -25,20 +25,24 @@ public class TokensCommands implements CommandExecutor {
 
         String cmd = command.getName();
 
-        Player player = Bukkit.getPlayer(args[0]);
-
-        if (player == null) {
+        if (args.length == 0) {
+            Messages.sendMessage(sender, "<red>Must specify a player!", "error");
             return false;
         }
 
-        if (args.length != 1) {
+        Player player = Bukkit.getPlayer(args[0]);
+
+        if (player == null) {
+            Messages.sendMessage(sender, "<red>That player is not online!", "error");
+            return false;
+        }
+
+        if (args.length > 1) {
             if (!Utilities.isInteger(args[1])) {
                 Messages.sendMessage(sender, "<red>The second argument must be a number!", "error");
                 return false;
             }
         }
-
-        int amount = Integer.parseInt(args[1]);
 
         UUID uuid = player.getUniqueId();
         int totaltokens = currencies.getTokens(uuid);
@@ -52,23 +56,25 @@ public class TokensCommands implements CommandExecutor {
             }
 
             case "removetokens" -> {
+                int amount = Integer.parseInt(args[1]);
                 if (!Utilities.debtCheck(sender, totaltokens, amount, "wins")) {
                     return false;
                 }
 
                 currencies.setTokens(uuid, totaltokens - amount);
-                Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has removed<light_purple> " + args[0] + " <gray>tokens " +
+                Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has removed<light_purple> " + args[1] + " <gray>token(s) " +
                         "from <light_purple>" + player.getName() + "<gray>!");
             }
 
             case "givetokens" -> {
+                int amount = Integer.parseInt(args[1]);
                 currencies.setTokens(uuid, totaltokens + amount);
-                Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has given<light_purple> " + args[0] + " <gray>tokens " +
+                Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has given<light_purple> " + args[1] + " <gray>token(s) " +
                         "to <light_purple>" + player.getName() + "<gray>!");
             }
 
             case "tokens" -> {
-                Messages.sendMessage(sender, "<light_purple>☄ " + sender.getName() + " <gray>has<light_purple> " + totaltokens +
+                Messages.sendMessage(sender, "<light_purple>☄ " + player.getName() + " <gray>has<light_purple> " + totaltokens +
                         " <gray>tokens!", "msg");
             }
 

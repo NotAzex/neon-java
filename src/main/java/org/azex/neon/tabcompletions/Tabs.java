@@ -62,14 +62,14 @@ public class Tabs implements TabCompleter {
 
             }
 
-            case "revive", "unrevive", "tokens" -> {
+            case "revive", "unrevive", "tokens", "wins", "cleartokens", "clearwins" -> {
                 if (args.length == 1) {
                     return players(args[0]);
                 }
                 return Collections.emptyList();
             }
 
-            case "givetoken", "removetoken" -> {
+            case "givetokens", "removetokens", "givewins", "removewins" -> {
                 if (args.length == 2) {
                     return amount;
                 }
@@ -130,7 +130,6 @@ public class Tabs implements TabCompleter {
             }
 
             case "neon" -> {
-
                 if (args.length == 1) {
                     StringUtil.copyPartialMatches(args[0], List.of("config", "reload"), validArguments);
                     return validArguments;
