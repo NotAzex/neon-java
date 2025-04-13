@@ -25,7 +25,7 @@ public class WinsCommands implements CommandExecutor {
 
         String cmd = command.getName();
 
-        if (cmd.equals("removetokens") || cmd.equals("removewins")) {
+        if (cmd.equals("givewins") || cmd.equals("removewins")) {
             if (args.length != 2) {
                 Messages.sendMessage(sender, "<red>There must be 2 arguments provided!", "error");
                 return false;

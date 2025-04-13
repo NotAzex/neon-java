@@ -3,7 +3,7 @@
 # Check out the MiniMessage docs to see how to properly use colors in this config.
 # https://docs.advntr.dev/minimessage/format
 
-# Scoreboard doesn't allow leagcy color codes.
+# Scoreboard doesn't allow legacy color codes.
 # You can add more lines to the scoreboard.
 # The scoreboard also supports PlaceholderAPI!
 
