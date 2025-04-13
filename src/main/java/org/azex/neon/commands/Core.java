@@ -1,5 +1,6 @@
 package org.azex.neon.commands;
 
+import org.azex.neon.Neon;
 import org.azex.neon.methods.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,6 +14,11 @@ public class Core implements CommandExecutor {
 
     private String color1 = Messages.color1;
     private String color2 = Messages.color2;
+    private Neon plugin;
+
+    public Core(Neon plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
@@ -20,7 +26,7 @@ public class Core implements CommandExecutor {
         Component here = Component.text("here")
                 .clickEvent(ClickEvent.openUrl("https://discord.gg/nKEa5NxRew"));
 
-        Component string = Messages.mini.deserialize(color1 + "\n☄ Neon [rewritten in Java]"
+        Component string = Messages.mini.deserialize(color1 + "\n☄ Neon v" + plugin.getDescription().getVersion() + " [rewritten in Java]"
         + color2 + "\n • Developed by " + color1 + "@ɴᴏᴛᴀᴢᴇx" + color2 + "\n • Click ");
         string = string.append(here)
                 .append(Messages.mini.deserialize(color2 + " for the" + color1 + " ☄ Neon"

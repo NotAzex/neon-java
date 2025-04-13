@@ -69,7 +69,7 @@ public final class Neon extends JavaPlugin {
                 map.put("pvp", togglables);
                 map.put("flow", togglables);
                 map.put("revive", new Revive(list));
-                map.put("core", new Core());
+                map.put("core", new Core(this));
                 map.put("alive", new Alive(list));
                 map.put("dead", new Dead(list));
                 map.put("mutechat", togglables);
