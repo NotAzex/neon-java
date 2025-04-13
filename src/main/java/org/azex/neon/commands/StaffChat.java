@@ -56,7 +56,7 @@ public class StaffChat implements CommandExecutor {
             format = format.replace("%message%", msg);
             format = format.replace("%player%", player.getName());
             for (Player staff : Bukkit.getOnlinePlayers()) {
-                if (staff.hasPermission("neon.admin")) {
+                if (staff.hasPermission("neon.staffchat")) {
                     if (!toggled.contains(staff.getUniqueId())) {
                         Messages.sendMessage(staff, format, "msg");
                     }
