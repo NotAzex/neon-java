@@ -19,11 +19,11 @@ public class ConfigManager {
     private void setValues() {
         scoreboard = Arrays.asList(
                 "",
-                " §7| &fAlive: &5%neon_alive_size%",
-                " §7| &fDead: &5%neon_dead_size%",
-                " §7| &fTokens: &5%neon_tokens%",
+                " <gray>| <reset>Alive: <light_purple>%neon_alive_size%",
+                " <gray>| <reset>Dead: <light_purple>%neon_dead_size%",
+                " <gray>| <reset>Tokens: <light_purple>%neon_tokens%",
                 "",
-                "§7§oEdit this in the config of Neon."
+                "<gray>Edit this in the config of Neon."
         );
 
         map.put("Sounds.Main", "BLOCK_NOTE_BLOCK_PLING");
@@ -33,7 +33,7 @@ public class ConfigManager {
         map.put("Other.BackupFrequency", "3");
         map.put("Other.EnableBackups", "true");
         map.put("Scoreboard.Lines", "<plugin is setting these at the moment...>");
-        map.put("Scoreboard.Title", "§5☄ Neon");
+        map.put("Scoreboard.Title", "<light_purple>☄ Neon");
         map.put("Scoreboard.Enable", "true");
         map.put("WorldGuard.World", "world");
         map.put("WorldGuard.Region", "arena");

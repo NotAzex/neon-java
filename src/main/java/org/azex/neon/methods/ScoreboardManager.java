@@ -1,6 +1,8 @@
 package org.azex.neon.methods;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.internal.parser.ParsingExceptionImpl;
 import org.azex.neon.FastBoard.FastBoard;
 import org.azex.neon.Neon;
 import org.bukkit.Bukkit;
@@ -45,16 +47,22 @@ public class ScoreboardManager {
     private void updateBoard(FastBoard board) {
 
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            List<String> parsedlines = new ArrayList<>();
-            for (String line : lines) {
-                String placeholders = PlaceholderAPI.setPlaceholders(board.getPlayer(), line);
-                parsedlines.add(placeholders);
-            }
+            List<Component> parsedlines = new ArrayList<>();
+            try {
+                for (String line : lines) {
+                    String placeholders = PlaceholderAPI.setPlaceholders(board.getPlayer(), line);
+                    Component comp = Messages.mini.deserialize(placeholders);
+                    parsedlines.add(comp);
+                }
 
-            String title = plugin.getConfig().getString("Scoreboard.Title");
-            String updatedtitle = PlaceholderAPI.setPlaceholders(board.getPlayer(), title);
-            board.updateTitle(updatedtitle);
-            board.updateLines(parsedlines);
+                String title = plugin.getConfig().getString("Scoreboard.Title", "<light_purple>☄ Neon");
+                String updatedtitle = PlaceholderAPI.setPlaceholders(board.getPlayer(), title);
+                board.updateTitle(Messages.mini.deserialize(updatedtitle));
+                board.updateLines(parsedlines);
+            } catch (ParsingExceptionImpl e) {
+                plugin.getLogger().warning("Legacy color codes aren't allowed in the scoreboard! Stopping scoreboard loop...");
+                endScoreboardLoop();
+            }
         }
     }
 

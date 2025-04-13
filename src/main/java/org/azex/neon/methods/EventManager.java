@@ -2,6 +2,7 @@ package org.azex.neon.methods;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.minimessage.internal.parser.ParsingExceptionImpl;
 import org.azex.neon.FastBoard.FastBoard;
 import org.azex.neon.Neon;
 import org.azex.neon.commands.*;
@@ -97,7 +98,12 @@ public class EventManager implements Listener {
         UUID uuid = player.getUniqueId();
 
         FastBoard board = new FastBoard(player);
-        board.updateTitle(plugin.getConfig().getString("Scoreboard.Title"));
+        try {
+            board.updateTitle(Messages.mini.deserialize(plugin.getConfig().getString("Scoreboard.Title")));
+        } catch (ParsingExceptionImpl e) {
+            board.updateTitle(Messages.mini.deserialize("<red>Can't use legacy color codes in scoreboard!"));
+            plugin.getLogger().warning("Please don't use legacy color codes in your scoreboard.");
+        }
         scoreboardManager.boards.put(uuid, board);
 
         list.unrevive(uuid);
