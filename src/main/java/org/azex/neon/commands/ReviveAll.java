@@ -43,7 +43,7 @@ public class ReviveAll implements CommandExecutor {
                 UUID revivable = reviveAll.next();
                 Player target = Bukkit.getPlayer(revivable);
                 if (target != null) {
-                    if (!target.hasPermission("neon.admin")) {
+                    if (!target.hasPermission("neon.revive")) {
                         list.revive(revivable);
                         target.teleport(player);
                     }

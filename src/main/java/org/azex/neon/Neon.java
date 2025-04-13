@@ -133,7 +133,7 @@ public final class Neon extends JavaPlugin {
         }
 
         getLogger().info("\u001B[37mRegistering events...\u001B[0m");
-        getServer().getPluginManager().registerEvents(new EventManager(this, versionChecker, list, location, wg), this);
+        getServer().getPluginManager().registerEvents(new EventManager(this, scoreboardManager, versionChecker, list, location, wg), this);
         getLogger().info("\u001B[37mRegistered events!\u001B[0m");
 
         getLogger().info("\u001B[37mRegistering commands...\u001B[0m");

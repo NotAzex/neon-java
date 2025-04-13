@@ -57,7 +57,7 @@ public class Giving implements CommandExecutor {
         }
 
         String cmd = command.getName();
-        String format = args[0].replace("_", " ");
+        String format = args[0].replace("_", " ").toLowerCase();
         String who = cmd.substring(4);
 
         Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has given<light_purple> " +

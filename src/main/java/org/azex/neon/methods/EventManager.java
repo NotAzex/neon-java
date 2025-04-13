@@ -2,6 +2,7 @@ package org.azex.neon.methods;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import org.azex.neon.FastBoard.FastBoard;
 import org.azex.neon.Neon;
 import org.azex.neon.commands.*;
 import org.bukkit.Bukkit;
@@ -42,6 +43,7 @@ public class EventManager implements Listener {
     private final VersionChecker versionChecker;
     private final WorldGuardManager wg;
     private final Neon plugin;
+    private final ScoreboardManager scoreboardManager;
     private HashMap<UUID, playerInfo> rejoinMap = new HashMap<UUID, playerInfo>();
 
     private String color1 = Messages.color1;
@@ -55,8 +57,9 @@ public class EventManager implements Listener {
             "/minecraft:me ",
             "/me ");
 
-    public EventManager(Neon plugin, VersionChecker versionChecker, ListManager list, LocationManager locationManager, WorldGuardManager wg) {
+    public EventManager(Neon plugin, ScoreboardManager scoreboardManager, VersionChecker versionChecker, ListManager list, LocationManager locationManager, WorldGuardManager wg) {
         this.plugin = plugin;
+        this.scoreboardManager = scoreboardManager;
         this.versionChecker = versionChecker;
         this.wg = wg;
         this.list = list;
@@ -69,6 +72,13 @@ public class EventManager implements Listener {
     public void disconnect(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
+
+        FastBoard board = scoreboardManager.boards.remove(player.getUniqueId());
+
+        if (board != null) {
+            board.delete();
+        }
+
         if (list.getPlayers("alive").contains(uuid)) {
             if (Rejoin.toggle) {
                 rejoinMap.put(uuid, new playerInfo(System.currentTimeMillis(), player.getLocation()));
@@ -85,6 +95,11 @@ public class EventManager implements Listener {
         Location location = locationManager.getLocation("spawn.yml", "spawn");
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
+
+        FastBoard board = new FastBoard(player);
+        board.updateTitle(plugin.getConfig().getString("Scoreboard.Title"));
+        scoreboardManager.boards.put(uuid, board);
+
         list.unrevive(uuid);
         list.ReviveRecentMap.remove(uuid);
 
