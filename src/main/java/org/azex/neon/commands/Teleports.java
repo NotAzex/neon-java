@@ -38,7 +38,7 @@ public class Teleports implements CommandExecutor {
                     @Override
                     public void run() {
 
-                        if (iteration == players.size() - 1) { // iteration - 1 is here because 'it just works' - todd howard i think
+                        if (iteration == players.size() - 1) {
                             cancel();
                         }
 
