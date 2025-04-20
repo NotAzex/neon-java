@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.UUID;
 
 public class Hide implements CommandExecutor {
@@ -23,7 +24,7 @@ public class Hide implements CommandExecutor {
 
     private void hideStaff(Player player) {
         for (Player loop : Bukkit.getOnlinePlayers()) {
-            if (loop.hasPermission("neon.hide")) {
+            if (!loop.hasPermission("neon.hide")) {
                 player.hidePlayer(plugin, loop);
             }
         }
@@ -65,6 +66,12 @@ public class Hide implements CommandExecutor {
         }
 
         if (args.length > 0) {
+
+            if (!List.of("off", "staff", "all").contains(args[0])) {
+                Messages.sendMessage(sender, "<red>Invalid first argument! Valid arguments: [off, staff, all]", "error");
+                return false;
+            }
+
             switch (args[0]) {
 
                 case "reveal", "off" -> revealPlayers(player);
