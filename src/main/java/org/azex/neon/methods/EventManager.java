@@ -45,7 +45,7 @@ public class EventManager implements Listener {
     private final WorldGuardManager wg;
     private final Neon plugin;
     private final ScoreboardManager scoreboardManager;
-    private HashMap<UUID, playerInfo> rejoinMap = new HashMap<UUID, playerInfo>();
+    private HashMap<UUID, playerInfo> rejoinMap = new HashMap<>();
 
     private String color1 = Messages.color1;
     private String color2 = Messages.color2;
@@ -88,6 +88,8 @@ public class EventManager implements Listener {
         list.status.remove(uuid);
         list.ReviveRecentMap.remove(uuid);
         Hide.toggledPlayers.remove(uuid);
+        UseRevive.requests.remove(uuid);
+        StaffChat.toggled.remove(uuid);
     }
 
     @EventHandler
@@ -209,11 +211,9 @@ public class EventManager implements Listener {
 
     @EventHandler
     public void pvp(EntityDamageByEntityEvent event) {
-        if (!(event.getDamager() instanceof Player && event.getEntity() instanceof Player)) {
+        if (!(event.getDamager() instanceof Player damager && event.getEntity() instanceof Player)) {
             return;
         }
-
-        Player damager = (Player) event.getDamager();
 
         if (Togglables.toggle.getOrDefault("pvp", false)) {
             return;

@@ -64,11 +64,11 @@ public class AllPlaceholders extends PlaceholderExpansion {
 
         // %neon_status%
         if (params.equalsIgnoreCase("status")) {
-            if (player == null) { return "§cDead"; }
+            if (player == null) { return "<red>Dead"; }
             if (list.getPlayers("alive").contains(uuid)) {
-                return "§aAlive";
+                return "<green>Alive";
             }else{
-                return "§cDead";
+                return "<red>Dead";
             }
         }
 

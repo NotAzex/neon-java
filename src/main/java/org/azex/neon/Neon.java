@@ -15,9 +15,7 @@ public final class Neon extends JavaPlugin {
     private LocationManager location;
     private ListManager list;
     private YmlManager ymlManager;
-    private VersionChecker versionChecker;
     private Currencies currencies;
-    private WorldGuardManager wg;
     private ScoreboardManager scoreboardManager;
     private ClearInventories inventories;
     private Killing killing;
@@ -73,7 +71,7 @@ public final class Neon extends JavaPlugin {
                 map.put("alive", new Alive(list));
                 map.put("dead", new Dead(list));
                 map.put("mutechat", togglables);
-                map.put("reviveall", new ReviveAll(list));
+                map.put("reviveall", new ReviveAll(list, this));
                 map.put("reviverecent", new ReviveRecent(list));
                 map.put("unrevive", new Unrevive(list));
                 map.put("spawn", new Spawn(location, list));
@@ -107,13 +105,13 @@ public final class Neon extends JavaPlugin {
         saveDefaultConfig();
 
         list = new ListManager(this);
-        teleports = new Teleports(list);
+        teleports = new Teleports(list, this);
         inventories = new ClearInventories(list);
         ymlManager = new YmlManager(this);
         scoreboardManager = new ScoreboardManager(this);
         currencies = new Currencies(ymlManager);
-        versionChecker = new VersionChecker(this);
-        wg = new WorldGuardManager(this);
+        VersionChecker versionChecker = new VersionChecker(this);
+        WorldGuardManager wg = new WorldGuardManager(this);
         togglables = new Togglables(wg);
         killing = new Killing(list);
         kicking = new Kicking(list);

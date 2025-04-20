@@ -17,7 +17,7 @@ public class StaffChat implements CommandExecutor {
 
     private String format;
     private final Neon plugin;
-    private final Set<UUID> toggled = new HashSet<>();
+    public static Set<UUID> toggled = new HashSet<>();
 
     public StaffChat(Neon plugin) {
         this.plugin = plugin;

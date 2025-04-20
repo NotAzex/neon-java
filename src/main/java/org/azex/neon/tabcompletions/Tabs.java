@@ -51,6 +51,22 @@ public class Tabs implements TabCompleter {
 
         switch (cmd) {
 
+            case "tpalive", "tpdead", "tpall", "reviveall" -> {
+                if (args.length == 1) {
+                    StringUtil.copyPartialMatches(args[0], List.of("slow", "fast"), validArguments);
+                    return validArguments;
+                }
+                return Collections.emptyList();
+            }
+
+            case "hide" -> {
+                if (args.length == 1) {
+                    StringUtil.copyPartialMatches(args[0], List.of("staff", "all", "off"), validArguments);
+                    return validArguments;
+                }
+                return Collections.emptyList();
+            }
+
             case "givealive", "givedead" -> {
                 if (args.length == 1) {
                     StringUtil.copyPartialMatches(args[0], items, validArguments);
