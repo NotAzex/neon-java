@@ -86,9 +86,25 @@ public class Timer implements CommandExecutor {
 
                 int minutes = time / 60;
                 int seconds = time % 60;
+
+                String s;
+                String m;
                 otherFormat = minutes + ":" + String.format("%02d", seconds);
-                format = (minutes > 0 ? "<light_purple>" + minutes + " <gray>minute(s),<light_purple> " : "<light_purple>")
-                        + seconds + " <gray>second(s)";
+
+                if (minutes == 1) {
+                    m = "minute";
+                } else {
+                    m = "minutes";
+                }
+
+                if (seconds == 1) {
+                    s = "second";
+                } else {
+                    s = "seconds";
+                }
+
+                format = (minutes > 0 ? "<light_purple>" + minutes + " <gray>" + m + ",<light_purple> " : "<light_purple>")
+                        + seconds + " <gray>" + s;
                 Messages.broadcastActionBar(format + " left!");
 
                 time--;

@@ -1,5 +1,6 @@
 package org.azex.neon.tabcompletions;
 
+import org.azex.neon.commands.Giving;
 import org.azex.neon.commands.NeonCommand;
 import org.azex.neon.methods.YmlManager;
 import org.bukkit.Bukkit;
@@ -31,7 +32,7 @@ public class Tabs implements TabCompleter {
 
     private void setItems() {
         for (Material material : Material.values()) {
-            items.add(material.toString());
+            items.add(material.toString().toLowerCase());
         }
     }
 
@@ -58,6 +59,15 @@ public class Tabs implements TabCompleter {
 
                 if (args.length == 2) {
                     return amount;
+                }
+
+                if (args.length == 3) {
+                    StringUtil.copyPartialMatches(args[2], Giving.enchantments, validArguments);
+                    return validArguments;
+                }
+
+                if (args.length == 4) {
+                    return List.of("<level>");
                 }
 
             }

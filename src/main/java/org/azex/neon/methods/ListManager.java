@@ -2,6 +2,7 @@ package org.azex.neon.methods;
 
 import org.azex.neon.Neon;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
@@ -70,13 +71,13 @@ public class ListManager {
     public String statusAsList(String who) {
         return getPlayers(who).stream()
                 .map(Bukkit::getPlayer)
-                .filter(player -> player != null)
+                .filter(Objects::nonNull)
                 .map(Player::getName)
                 .collect(Collectors.joining(", "));
     }
 
     public boolean isEmpty(String who) {
-        return status.values().stream().noneMatch(status -> who.equals(status));
+        return status.values().stream().noneMatch(who::equals);
     }
 
     public void backupLists() {
@@ -122,9 +123,17 @@ public class ListManager {
     }
 
     public void revive(UUID uuid) {
-        if (!status.get(uuid).equals("alive")) {
-            status.put(uuid, "alive");
-            ReviveRecentMap.remove(uuid);
+        if (Bukkit.getPlayer(uuid) != null) {
+            if (!status.get(uuid).equals("alive")) {
+                status.put(uuid, "alive");
+                ReviveRecentMap.remove(uuid);
+
+                Player player = Bukkit.getPlayer(uuid);
+                player.setFireTicks(0);
+                player.setFoodLevel(20);
+                player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+
+            }
         }
 
     }
