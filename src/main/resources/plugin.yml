@@ -1,5 +1,5 @@
 name: Neon
-version: '1.1.9'
+version: '1.2'
 main: org.azex.neon.Neon
 api-version: '1.20'
 softdepend: [PlaceholderAPI]
@@ -12,103 +12,103 @@ commands:
     description: Returns the wins of a player.
   givewins:
     description: Gives a player wins.
-    permission: neon.admin
+    permission: neon.command.givewins
   removewins:
     description: Removes wins from a player.
-    permission: neon.admin
+    permission: neon.command.removewins
   clearwins:
     description: Clears the wins of a player.
-    permission: neon.admin
+    permission: neon.command.clearwins
   givealive:
     description: Gives items to alive people.
-    permission: neon.admin
+    permission: neon.command.givealive
   givedead:
     description: Gives items to dead people.
-    permission: neon.admin
+    permission: neon.command.givedead
   kickalive:
     description: Kicks alive people.
-    permission: neon.admin
+    permission: neon.command.kickalive
   kickdead:
     description: Kicks dead people.
-    permission: neon.admin
+    permission: neon.command.kickdead
   kickall:
     description: Kicks everyone except people with the permission 'neon.kick'.
-    permission: neon.admin
+    permission: neon.command.kickall
   killalive:
     description: Kills alive people.
-    permission: neon.admin
+    permission: neon.command.killalive
   killdead:
     description: Kills dead people.
-    permission: neon.admin
+    permission: neon.command.killdead
   rejoin:
     description: Lets you toggle rejoining and change the time of it.
-    permission: neon.admin
+    permission: neon.command.rejoin
   ad:
     description: Lets you send, delete and create custom ads.
-    permission: neon.admin
+    permission: neon.command.ad
   clearalive:
     description: Clears the inventories of alive people.
-    permission: neon.admin
+    permission: neon.command.clearalive
   cleardead:
     description: Clears the inventories of dead people.
-    permission: neon.admin
+    permission: neon.command.cleardead
   prize:
     description: Sets the prize.
-    permission: neon.admin
+    permission: neon.command.prize
   warp:
     description: Allows you to create warps that you can teleport to.
   staffchat:
     description: Allows you to communicate with other staff.
-    permission: neon.admin
+    permission: neon.command.staffchat
     aliases: sc
   event:
     description: Sets the event.
-    permission: neon.admin
+    permission: neon.command.event
   hunger:
     description: Toggles hunger using events.
-    permission: neon.admin
+    permission: neon.command.event
   cleartokens:
     description: Clears the revives of a player.
-    permission: neon.admin
+    permission: neon.command.cleartokens
     aliases: clearrevives
   listclear:
     description: Clears the alive & dead list and then adds everyone to the dead list.
-    permission: neon.admin
+    permission: neon.command.listclear
   timer:
     description: Starts a timer.
-    permission: neon.admin
+    permission: neon.command.timer
   tokenusage:
     description: Used for toggling token usage.
-    permission: neon.admin
+    permission: neon.command.tokenusage
   token:
     description: Used for accepting/denying tokens of players.
-    permission: neon.admin
+    permission: neon.command.token
   userevive:
     description: You can use a token if you have any with this command.
   neon:
     description: Used for reloading the config of Neon.
-    permission: neon.admin
+    permission: neon.command.neon
   break:
     description: Toggles breaking using WorldGuard.
-    permission: neon.admin
+    permission: neon.command.break
   build:
     description: Toggles building using WorldGuard.
-    permission: neon.admin
+    permission: neon.command.build
   flow:
     description: Toggles flowing using WorldGuard and events.
-    permission: neon.admin
+    permission: neon.command.flow
   pvp:
     description: Toggles PvP using WorldGuard and events.
-    permission: neon.admin
+    permission: neon.command.pvp
   falldamage:
     description: Toggles fall damage using WorldGuard.
-    permission: neon.admin
+    permission: neon.command.falldamage
   revival:
     description: Starts/ends a chat revival.
-    permission: neon.admin
+    permission: neon.command.revival
   revive:
     description: Revive a player.
-    permission: neon.admin
+    permission: neon.command.revive
   core:
     description: Tells you what Neon is.
   alive:
@@ -117,41 +117,41 @@ commands:
     description: Returns the dead list.
   mutechat:
     description: Toggles the chat.
-    permission: neon.admin
+    permission: neon.command.mutechat
   reviveall:
     description: Revives all players.
-    permission: neon.admin
+    permission: neon.command.reviveall
   reviverecent:
     description: Revives players who have died recently.
-    permission: neon.admin
+    permission: neon.command.reviverecent
   unrevive:
     description: Unrevives an alive player.
-    permission: neon.admin
+    permission: neon.command.unrevive
   spawn:
     description: Teleports player to spawn.
   setspawn:
     description: Sets the spawn location.
-    permission: neon.admin
+    permission: neon.command.setspawn
   tokens:
     description: Returns the tokens of someone.
     aliases: revives
   removetokens:
     description: Removes tokens from someone.
-    permission: neon.admin
+    permission: neon.command.removetokens
     aliases: removerevive
   givetokens:
     description: Gives tokens to someone.
-    permission: neon.admin
+    permission: neon.command.givetokens
     aliases: giverevive
   hide:
     description: Hides all players to the sender.
   tpalive:
     description: Teleports alive players to the sender.
-    permission: neon.admin
+    permission: neon.command.tpalive
   tpdead:
     description: Teleports dead players to the sender.
-    permission: neon.admin
+    permission: neon.command.tpdead
   tpall:
     description: Teleports all players to the sender.
-    permission: neon.admin
+    permission: neon.command.tpall
 

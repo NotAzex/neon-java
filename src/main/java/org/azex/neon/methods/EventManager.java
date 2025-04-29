@@ -1,9 +1,10 @@
 package org.azex.neon.methods;
 
+import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.internal.parser.ParsingExceptionImpl;
-import org.azex.neon.FastBoard.FastBoard;
+import org.azex.neon.fastboard.FastBoard;
 import org.azex.neon.Neon;
 import org.azex.neon.commands.*;
 import org.bukkit.Bukkit;
@@ -45,7 +46,8 @@ public class EventManager implements Listener {
     private final WorldGuardManager wg;
     private final Neon plugin;
     private final ScoreboardManager scoreboardManager;
-    private HashMap<UUID, playerInfo> rejoinMap = new HashMap<>();
+    private final HashMap<UUID, playerInfo> rejoinMap = new HashMap<>();
+    private final HashMap<UUID, String> revival = new HashMap<>();
 
     private String color1 = Messages.color1;
     private String color2 = Messages.color2;
@@ -99,15 +101,16 @@ public class EventManager implements Listener {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
 
-        FastBoard board = new FastBoard(player);
-        try {
-            board.updateTitle(Messages.mini.deserialize(plugin.getConfig().getString("Scoreboard.Title")));
-        } catch (ParsingExceptionImpl e) {
-            board.updateTitle(Messages.mini.deserialize("<red>Can't use legacy color codes in scoreboard!"));
-            plugin.getLogger().warning("Please don't use legacy color codes in your scoreboard.");
+        if (plugin.getConfig().getString("Scoreboard.Enable").equals("true")) {
+            FastBoard board = new FastBoard(player);
+            try {
+                board.updateTitle(Messages.mini.deserialize(plugin.getConfig().getString("Scoreboard.Title", "<light_purple>☄ Neon")));
+            } catch (ParsingExceptionImpl e) {
+                board.updateTitle(Messages.mini.deserialize("<red>Can't use legacy color codes in scoreboard!"));
+                plugin.getLogger().warning("Please don't use legacy color codes in your scoreboard.");
+            }
+            scoreboardManager.boards.put(uuid, board);
         }
-        scoreboardManager.boards.put(uuid, board);
-
         list.unrevive(uuid);
         list.ReviveRecentMap.remove(uuid);
 
@@ -160,7 +163,7 @@ public class EventManager implements Listener {
     }
 
     @EventHandler
-    public void revivalWinner(AsyncPlayerChatEvent event) {
+    public void revivalWinner(AsyncChatEvent event) {
         Player player = event.getPlayer();
 
         if (!Revival.isRevivalActive) {
@@ -169,7 +172,7 @@ public class EventManager implements Listener {
 
         int guess;
         try {
-            guess = Integer.parseInt(event.getMessage());
+            guess = Integer.parseInt(event.message().toString());
         } catch (NumberFormatException e) {
             return;
         }
@@ -189,7 +192,7 @@ public class EventManager implements Listener {
 
 
     @EventHandler
-    public void chat(AsyncPlayerChatEvent event) {
+    public void chat(AsyncChatEvent event) {
         if (Togglables.toggle.getOrDefault("mutechat", false) && !event.getPlayer().hasPermission("neon.chat")) {
             event.setCancelled(true);
             Messages.sendMessage(event.getPlayer(), "<red>The chat is muted!", "error");

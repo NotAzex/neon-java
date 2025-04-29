@@ -3,7 +3,7 @@ package org.azex.neon.methods;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.internal.parser.ParsingExceptionImpl;
-import org.azex.neon.FastBoard.FastBoard;
+import org.azex.neon.fastboard.FastBoard;
 import org.azex.neon.Neon;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;

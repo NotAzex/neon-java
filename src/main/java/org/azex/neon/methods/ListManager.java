@@ -125,13 +125,14 @@ public class ListManager {
     public void revive(UUID uuid) {
         if (Bukkit.getPlayer(uuid) != null) {
             if (!status.get(uuid).equals("alive")) {
-                status.put(uuid, "alive");
-                ReviveRecentMap.remove(uuid);
-
                 Player player = Bukkit.getPlayer(uuid);
                 player.setFireTicks(0);
                 player.setFoodLevel(20);
                 player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+                player.getInventory().clear();
+
+                status.put(uuid, "alive");
+                ReviveRecentMap.remove(uuid);
 
             }
         }

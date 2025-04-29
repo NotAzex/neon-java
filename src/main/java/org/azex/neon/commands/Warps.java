@@ -56,7 +56,7 @@ public class Warps implements CommandExecutor {
             }
         }
 
-        if (player.hasPermission("neon.admin")) {
+        if (player.hasPermission("neon.command.warp")) {
             if (args[0].equals("delete")) {
                 Messages.sendMessage(sender, "<light_purple>☄ <gray>You have deleted the <light_purple>" +
                         "'" + args[1] + "'<gray> warp!", "msg");

@@ -37,7 +37,7 @@ public class Revival implements CommandExecutor {
                 isRevivalActive = true;
                 Messages.broadcast("\n<light_purple>☄ <bold>REVIVAL<reset><light_purple>!\n<gray>First one to say" +
                         "<light_purple> " + number
-                + " <gray>wins the revival!\n");
+                        + " <gray>wins the revival!\n");
             }else{
                 Messages.sendMessage(sender, "<red>There is an revival going on already!" +
                         " Cancel it with /revival cancel.", "error");

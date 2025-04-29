@@ -71,7 +71,7 @@ public final class Neon extends JavaPlugin {
                 map.put("alive", new Alive(list));
                 map.put("dead", new Dead(list));
                 map.put("mutechat", togglables);
-                map.put("reviveall", new ReviveAll(list, this));
+                map.put("reviveall", new ReviveAll(this, list));
                 map.put("reviverecent", new ReviveRecent(list));
                 map.put("unrevive", new Unrevive(list));
                 map.put("spawn", new Spawn(location, list));

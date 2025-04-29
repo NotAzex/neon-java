@@ -19,8 +19,8 @@ import java.util.UUID;
 
 public class Giving implements CommandExecutor {
 
-    private final ListManager list;
     public static List<String> enchantments = new ArrayList<>();
+    private ListManager list;
 
     public Giving(ListManager list) {
         this.list = list;

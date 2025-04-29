@@ -18,10 +18,10 @@ import java.util.UUID;
 
 public class ReviveAll implements CommandExecutor {
 
-    private final ListManager list;
     private final Neon plugin;
+    private final ListManager list;
 
-    public ReviveAll(ListManager list, Neon plugin) {
+    public ReviveAll(Neon plugin, ListManager list) {
         this.list = list;
         this.plugin = plugin;
     }
@@ -32,6 +32,11 @@ public class ReviveAll implements CommandExecutor {
         new BukkitRunnable() {
             @Override
             public void run() {
+
+                if (!reviveAll.hasNext()) {
+                    this.cancel();
+                }
+
                 try {
                     UUID revivable = reviveAll.next();
                     Player target = Bukkit.getPlayer(revivable);
@@ -43,8 +48,9 @@ public class ReviveAll implements CommandExecutor {
                             }
                         }
                     }
-                } catch (NoSuchElementException ignored) {
-                }
+                } catch (NoSuchElementException e) {
+                    plugin.getLogger().info("Ignored an exception.");
+                } // if multiple players use /reviveall at the same time, it can cause NoSuchElement exception so i added this
             }
         }.runTaskTimer(plugin, 0L, time);
     }
