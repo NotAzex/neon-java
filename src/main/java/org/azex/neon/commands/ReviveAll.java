@@ -48,9 +48,8 @@ public class ReviveAll implements CommandExecutor {
                             }
                         }
                     }
-                } catch (NoSuchElementException e) {
-                    plugin.getLogger().info("Ignored an exception.");
-                } // if multiple players use /reviveall at the same time, it can cause NoSuchElement exception so i added this
+                } catch (NoSuchElementException ignored) { }
+                // if multiple players use /reviveall at the same time, it can cause NoSuchElement exception so i added this
             }
         }.runTaskTimer(plugin, 0L, time);
     }
