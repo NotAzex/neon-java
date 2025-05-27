@@ -2,6 +2,7 @@ package org.azex.neon.methods;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.internal.parser.ParsingExceptionImpl;
 import org.azex.neon.fastboard.FastBoard;
@@ -19,24 +20,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
-// used for the rejoin system !
-
-class playerInfo {
-    long leaveTime;
-    Location location;
-
-    public playerInfo(long leaveTime, Location location) {
-        this.leaveTime = leaveTime;
-        this.location = location;
-    }
-}
-
-// -
+import java.util.*;
 
 public class EventManager implements Listener {
 
@@ -46,8 +30,9 @@ public class EventManager implements Listener {
     private final WorldGuardManager wg;
     private final Neon plugin;
     private final ScoreboardManager scoreboardManager;
-    private final HashMap<UUID, playerInfo> rejoinMap = new HashMap<>();
     private final HashMap<UUID, String> revival = new HashMap<>();
+    private final Map<UUID, RejoinInfo> info = new HashMap<>();
+    public static Location spawnLocation;
 
     private String color1 = Messages.color1;
     private String color2 = Messages.color2;
@@ -67,9 +52,8 @@ public class EventManager implements Listener {
         this.wg = wg;
         this.list = list;
         this.locationManager = locationManager;
+        this.spawnLocation = locationManager.getLocation("spawn.yml", "spawn");
     }
-
-    // REJOINING SYSTEM
 
     @EventHandler
     public void disconnect(PlayerQuitEvent event) {
@@ -84,7 +68,8 @@ public class EventManager implements Listener {
 
         if (list.getPlayers("alive").contains(uuid)) {
             if (Rejoin.toggle) {
-                rejoinMap.put(uuid, new playerInfo(System.currentTimeMillis(), player.getLocation()));
+                RejoinInfo data = new RejoinInfo(player.getLocation(), System.currentTimeMillis());
+                info.put(uuid, data);
             }
         }
         list.status.remove(uuid);
@@ -92,43 +77,46 @@ public class EventManager implements Listener {
         Hide.toggledPlayers.remove(uuid);
         UseRevive.requests.remove(uuid);
         StaffChat.toggled.remove(uuid);
+        info.remove(uuid);
     }
 
     @EventHandler
     public void join(PlayerJoinEvent event) {
 
-        Location location = locationManager.getLocation("spawn.yml", "spawn");
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
 
-        if (plugin.getConfig().getString("Scoreboard.Enable").equals("true")) {
-            FastBoard board = new FastBoard(player);
-            try {
-                board.updateTitle(Messages.mini.deserialize(plugin.getConfig().getString("Scoreboard.Title", "<light_purple>☄ Neon")));
-            } catch (ParsingExceptionImpl e) {
-                board.updateTitle(Messages.mini.deserialize("<red>Can't use legacy color codes in scoreboard!"));
-                plugin.getLogger().warning("Please don't use legacy color codes in your scoreboard.");
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            if (plugin.getConfig().getString("Scoreboard.Enable").equals("true")) {
+                FastBoard board = new FastBoard(player);
+                try {
+                    board.updateTitle(Messages.mini.deserialize(plugin.getConfig().getString("Scoreboard.Title", "<light_purple>☄ Neon")));
+                } catch (ParsingExceptionImpl e) {
+                    board.updateTitle(Messages.mini.deserialize("<red>Can't use legacy color codes in scoreboard!"));
+                    plugin.getLogger().warning("Please don't use legacy color codes in your scoreboard.");
+                }
+                scoreboardManager.boards.put(uuid, board);
             }
-            scoreboardManager.boards.put(uuid, board);
         }
+
         list.unrevive(uuid);
         list.ReviveRecentMap.remove(uuid);
 
-        if (!rejoinMap.containsKey(uuid)) {
+        if (!info.containsKey(uuid)) {
 
-            if (location != null) {
-                player.teleport(location);
+            if (spawnLocation != null) {
+                player.teleport(spawnLocation);
             }
 
         }else{
-            playerInfo info = rejoinMap.get(uuid);
-            long diff = System.currentTimeMillis() - info.leaveTime;
+            RejoinInfo getInfo = info.get(uuid);
+            long diff = System.currentTimeMillis() - getInfo.getLeaveTime();
             long takenTime = diff / 1000;
 
-            rejoinMap.remove(uuid);
+            info.remove(uuid);
             if (takenTime <= Rejoin.rejoinSeconds) {
                 list.revive(uuid);
-                player.teleport(info.location);
+                player.teleport(getInfo.getLocation());
                 Messages.broadcast("<light_purple>" + player.getName() + " <gray>has joined back in" +
                         "<light_purple> " + takenTime + "<gray> second(s).");
             } else {
@@ -137,25 +125,21 @@ public class EventManager implements Listener {
         }
     }
 
-    // ----------------
-
     @EventHandler
     public void hidePlayers(PlayerJoinEvent event) {
+        if (Hide.toggledPlayers.isEmpty()) return;
+
         Player player = event.getPlayer();
-        if (!Hide.toggledPlayers.isEmpty()) {
-            for (UUID uuid : Hide.toggledPlayers) {
-                if (Bukkit.getPlayer(uuid) != null) {
-                    Player loop = Bukkit.getPlayer(uuid);
-                    loop.hidePlayer(plugin, player);
-                }
-            }
-        }
+        Hide.toggledPlayers.stream()
+                .map(Bukkit::getPlayer)
+                .filter(Objects::nonNull)
+                .forEach(p -> p.hidePlayer(plugin, player));
     }
 
     @EventHandler
     public void blockCommands(PlayerCommandPreprocessEvent event) {
         for (String command : blockedCommands) {
-            if (event.getMessage().startsWith(command.toLowerCase())) {
+            if (event.getMessage().startsWith(command)) {
                 event.setCancelled(true);
                 break;
             }
@@ -166,28 +150,26 @@ public class EventManager implements Listener {
     public void revivalWinner(AsyncChatEvent event) {
         Player player = event.getPlayer();
 
-        if (!Revival.isRevivalActive) {
-            return;
-        }
+        if (Revival.isRevivalActive) {
 
-        int guess;
-        try {
-            guess = Integer.parseInt(event.message().toString());
-        } catch (NumberFormatException e) {
-            return;
-        }
+            int guess;
+            try {
+                guess = Integer.parseInt(((TextComponent) event.message()).content());
+            } catch (NumberFormatException | ClassCastException e) {
+                return;
+            }
 
-        if (guess != Revival.number) {
-            return;
-        }
+            if (guess == Revival.number) {
 
-        if (list.getPlayers("alive").contains(player.getUniqueId())) {
-            return;
-        }
+                if (!list.getPlayers("alive").contains(player.getUniqueId())) {
+                    Revival.number = null;
+                    Revival.isRevivalActive = false;
+                    Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has won the revival!");
+                }
 
-        Revival.number = null;
-        Revival.isRevivalActive = false;
-        Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has won the revival!");
+            }
+
+        }
     }
 
 
@@ -202,31 +184,31 @@ public class EventManager implements Listener {
     @EventHandler
     public void flowing(BlockFromToEvent event) {
         Material blockType = event.getBlock().getType();
-        if (blockType != Material.WATER && blockType != Material.LAVA) {
-            return;
+
+        if (blockType == Material.WATER || blockType == Material.LAVA) {
+            if (!Togglables.toggle.getOrDefault("flow", false)) {
+                event.setCancelled(true);
+            }
         }
 
-        if (Togglables.toggle.getOrDefault("flow", false)) {
-            return;
-        }
-        event.setCancelled(true);
     }
 
     @EventHandler
     public void pvp(EntityDamageByEntityEvent event) {
-        if (!(event.getDamager() instanceof Player damager && event.getEntity() instanceof Player)) {
-            return;
-        }
+        if (event.getDamager() instanceof Player damager && event.getEntity() instanceof Player) {
 
-        if (Togglables.toggle.getOrDefault("pvp", false)) {
-            return;
-        }
-        if (damager.hasPermission("neon.pvp")) {
-            return;
-        }
+            if (!Togglables.toggle.getOrDefault("pvp", false)) {
 
-        if (wg.getRegions(damager).contains(wg.getYmlRegion())) {
-            event.setCancelled(true);
+                if (!damager.hasPermission("neon.pvp")) {
+
+                    if (WorldGuardManager.getRegions(damager).contains(wg.getYmlRegion())) {
+                        event.setCancelled(true);
+                    }
+
+                }
+
+            }
+
         }
     }
 

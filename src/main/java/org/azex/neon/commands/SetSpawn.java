@@ -1,5 +1,6 @@
 package org.azex.neon.commands;
 
+import org.azex.neon.methods.EventManager;
 import org.azex.neon.methods.LocationManager;
 import org.azex.neon.methods.Messages;
 import org.bukkit.Location;
@@ -28,6 +29,7 @@ public class SetSpawn implements CommandExecutor {
         locationManager.saveLocation("spawn.yml", "spawn", player);
 
         Location location = player.getLocation();
+        EventManager.spawnLocation = location;
 
         Messages.sendMessage(player, "<gray>You have set the spawn location to <light_purple>" +
                 location.getBlockX() + "<gray>, <light_purple>" + location.getBlockY() + "<gray>, <light_purple>"
