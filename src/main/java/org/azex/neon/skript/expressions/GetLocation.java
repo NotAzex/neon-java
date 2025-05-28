@@ -1,4 +1,4 @@
-package org.azex.neon.skript;
+package org.azex.neon.skript.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;

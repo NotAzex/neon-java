@@ -1,4 +1,4 @@
-package org.azex.neon.skript;
+package org.azex.neon.skript.effects;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Effect;

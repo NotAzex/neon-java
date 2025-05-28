@@ -1,4 +1,4 @@
-package org.azex.neon.skript;
+package org.azex.neon.skript.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;
@@ -6,17 +6,18 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import org.azex.neon.Neon;
+import org.azex.neon.commands.Prize;
+import org.azex.neon.commands.SetEvent;
 import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
-public class List extends SimpleExpression<String> {
+public class Strings extends SimpleExpression<String> {
 
     static {
-        Skript.registerExpression(List.class, String.class, ExpressionType.SIMPLE,
-                "[the] dead players",
-                         "[the] alive players"
+        Skript.registerExpression(Strings.class, String.class, ExpressionType.SIMPLE,
+                "[the] [name] [<of|of the|of this>] [neon] event",
+                "[the] prize [of [<the|this>] event]"
         );
     }
 
@@ -41,18 +42,17 @@ public class List extends SimpleExpression<String> {
 
     @Override
     public String toString(@Nullable Event event, boolean debug) {
-        return "A Neon list of players";
+        return "Value of the event's information";
     }
 
     @Override
     @Nullable
     protected String[] get(Event event) {
-        String which = "dead";
-        if (!type) { which = "alive"; }
-        if (Neon.getInstance().getListManager().statusAsList(which).isEmpty()) { return null; }
-        return new String[]{Neon.getInstance().getListManager().statusAsList(which)};
+
+        if (!type) {
+            return new String[]{Prize.prize};
+        } else {
+            return new String[]{SetEvent.event};
     }
 
-
-
-}
+}}

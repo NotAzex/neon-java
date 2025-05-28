@@ -1,4 +1,4 @@
-package org.azex.neon.skript;
+package org.azex.neon.skript.conditions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Condition;
@@ -12,12 +12,12 @@ import org.bukkit.event.Event;
 
 import javax.annotation.Nullable;
 
-public class StatusCondition extends Condition {
+public class Status extends Condition {
 
     private ListManager listManager = Neon.getInstance().getListManager();
 
     static {
-        Skript.registerCondition(StatusCondition.class,
+        Skript.registerCondition(Status.class,
                 "%player% is alive in event",
                 "%player% is dead in event"
         );
