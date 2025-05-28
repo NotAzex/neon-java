@@ -2,7 +2,7 @@ package org.azex.neon;
 
 import org.azex.neon.commands.*;
 import org.azex.neon.commands.Timer;
-import org.azex.neon.commands.placeholders.*;
+import org.azex.neon.placeholders.*;
 import org.azex.neon.methods.*;
 import org.azex.neon.tabcompletions.*;
 import org.bukkit.Bukkit;
@@ -13,7 +13,6 @@ import java.util.*;
 
 public final class Neon extends JavaPlugin {
     private LocationManager location;
-    private ListManager list;
     private YmlManager ymlManager;
     private Currencies currencies;
     private ScoreboardManager scoreboardManager;
@@ -26,11 +25,10 @@ public final class Neon extends JavaPlugin {
     private WinsCommands winsCommands;
     private TokensCommands tokensCommands;
 
-    private static Neon instance;
+    private final SkriptAddonLoading addonLoading = new SkriptAddonLoading();
 
-    public static Neon getInstance() {
-        return instance;
-    }
+    private static Neon instance;
+    private static ListManager list;
 
     private void loadCommands() {
         HashMap<String, CommandExecutor> map = new HashMap<>();
@@ -99,6 +97,7 @@ public final class Neon extends JavaPlugin {
     public void onEnable() {
 
         instance = this;
+
         int pluginId = 25207;
         Metrics metrics = new Metrics(this, pluginId);
 
@@ -138,9 +137,27 @@ public final class Neon extends JavaPlugin {
         loadCommands();
         getLogger().info("\u001B[37mRegistered commands!\u001B[0m");
 
+        addonLoading.load();
+
         scoreboardManager.runScoreboardLoop();
         list.startBackupLoop();
         versionChecker.checkForUpdates();
+    }
+
+    public static Neon getInstance() {
+        return instance;
+    }
+
+    public ListManager getListManager() {
+        return list;
+    }
+
+    public LocationManager getLocationManager() {
+        return location;
+    }
+
+    public Currencies getCurrenciesManager() {
+        return currencies;
     }
 
     @Override

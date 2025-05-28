@@ -52,7 +52,7 @@ public class EventManager implements Listener {
         this.wg = wg;
         this.list = list;
         this.locationManager = locationManager;
-        this.spawnLocation = locationManager.getLocation("spawn.yml", "spawn");
+        spawnLocation = locationManager.getLocation("spawn.yml", "spawn");
     }
 
     @EventHandler
@@ -151,17 +151,21 @@ public class EventManager implements Listener {
         Player player = event.getPlayer();
 
         if (Revival.isRevivalActive) {
+            Messages.broadcast("1");
 
             int guess;
             try {
                 guess = Integer.parseInt(((TextComponent) event.message()).content());
             } catch (NumberFormatException | ClassCastException e) {
+                Messages.broadcast("2");
                 return;
             }
 
             if (guess == Revival.number) {
+                Messages.broadcast("3");
 
                 if (!list.getPlayers("alive").contains(player.getUniqueId())) {
+                    Messages.broadcast("4");
                     Revival.number = null;
                     Revival.isRevivalActive = false;
                     Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has won the revival!");
@@ -171,7 +175,6 @@ public class EventManager implements Listener {
 
         }
     }
-
 
     @EventHandler
     public void chat(AsyncChatEvent event) {

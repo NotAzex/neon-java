@@ -1,4 +1,4 @@
-package org.azex.neon.commands.placeholders;
+package org.azex.neon.placeholders;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.azex.neon.commands.*;

@@ -2,6 +2,7 @@ package org.azex.neon.methods;
 
 import org.azex.neon.Neon;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -137,6 +138,25 @@ public class ListManager {
             }
         }
 
+    }
+
+    public int reviveRecent(String timespan, int time, Location location) {
+
+        Set<UUID> copykeys = new HashSet<>(ReviveRecentMap.keySet());
+        int looped = 0;
+        for (UUID revivable : copykeys) {
+            Player loop = Bukkit.getPlayer(revivable);
+            if (loop != null) {
+                long diff = System.currentTimeMillis() - ReviveRecentMap.get(revivable);
+                long takentime = diff / 1000;
+                if (takentime <= time) {
+                    revive(revivable);
+                    if (location != null) { loop.teleport(location); }
+                    looped++;
+                }
+            }
+        }
+        return looped;
     }
 
 }
