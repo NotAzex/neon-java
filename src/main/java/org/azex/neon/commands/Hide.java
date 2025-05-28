@@ -9,41 +9,41 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Hide implements CommandExecutor {
 
     private final Neon plugin;
-    public static HashSet<UUID> toggledPlayers = new HashSet<>();
+    public static final Set<UUID> toggledPlayers = ConcurrentHashMap.newKeySet();
+    private static final Set<String> valid = Set.of("off", "reveal", "staff", "all");
 
     public Hide(Neon plugin) {
         this.plugin = plugin;
     }
 
     private void hideStaff(Player player) {
-        for (Player loop : Bukkit.getOnlinePlayers()) {
-            if (!loop.hasPermission("neon.hide")) {
-                player.hidePlayer(plugin, loop);
-            }
-        }
+        Bukkit.getOnlinePlayers().parallelStream()
+                .filter(p -> !p.hasPermission("neon.hide"))
+                .forEach(p -> player.hidePlayer(plugin, p));
+
         toggledPlayers.add(player.getUniqueId());
         Messages.sendMessage(player, "<light_purple>☄ You<gray> have hidden everyone except <light_purple>staff members<gray>.", "msg");
     }
 
     private void revealPlayers(Player player) {
-        for (Player loop : Bukkit.getOnlinePlayers()) {
-            player.showPlayer(plugin, loop);
-        }
+        Bukkit.getOnlinePlayers().parallelStream()
+                .forEach(p -> player.showPlayer(plugin, p));
+
         toggledPlayers.remove(player.getUniqueId());
         Messages.sendMessage(player, "<light_purple>☄ You<gray> have revealed <light_purple>everyone<gray>!", "msg");
     }
 
     private void hideAll(Player player) {
-        for (Player loop : Bukkit.getOnlinePlayers()) {
-            player.hidePlayer(plugin, loop);
-        }
+        Bukkit.getOnlinePlayers().parallelStream()
+                .forEach(p -> player.hidePlayer(plugin, p));
+
         toggledPlayers.add(player.getUniqueId());
         Messages.sendMessage(player, "<light_purple>☄ You<gray> have hidden <light_purple>everyone<gray>.", "msg");
     }
@@ -56,31 +56,35 @@ public class Hide implements CommandExecutor {
         }
 
         if (toggledPlayers.contains(player.getUniqueId())) {
-            toggledPlayers.remove(player.getUniqueId());
             revealPlayers(player);
             return true;
         }
 
         if (args.length == 0) {
             hideStaff(player);
+            return true;
         }
 
-        if (args.length > 0) {
-
-            if (!List.of("off", "staff", "all").contains(args[0])) {
-                Messages.sendMessage(sender, "<red>Invalid first argument! Valid arguments: [off, staff, all]", "error");
-                return false;
-            }
-
-            switch (args[0]) {
-
-                case "reveal", "off" -> revealPlayers(player);
-                case "staff" -> hideStaff(player);
-                case "all" -> hideAll(player);
-
-            }
-
+        String arg = args[0].toLowerCase();
+        if (!valid.contains(arg)) {
+            Messages.sendMessage(sender, "<red>Invalid argument! Valid arguments: [off, reveal, staff, all]", "error");
+            return false;
         }
+
+        switch (arg) {
+            case "reveal", "off" -> revealPlayers(player);
+            case "staff" -> hideStaff(player);
+            case "all" -> hideAll(player);
+        }
+
         return true;
+    }
+
+    public static boolean isPlayerHidden(UUID playerId) {
+        return toggledPlayers.contains(playerId);
+    }
+
+    public static void removePlayer(UUID playerId) {
+        toggledPlayers.remove(playerId);
     }
 }
