@@ -17,7 +17,7 @@ public class Strings extends SimpleExpression<String> {
     static {
         Skript.registerExpression(Strings.class, String.class, ExpressionType.SIMPLE,
                 "[the] [name] [<of|of the|of this>] [neon] event",
-                "[the] prize [of [<the|this>] event]"
+                "[the] [name] [<of|of the|of this>] [neon] prize"
         );
     }
 
