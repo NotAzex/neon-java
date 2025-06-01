@@ -24,7 +24,7 @@ public class Hide implements CommandExecutor {
     }
 
     private void hideStaff(Player player) {
-        Bukkit.getOnlinePlayers().parallelStream()
+        Bukkit.getOnlinePlayers().stream()
                 .filter(p -> !p.hasPermission("neon.hide"))
                 .forEach(p -> player.hidePlayer(plugin, p));
 
@@ -33,15 +33,14 @@ public class Hide implements CommandExecutor {
     }
 
     private void revealPlayers(Player player) {
-        Bukkit.getOnlinePlayers().parallelStream()
+        Bukkit.getOnlinePlayers()
                 .forEach(p -> player.showPlayer(plugin, p));
-
         toggledPlayers.remove(player.getUniqueId());
         Messages.sendMessage(player, "<light_purple>☄ You<gray> have revealed <light_purple>everyone<gray>!", "msg");
     }
 
     private void hideAll(Player player) {
-        Bukkit.getOnlinePlayers().parallelStream()
+        Bukkit.getOnlinePlayers()
                 .forEach(p -> player.hidePlayer(plugin, p));
 
         toggledPlayers.add(player.getUniqueId());
