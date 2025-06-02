@@ -180,7 +180,6 @@ public class EventManager implements Listener {
     public void chat(AsyncChatEvent event) {
         if (Togglables.toggle.getOrDefault("mutechat", false) && !event.getPlayer().hasPermission("neon.chat")) {
             event.setCancelled(true);
-            Messages.sendMessage(event.getPlayer(), "<red>The chat is muted!", "error");
         }
     }
 
