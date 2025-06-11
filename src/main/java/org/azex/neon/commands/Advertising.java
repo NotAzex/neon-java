@@ -74,9 +74,7 @@ public class Advertising implements CommandExecutor {
             String ad = config.getString(args[1] + ".Advertisement", "<red>Failed to fetch the ad due to missing fields. Delete this ad and create it again!");
 
             try {
-                Component advertisement = Component.newline()
-                        .append(Messages.mini.deserialize(ad))
-                        .append(Component.newline())
+                Component advertisement = Messages.mini.deserialize(ad)
                         .clickEvent(ClickEvent.openUrl(link));
                 Bukkit.broadcast(advertisement);
                 for (Player loop : Bukkit.getOnlinePlayers()) {
