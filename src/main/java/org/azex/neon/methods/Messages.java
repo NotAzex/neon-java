@@ -85,7 +85,12 @@ public class Messages {
     public static void broadcast(String text) {
         text = replace(text);
         Component string = mini.deserialize(text);
-        Bukkit.broadcast(string);
+        if (Neon.getInstance().getConfig().getString("Other.BiggerMessages", "false").equals("true")) {
+            Bukkit.broadcast(mini.deserialize(" "));
+            Bukkit.broadcast(string);
+            Bukkit.broadcast(mini.deserialize(" "));
+        } else {
+            Bukkit.broadcast(string); }
         for (Player player : Bukkit.getOnlinePlayers()) {
             playSound(player, "main");
         }

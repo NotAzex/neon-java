@@ -32,6 +32,8 @@ public class ConfigManager {
         map.put("Sounds.Volume", "100");
         map.put("Other.BackupFrequency", "3");
         map.put("Other.EnableBackups", "true");
+        map.put("Other.ChatMutedError", "false");
+        map.put("Other.BiggerMessages", "false");
         map.put("Scoreboard.Lines", "<plugin is setting these at the moment...>");
         map.put("Scoreboard.Title", "<light_purple>☄ Neon");
         map.put("Scoreboard.Enable", "true");
