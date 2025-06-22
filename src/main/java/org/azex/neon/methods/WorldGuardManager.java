@@ -32,7 +32,6 @@ public class WorldGuardManager {
     private RegionManager getRegionManager() {
         Object worldObj = plugin.getConfig().getString("WorldGuard.World");
         org.bukkit.World bukkitWorld = Bukkit.getWorld((String) worldObj);
-
         if (bukkitWorld == null) {
             plugin.getLogger().warning("Failed to load world " + worldObj + ", does it exist?");
             return null;

@@ -137,7 +137,9 @@ public final class Neon extends JavaPlugin {
         loadCommands();
         getLogger().info("\u001B[37mRegistered commands!\u001B[0m");
 
-        addonLoading.load();
+        if (Bukkit.getPluginManager().isPluginEnabled("Skript")) {
+            addonLoading.load();
+        }
 
         scoreboardManager.runScoreboardLoop();
         list.startBackupLoop();

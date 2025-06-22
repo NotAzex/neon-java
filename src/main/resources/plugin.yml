@@ -2,7 +2,7 @@ name: Neon
 version: '1.2.2'
 main: org.azex.neon.Neon
 api-version: '1.20'
-softdepend: [PlaceholderAPI]
+softdepend: [PlaceholderAPI, Skript]
 depend: [WorldGuard]
 authors: [ Azex ]
 description: Neon, a simple free core for events with plenty of features.

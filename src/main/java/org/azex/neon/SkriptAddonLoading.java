@@ -11,9 +11,10 @@ public class SkriptAddonLoading {
     private SkriptAddon addon;
 
     public void load() {
-        addon = Skript.registerAddon(Neon.getInstance());
 
         if (Bukkit.getPluginManager().isPluginEnabled("Skript")) {
+
+            addon = Skript.registerAddon(Neon.getInstance());
 
             try {
                 Neon.getInstance().getLogger().info("Loading Skript support...");
