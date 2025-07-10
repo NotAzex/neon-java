@@ -8,7 +8,6 @@ import org.azex.neon.methods.Messages;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.UUID;
 
 public class AllPlaceholders extends PlaceholderExpansion {
@@ -58,13 +57,11 @@ public class AllPlaceholders extends PlaceholderExpansion {
 
         // %neon_wins%
         if (params.equalsIgnoreCase("wins")) {
-            if (player == null) { return "0"; }
             return String.valueOf(currencies.getWins(uuid));
         }
 
         // %neon_status%
         if (params.equalsIgnoreCase("status")) {
-            if (player == null) { return "<red>Dead"; }
             if (list.getPlayers("alive").contains(uuid)) {
                 return "<green>Alive";
             }else{
@@ -73,7 +70,6 @@ public class AllPlaceholders extends PlaceholderExpansion {
         }
 
         // %neon_tokens%
-        if (player == null) { return "0"; }
         if (params.equalsIgnoreCase("tokens")) {
             return String.valueOf(currencies.getTokens(uuid));
         }

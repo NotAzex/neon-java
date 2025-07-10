@@ -43,6 +43,13 @@ public class ConfigManager {
         map.put("Customization.Color1", "<light_purple>");
         map.put("Customization.Color2", "<gray>");
         map.put("Customization.StaffChatPrefix", "<light_purple>☄ <gray>[<light_purple>STAFF<gray>] %player%:<reset> %message%");
+
+        map.put("Messages.Revive", "Revived!");
+
+    }
+
+    public static String getStringFromConfig(String text) {
+        return Neon.getInstance().getConfig().getString(text);
     }
 
     public void checkConfig() {

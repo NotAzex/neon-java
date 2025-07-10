@@ -1,5 +1,6 @@
 package org.azex.neon.methods;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.azex.neon.Neon;
@@ -71,6 +72,7 @@ public class Messages {
         text = text.replace("<light_purple>", color1);
         text = text.replace("<gray>", color2);
         text = text.replace("☄", prefix);
+        text = PlaceholderAPI.setPlaceholders(text);
         return text;
     }
 

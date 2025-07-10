@@ -1,5 +1,6 @@
 package org.azex.neon.commands;
 
+import org.azex.neon.methods.ConfigManager;
 import org.azex.neon.methods.ListManager;
 import org.azex.neon.methods.Messages;
 import org.bukkit.Bukkit;
@@ -47,8 +48,13 @@ public class Revive implements CommandExecutor {
         }else{
             list.revive(uuid);
             revivable.teleport(player.getLocation());
-            Messages.broadcast("<light_purple>☄ " + player.getName() +
-                    " <gray>has revived<light_purple> " + revivable.getName() + "<gray>!");
+
+            String text = ConfigManager.getStringFromConfig("Messages.Revive");
+
+            text = text.replaceAll("%sender%", player.getName());
+            text = text.replaceAll("%revivable%", revivable.getName());
+
+            Messages.broadcast(text);
         }
         return true;
     }
