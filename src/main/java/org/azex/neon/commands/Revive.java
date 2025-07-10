@@ -49,12 +49,9 @@ public class Revive implements CommandExecutor {
             list.revive(uuid);
             revivable.teleport(player.getLocation());
 
-            String text = ConfigManager.getStringFromConfig("Messages.Revive");
+            Messages.broadcast("<light_purple>☄ " + player.getName() +
+                    " <gray>has revived<light_purple> " + revivable.getName() + "<gray>!");
 
-            text = text.replaceAll("%sender%", player.getName());
-            text = text.replaceAll("%revivable%", revivable.getName());
-
-            Messages.broadcast(text);
         }
         return true;
     }
