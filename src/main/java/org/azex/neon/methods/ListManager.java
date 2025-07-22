@@ -140,7 +140,7 @@ public class ListManager {
 
     }
 
-    public int reviveRecent(String timespan, int time, Location location) {
+    public int reviveRecent(int time, Location location) {
 
         Set<UUID> copykeys = new HashSet<>(ReviveRecentMap.keySet());
         int looped = 0;

@@ -53,7 +53,7 @@ public class ReviveRecent implements CommandExecutor {
 
         int players = list.ReviveRecentMap.size();
 
-        if (list.reviveRecent(args[1], time, player.getLocation()) > 0) {
+        if (list.reviveRecent(time, player.getLocation()) > 0) {
             Messages.broadcast("<light_purple>☄ " + player.getName() + " <gray>has" +
                     " revived players who died in the last <light_purple>" + args[0] + " <gray>" + args[1] + "! (<light_purple>" + players + "<gray>)");
         } else {

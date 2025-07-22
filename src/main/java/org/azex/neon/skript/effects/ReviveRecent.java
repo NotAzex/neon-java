@@ -46,7 +46,7 @@ public class ReviveRecent extends Effect {
         String span = "seconds";
 
         if (!timespan) { howLong *= 60; span = "minutes"; }
-        Neon.getInstance().getListManager().reviveRecent(span, howLong, where);
+        Neon.getInstance().getListManager().reviveRecent(howLong, where);
 
     }
 }
