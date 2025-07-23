@@ -31,14 +31,18 @@ public class Killing implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
 
-        cmd = command.getName();
+        switch (command.getName()) {
 
-        if (cmd.equals("killalive")) {
-            killGroup(listManager.getPlayers("alive"));
-            Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has killed <light_purple>alive<gray> players!");
-        } else if (cmd.equals("killdead")) {
-            killGroup(listManager.getPlayers("dead"));
-            Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has killed <light_purple>dead<gray> players!");
+            case "killalive" -> {
+                killGroup(listManager.getPlayers("alive"));
+                Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has killed <light_purple>alive<gray> players!");
+            }
+
+            case "killdead" -> {
+                killGroup(listManager.getPlayers("dead"));
+                Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has killed <light_purple>dead<gray> players!");
+            }
+
         }
         return true;
     }
