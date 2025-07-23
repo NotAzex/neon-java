@@ -115,8 +115,10 @@ public class ListManager {
 
 
     public void playerDeath(UUID uuid) {
-        if (status.get(uuid).equals("alive")) { ReviveRecentMap.put(uuid, System.currentTimeMillis()); }
-        status.put(uuid, "dead");
+        if (Bukkit.getPlayer(uuid) != null) {
+            if (status.get(uuid).equals("alive")) { ReviveRecentMap.put(uuid, System.currentTimeMillis()); }
+            status.put(uuid, "dead");
+        }
     }
 
     public void unrevive(UUID uuid) {
