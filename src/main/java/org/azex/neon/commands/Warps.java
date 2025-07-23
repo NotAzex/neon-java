@@ -4,6 +4,7 @@ import org.azex.neon.methods.ListManager;
 import org.azex.neon.methods.LocationManager;
 import org.azex.neon.methods.Messages;
 import org.azex.neon.methods.YmlManager;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -28,8 +29,13 @@ public class Warps implements CommandExecutor {
     }
 
     private void teleportToWarp(Player player, String warp) {
-        player.teleport(locationManager.getLocation("warps.yml", warp));
-        player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100, 1);
+
+        Location location = locationManager.getLocation("warps.yml", warp);
+
+        if (location.getWorld() != null) {
+            player.teleport(location);
+            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100, 1);
+        }
     }
 
     @Override
