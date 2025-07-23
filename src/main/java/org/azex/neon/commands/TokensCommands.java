@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public classTokensCommands implements CommandExecutor {
+public class TokensCommands implements CommandExecutor {
 
     private Currencies currencies;
 

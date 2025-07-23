@@ -36,12 +36,15 @@ public class Spawn implements CommandExecutor {
             return false;
         }
 
-        if (location != null) {
-            player.teleport(location);
-            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100, 1);
-        }else{
+        if (location == null) {
+
             Messages.sendMessage(player, "<red>The location for the spawn hasn't been set.", "error");
+            return false;
         }
+
+        player.teleport(location);
+        player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100, 1);
+
 
         return true;
     }
