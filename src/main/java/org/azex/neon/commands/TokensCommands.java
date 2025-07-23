@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class TokensCommands implements CommandExecutor {
 
-    private Currencies currencies;
+    private final Currencies currencies;
 
     public TokensCommands(Currencies currencies) {
         this.currencies = currencies;
@@ -80,10 +80,8 @@ public class TokensCommands implements CommandExecutor {
                         "to <light_purple>" + player.getName() + "<gray>!");
             }
 
-            case "tokens" -> {
-                Messages.sendMessage(sender, "<light_purple>☄ " + player.getName() + " <gray>has<light_purple> " + totaltokens +
-                        " <gray>tokens!", "msg");
-            }
+            case "tokens" -> Messages.sendMessage(sender, "<light_purple>☄ " + player.getName() + " <gray>has<light_purple> " + totaltokens +
+                    " <gray>tokens!", "msg");
 
         }
 
