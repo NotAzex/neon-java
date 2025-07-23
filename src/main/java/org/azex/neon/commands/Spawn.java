@@ -24,23 +24,23 @@ public class Spawn implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(Messages.ConsolePlayerError);
             return false;
         }
 
-        Player player = (Player) sender;
         Location location = locationManager.getLocation("spawn.yml", "spawn");
 
         if (list.getPlayers("alive").contains(player.getUniqueId())) {
             Messages.sendMessage(player, "<red>Alive players can't use this command!", "error");
+            return false;
+        }
+
+        if (location != null) {
+            player.teleport(location);
+            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100, 1);
         }else{
-            if (location != null) {
-                player.teleport(location);
-                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 100, 1);
-            }else{
-                Messages.sendMessage(player, "<red>The location for the spawn hasn't been set.", "error");
-            }
+            Messages.sendMessage(player, "<red>The location for the spawn hasn't been set.", "error");
         }
 
         return true;

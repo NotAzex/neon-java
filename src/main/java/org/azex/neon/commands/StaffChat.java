@@ -15,7 +15,6 @@ import java.util.UUID;
 
 public class StaffChat implements CommandExecutor {
 
-    private String format;
     private final Neon plugin;
     public static Set<UUID> toggled = new HashSet<>();
 
@@ -26,12 +25,11 @@ public class StaffChat implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(Messages.ConsolePlayerError);
             return false;
         }
 
-        Player player = (Player) sender;
         UUID uuid = player.getUniqueId();
 
         if (args.length == 0) {
@@ -52,7 +50,7 @@ public class StaffChat implements CommandExecutor {
 
         if (!(toggled.contains(uuid))) {
             String msg = String.join(" ", args);
-            format = plugin.getConfig().getString("Customization.StaffChatPrefix", "<light_purple>☄ <gray>[<light_purple>STAFF<gray>] | %message%");
+            String format = plugin.getConfig().getString("Customization.StaffChatPrefix", "<light_purple>☄ <gray>[<light_purple>STAFF<gray>] | %message%");
             format = format.replace("%message%", msg);
             format = format.replace("%player%", player.getName());
             for (Player staff : Bukkit.getOnlinePlayers()) {

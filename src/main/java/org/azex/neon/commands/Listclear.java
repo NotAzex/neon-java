@@ -21,6 +21,7 @@ public class Listclear implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
         listManager.status.clear();
+
         for (Player player : Bukkit.getOnlinePlayers()) {
             listManager.status.put(player.getUniqueId(), "dead");
         }
