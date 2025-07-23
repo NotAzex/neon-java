@@ -1,6 +1,5 @@
 package org.azex.neon.commands;
 
-import org.azex.neon.methods.ConfigManager;
 import org.azex.neon.methods.ListManager;
 import org.azex.neon.methods.Messages;
 import org.bukkit.Bukkit;
