@@ -21,12 +21,11 @@ public class Unrevive implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
-        if (!(sender instanceof Player)) {
+
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(Messages.ConsolePlayerError);
             return false;
         }
-
-        Player player = (Player) sender;
 
         if (args.length < 1) {
             Messages.sendMessage(player, Messages.mini.serialize(Messages.UsedCommandWrong), "error");
@@ -34,20 +33,22 @@ public class Unrevive implements CommandExecutor {
         }
 
         Player revivable = Bukkit.getPlayer(args[0]);
-        UUID uuid = revivable.getUniqueId();
 
         if (revivable == null) {
             Messages.sendMessage(player, Messages.mini.serialize(Messages.PlayerNotOnline), "error");
             return false;
         }
 
+        UUID uuid = revivable.getUniqueId();
+
         if (list.getPlayers("alive").contains(uuid)) {
-            list.unrevive(uuid);
-            Messages.broadcast("<light_purple>☄ " + player.getName() + "<gray>" +
-                    " has unrevived<light_purple> " + revivable.getName() + "<gray>!");
-        }else{
             Messages.sendMessage(player, Messages.mini.serialize(Messages.PlayerNotAlive), "error");
+            return false;
         }
+
+        list.unrevive(uuid);
+        Messages.broadcast("<light_purple>☄ " + player.getName() + "<gray>" +
+                " has unrevived<light_purple> " + revivable.getName() + "<gray>!");
 
         return true;
     }
