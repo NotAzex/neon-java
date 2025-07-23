@@ -22,36 +22,36 @@ public class Revive implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
 
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(Messages.ConsolePlayerError);
             return false;
         }
-
-        Player player = (Player) sender;
 
         if (args.length < 1) {
             Messages.sendMessage(player, Messages.mini.serialize(Messages.UsedCommandWrong), "error");
             return false;
         }
 
-        if (Bukkit.getPlayer(args[0]) == null) {
+        Player revivable = Bukkit.getPlayer(args[0]);
+
+        if (revivable == null) { // check this code later on before release and make sure it works...
             Messages.sendMessage(player, Messages.mini.serialize(Messages.PlayerNotOnline), "error");
             return false;
         }
 
-        Player revivable = Bukkit.getPlayer(args[0]);
         UUID uuid = revivable.getUniqueId();
 
         if (list.getPlayers("alive").contains(uuid)) {
             Messages.sendMessage(player, "<red>This player is already alive!", "error");
-        }else{
-            list.revive(uuid);
-            revivable.teleport(player.getLocation());
+            return false;
+        }
 
-            Messages.broadcast("<light_purple>☄ " + player.getName() +
+        list.revive(uuid);
+        revivable.teleport(player.getLocation());
+
+        Messages.broadcast("<light_purple>☄ " + player.getName() +
                     " <gray>has revived<light_purple> " + revivable.getName() + "<gray>!");
 
-        }
         return true;
     }
 }
