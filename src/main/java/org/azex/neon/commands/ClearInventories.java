@@ -39,18 +39,20 @@ public class ClearInventories implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
 
-        String cmd = command.getName();
+        switch (command.getName()) {
 
-        if (cmd.equals("clearalive")) {
-            Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has" +
-                    " cleared the inventories of <light_purple>alive<gray> people.");
-            clearInventoryOf(listManager.getPlayers("alive"));
-        }
+            case "clearalive" -> {
+                Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has" +
+                        " cleared the inventories of <light_purple>alive<gray> people.");
+                clearInventoryOf(listManager.getPlayers("alive"));
+            }
 
-        if (cmd.equals("cleardead")) {
-            Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has" +
-                    " cleared the inventories of <light_purple>dead<gray> people.");
-            clearInventoryOf(listManager.getPlayers("dead"));
+            case "cleardead" -> {
+                Messages.broadcast("<light_purple>☄ " + sender.getName() + " <gray>has" +
+                        " cleared the inventories of <light_purple>dead<gray> people.");
+                clearInventoryOf(listManager.getPlayers("dead"));
+            }
+
         }
 
         return true;
